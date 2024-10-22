@@ -1,8 +1,8 @@
-async function showAddBookModal() {
+async function showAddMenuModal() {
     document.querySelector("#modal").classList.remove("hidden");
   
     document.getElementById("confirm-modal").onclick = async function () {
-        await addBook();
+        await addMenu();
         closeModal();
     };
   }
@@ -13,6 +13,19 @@ async function showAddBookModal() {
     document.querySelector("#modal").classList.add("hidden");
   }
   
+  async function addMenuk() {
+    const form = new FormData(document.querySelector("#form"));
+    const response = await fetch("/explore/add_menu/", {
+      method: "POST",
+      body: form,
+    });
+  
+    if (!response.ok) {
+      throw new Error("Failed to add menu");
+    }
+    return false;
+  }
+
   function submitFilterForm() {
     var form = document.getElementById('filterForm');
     form.addEventListener('submit', function() {
@@ -21,7 +34,7 @@ async function showAddBookModal() {
     form.submit();
   }
   
-  function returnToKatalog(){
+  function returnToList(){
     window.location.href="/explore";
   }
   

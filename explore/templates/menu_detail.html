@@ -16,8 +16,13 @@
     <p><strong>Specialized in:</strong> {{ menu.specialized }}</p>
     <p><strong>Rating:</strong> {{ menu.rating }}</p>
     <br>
+    <button onclick="returnToList()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">Back to Menu List</button>
+    <a href="{% url 'explore:add_to_cart' menu.id request.user.id %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+        Add to Cart
+    </a>
 </div>
 {% endblock content %}
 
 {% block script %}
+<script src="/static/js/ajax_menu.js"></script>
 {% endblock script %}

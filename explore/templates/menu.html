@@ -16,11 +16,14 @@
         </form>            
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 px-4 md:px-0">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-0">
     {% for menu in explore %}
         <div class="max-w-md rounded overflow-hidden shadow-lg bg-white relative border">
             <div class="relative">
                 <img class="w-full h-64 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
+                <a href="{% url 'explore:menu_detail' menu.id %}" class="see-details-button bg-[#3992C6] hover-bg-[#247FB8] text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    See Details
+                </a>
             </div>
             <div class="px-4 md:px-6 py-4">
                 <div class="text-xl text-blue-500 font-inter font-bold mb-2">
