@@ -24,4 +24,5 @@ urlpatterns = [
     path('review/', include('review.urls')),
     # path('spinthewheel/', include('spinthewheel.urls')),
     path('spinthewheel/', include('spinthewheel.urls')),
+    path('booking/', include('booking.urls')),
 ]

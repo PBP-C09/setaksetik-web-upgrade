@@ -13,7 +13,7 @@ async function showAddMenuModal() {
     document.querySelector("#modal").classList.add("hidden");
   }
   
-  async function addMenuk() {
+  async function addMenu() {
     const form = new FormData(document.querySelector("#form"));
     const response = await fetch("/explore/add_menu/", {
       method: "POST",
@@ -28,14 +28,23 @@ async function showAddMenuModal() {
 
   function submitFilterForm() {
     var form = document.getElementById('filterForm');
-    form.addEventListener('submit', function() {
-      form.reset();
-    });
+    form.reset();
+ 
     form.submit();
   }
   
   function returnToList(){
     window.location.href="/explore";
   }
+
+  function toggleFilter() {
+    const filterOptions = document.getElementById("filter-options");
+    if (filterOptions.classList.contains("hidden")) {
+        filterOptions.classList.remove("hidden");
+    } else {
+        filterOptions.classList.add("hidden");
+    }
+}
   
   document.getElementById("cancel-modal").addEventListener("click", closeModal);
+  

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% include 'navbar.html' %}
+
+{% block meta %}
+    <title>Daftar Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+{% endblock meta %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-4xl font-bold mb-8 text-yellow-200">Daftar Booking Anda</h1>
+
+    {% if bookings %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% for booking in bookings %}
+                <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white text-black">
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl mb-2">{{ booking.menu.restaurant_name }}</div>
+                        <p class="text-gray-700 text-base">
+                            Booking di tanggal: {{ booking.booking_date}} <br>
+                            Jumlah orang: {{ booking.number_of_people }} <br>
+                            Menu: {{ booking.menu_items.menu }} <br>
+                            Lokasi: {{ booking.menu_items.city }} <br>
+                            Rating: {{ booking.menu_items.rating }}
+                        </p>
+                    </div>
+                    <div class="px-6 pt-4 pb-2">
+                        <a href="{% url 'booking:edit_booking' booking.id %}" class="bg-blue-500 text-white px-3 py-1 rounded">Edit</a>
+                        <a href="{% url 'booking:delete_booking' booking.id %}" class="bg-red-500 text-white px-3 py-1 rounded">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-white">Anda belum memiliki booking.</p>
+    {% endif %}
+
+    <a href="{% url 'booking:main_booking_page' %}" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">Kembali ke halaman booking</a>
+</div>
+{% endblock content %}
