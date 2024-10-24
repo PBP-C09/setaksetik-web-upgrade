@@ -1,34 +1,85 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
-<title>Login</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="container-fluid form-section">
-    <div class="row w-100">
-        <div class="col-lg-6 side-image"></div>
-        <div class="col-lg-6 d-flex justify-content-center align-items-center">
-            <div class="login">
-                <h1 class="mb-4">Welcome to SetakSetik</h1>
-                <p>Makan apa hari ini?</p>
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.as_p }}
+<style>
+    input, select {
+        color: #3E2723;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    input, select {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+    }
+    .submit-button {
+        background-color: #A69890;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+    .submit-button:hover {
+        background-color: #D1C0B9;
+    }
+</style>
+
+<div class="flex items-center container mx-auto" style="height: calc(100vh - 4rem); font-family: 'Raleway', sans-serif;">
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
+
+        <div class="hidden lg:flex items-center container mx-auto" style="height: calc(100vh - 4rem); font-family: 'Raleway', sans-serif; align-items: stretch;">
+            <div class="flex items-center justify-center p-4 w-full">
+                <div class="hidden lg:block h-full">
+                    <img src="{% static 'image/steak-image.png' %}" alt="Steak" class="w-full h-full object-cover" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-center p-5 w-full">
+            <div class="bg-[#5C4A4A] p-8 rounded-2xl shadow-lg w-full max-w-md">
+                <h1 class="text-2xl" style="font-family: 'Raleway', sans-serif;">SetakSetik</h1>
+                <h1 class="text-4xl mb-8 italic" style="font-family: 'Playfair Display'">Welcomes You Back!</h1>  
+                <form class="mt-8 space-y-6" method="POST" action="">
+                    {% csrf_token %}            
+                    <div class="space-y-4">
+                        {% for field in form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <div>{{ field }}</div>
+                            {% if field.help_text %}
+                            <small class="text-sm text-gray-400">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="text-red-500">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
                     </div>
-                    <input type="submit" class="btn btn-block" value="Login" />
+                    <button type="submit" class="submit-button mt-6" style="font-weight: bold;">Login!</button>
                 </form>
                 {% if messages %}
-                <ul class="mt-3">
+                <ul class="mt-4 space-y-2">
                     {% for message in messages %}
                     <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <p class="mt-3">Don't have an account yet? <a href="{% url 'main:register' %}" style="color: #A69890;">Register Now</a></p>
+                <p class="mt-6 text-[#D1C0B9]">Haven't had any account? 
+                    <a href="{% url 'main:register' %}" class="text-[#A69890] hover:text-[#D1C0B9] transition duration-300">Register Here</a>
+                </p>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock content %}
