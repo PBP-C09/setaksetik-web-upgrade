@@ -3,15 +3,6 @@ from django.contrib.auth.models import User
 from explore.models import Menu
 import uuid
 
-class Option(models.Model):
-    menu = models.OneToOneField(Menu, on_delete=models.CASCADE)
-    added = models.BooleanField(default=False)
-
-    @property
-    def category(self):
-        return self.menu.category
-
-# Save history after spinning
 class SpinHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     winner = models.TextField()
