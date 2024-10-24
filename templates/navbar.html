@@ -1,22 +1,29 @@
-<nav class="bg-[#5B3E39] shadow-lg fixed top-0 left-0 z-40 w-screen">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav class="bg-[#f5f5dc] shadow-lg fixed top-0 left-0 z-40 w-screen">
+  <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         {% if user.is_authenticated %}
-          <span class="text-[#F5F5DC] mr-4">Welcome, {{ user.username }}</span>
+        <span class="text-[#6d4c41] mr-4 text-2xl font-bold" style="font-family: 'Playfair Display'">
+          Setak <span class="italic font-normal">Setik</span>
+        </span>
+          <a href="/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/' %}font-bold{% else %}font-normal{% endif %}">Home</a>
+          <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Explore</a>
+          <a href="/spinthewheel/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/spinthewheel/' %}font-bold{% else %}font-normal{% endif %}">Spin</a>
+          <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Review</a>
+          <a href="/meatup/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/meatup/' %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
+          <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Booking</a>
         {% endif %}
-        <a href="/" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Home</a>
-        <a href="/explore/" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Explore</a>
-        <a href="/spinthewheel/" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Spin</a>
-        <a href="/review/" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Review</a>
-        <a href="/booking/" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Booking</a>
       </div>
       <div class="flex items-center">
         {% if user.is_authenticated %}
-          <a href="{% url 'main:logout' %}" class="text-[#F5F5DC] bg-red-500 hover:bg-red-600 font-bold py-2 px-4 rounded transition duration-300 ml-auto">Logout</a>
+          <a href="{% url 'main:logout' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 rounded transition duration-300 ml-auto" style="font-family: 'Raleway'">
+            Logging out, <span class="italic font-bold" style="font-family: 'Playfair Display'">{{ user.username }}</span>?
+          </a>
         {% else %}
-          <a href="{% url 'main:login' %}" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300 mr-2">Login</a>
-          <a href="{% url 'main:register' %}" class="text-[#F5F5DC] hover:text-[#D1C0B9] font-bold py-2 px-4 transition duration-300">Register</a>
+          <a href="{% url 'main:login' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 rounded transition duration-300 ml-auto font-bold" style="font-family: 'Playfair Display'">Login</a>
+          <a href="{% url 'main:register' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 rounded transition duration-300 ml-auto font-bold" style="font-family: 'Playfair Display'">Register</a>
+          <!-- <a href="{% url 'main:login' %}" class="text-[#6d4c41] hover:text-[#D1C0B9] font-bold py-2 px-6 transition duration-300 mr-2">Login</a>
+          <a href="{% url 'main:register' %}" class="text-[#6d4c41] hover:text-[#D1C0B9] font-bold py-2 px-6 transition duration-300">Register</a> -->
         {% endif %}
       </div>
     </div>

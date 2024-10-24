@@ -11,55 +11,11 @@
         </div>
         <div class="col-md-6">
             <h5>Class:</h5>
-            <p>{{ class }}</p>
+            <p>{{ role }}</p>
         </div>
     </div>
 
-    <h2 class="mt-5">Menu Items</h2>
-
-    {% if not menu_items %}
-    <p>Belum ada data menu yang tersedia.</p>
-    {% else %}
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>Menu</th>
-                <th>Category</th>
-                <th>Restaurant Name</th>
-                <th>City</th>
-                <th>Price</th>
-                <th>Rating</th>
-                <th>Specialized</th>
-                <th>Takeaway</th>
-                <th>Delivery</th>
-                <th>Outdoor</th>
-                <th>Smoking Area</th>
-                <th>WiFi</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in menu_items %}
-            <tr>
-                <td>{{ item.menu }}</td>
-                <td>{{ item.category }}</td>
-                <td>{{ item.restaurant_name }}</td>
-                <td>{{ item.city }}</td>
-                <td>{{ item.price }}</td>
-                <td>{{ item.rating }}</td>
-                <td>{{ item.specialized }}</td>
-                <td>{{ item.takeaway|yesno:"Yes,No" }}</td>
-                <td>{{ item.delivery|yesno:"Yes,No" }}</td>
-                <td>{{ item.outdoor|yesno:"Yes,No" }}</td>
-                <td>{{ item.smoking_area|yesno:"Yes,No" }}</td>
-                <td>{{ item.wifi|yesno:"Yes,No" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-
     <div class="mt-4">
-        <a href="{% url 'main:create_menu_item' %}" class="btn btn-primary">Add New Menu Item</a>
         <a href="{% url 'main:logout' %}" class="btn btn-danger ml-3">Logout</a>
     </div>
 

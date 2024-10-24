@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
 from django.contrib import messages
+from explore.models import Menu
+from explore.forms import MenuFilterForm
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -23,17 +25,7 @@ def show_review(request):
     }
     return render(request, 'review.html', context)
 
-def create_review_entry(request):
-    form = ReviewEntryForm(request.POST or None)
 
-    if form.is_valid() and request.method == "POST":
-        review_entry = form.save(commit=False)
-        review_entry.user = request.user
-        review_entry.save()
-        return redirect('review:show_review')
-
-    context = {'form': form}
-    return render(request, "create_review_entry.html", context)
 
 def show_xml(request):
     data = ReviewEntry.objects.filter(user=request.user)
@@ -68,3 +60,31 @@ def add_review_entry_ajax(request):
     new_review.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+
+def create_review_entry(request):
+    # Retrieve all menu entries without filtering
+    menus = Menu.objects.all()
+    
+    # Print menus to check in console/logs
+    print("Menus: ", menus)
+    
+    # Context data for rendering the template
+    context = {
+        'menus': menus,  # Pass the query result
+    }
+
+    return render(request, 'create_review_entry.html', context)
+
+
+# def create_review_entry(request):
+#     form = ReviewEntryForm(request.POST or None)
+
+#     if form.is_valid() and request.method == "POST":
+#         review_entry = form.save(commit=False)
+#         review_entry.user = request.user
+#         review_entry.save()
+#         return redirect('review:show_review')
+
+#     context = {'form': form}
+#     return render(request, "create_review_entry.html", context)
