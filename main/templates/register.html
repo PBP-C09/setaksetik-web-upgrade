@@ -5,6 +5,7 @@
 {% endblock meta %}
 
 {% block content %}
+<title>Register to SetakSetik!</title>
 <style>
     input, select {
         color: #3E2723;
@@ -20,30 +21,23 @@
         padding: 0.5rem;
     }
     .submit-button {
-        background-color: #A69890; /* Adjust color as needed */
-        color: white; /* Text color */
-        padding: 0.5rem 1rem; /* Padding */
-        border: none; /* No border */
-        border-radius: 0.5rem; /* Rounded corners */
-        cursor: pointer; /* Pointer cursor on hover */
-        transition: background-color 0.3s; /* Transition for hover effect */
-        width: 100%; /* Full width */
+        background-color: #A69890;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
     }
     .submit-button:hover {
-        background-color: #D1C0B9; /* Change color on hover */
+        background-color: #D1C0B9;
     }
+
 </style>
 
-<div class="flex items-center container mx-auto" style="height: calc(100vh - 4rem); font-family: 'Raleway', sans-serif;">
+<div class="flex items-center container mx-auto" style="height: calc(100vh - 2rem); font-family: 'Raleway', sans-serif;">
     <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
-
-        <div class="hidden lg:flex items-center container mx-auto" style="height: calc(100vh - 4rem); font-family: 'Raleway', sans-serif; align-items: stretch;">
-            <div class="flex items-center justify-center p-4 w-full">
-                <div class="hidden lg:block h-full">
-                    <img src="{% static 'image/steak-image.png' %}" alt="Steak" class="w-full h-full object-cover" />
-                </div>
-            </div>
-        </div>
         
         <div class="flex items-center justify-center p-5 w-full">
             <div class="bg-[#5C4A4A] p-8 rounded-2xl shadow-lg w-full max-w-md">
@@ -65,6 +59,18 @@
                             {% endfor %}
                         </div>
                         {% endfor %}
+
+                        {% if request.resolver_match.url_name == 'register-admin' %}
+
+                        <div class="checkbox-label" style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <label for="is_admin" style="display: flex; align-items: center; white-space: nowrap;">
+                                <input type="checkbox" id="is_admin" name="is_admin" value="true" style="margin-right: 0.5rem; margin-top: 18px;">
+                                Are you an admin?
+                            </label>
+                        </div>                                               
+                        
+                        {% endif %}
+
                     </div>
                     {% if messages %}
                     <ul class="mt-4 space-y-2">
@@ -74,10 +80,18 @@
                     </ul>
                     {% endif %}
                     <button type="submit" class="submit-button mt-6" style="font-weight: bold;">Register now!</button>
-                    <p class="mt-6 text-[#D1C0B9]">Already have an account? 
-                        <a href="{% url 'main:login' %}" class="text-[#A69890] hover:text-[#D1C0B9] transition duration-300" style="font-weight: bold;">Login Here</a>
+                    <p class="mt-6 text-[#F5F5DC]">Already have an account? 
+                        <a href="{% url 'main:login' %}" class="text-[#F5F5DC] hover:text-[#A69890] transition duration-300" style="font-weight: bold;">Login Here</a>
                     </p>
                 </form>
+            </div>
+        </div>
+        
+        <div class="hidden lg:flex items-center container mx-auto" style="height: calc(100vh - 4rem); font-family: 'Raleway', sans-serif; align-items: stretch;">
+            <div class="flex items-center justify-center p-2 w-full">
+                <div class="hidden lg:block h-full">
+                    <img src="{% static 'image/steak-image.png' %}" alt="Steak" class="w-full h-full object-cover" />
+                </div>
             </div>
         </div>
     </div>

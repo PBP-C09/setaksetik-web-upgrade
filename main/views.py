@@ -26,12 +26,35 @@ def register(request):
 
     if request.method == "POST":
         form = UserProfileForm(request.POST)
+        
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+
+            if request.POST.get('is_admin'):
+                role = 'admin'
+            else:
+                role = form.cleaned_data["role"]
+
+            user.save()
+            UserProfile.objects.create(user=user, full_name=form.cleaned_data["full_name"], role=role)
             messages.success(request, 'Your account has been successfully created!')
             return redirect('main:login')
+        
     context = {'form':form}
     return render(request, 'register.html', context)
+
+# def register(request):
+#     form = UserProfileForm()
+
+#     if request.method == "POST":
+#         form = UserProfileForm(request.POST)
+        
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your account has been successfully created!')
+#             return redirect('main:login')
+#     context = {'form':form}
+#     return render(request, 'register.html', context)
 
 def login_user(request):
    if request.method == 'POST':
