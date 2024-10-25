@@ -85,10 +85,38 @@
               
               <div class="mt-4 border-t pt-4">
                 ${review.fields.owner_reply ? `
-                  <div class="bg-white p-3 rounded-lg">
-                    <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
-                    <p class="text-sm text-gray-600">${DOMPurify.sanitize(review.fields.owner_reply)}</p>
+                  <div class="bg-white p-3 rounded-lg flex items-start justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+                      <p class="text-sm text-gray-600" id="reply-text-${review.pk}">
+                        ${DOMPurify.sanitize(review.fields.owner_reply)}
+                      </p>
+                      <!-- Input untuk edit balasan -->
+                      <input 
+                        type="text" 
+                        class="flex-1 p-2 border rounded-lg focus:outline-none focus:border-[#F7B32B] text-black mt-2 hidden" 
+                        id="edit-reply-${review.pk}"
+                        value="${DOMPurify.sanitize(review.fields.owner_reply)}"
+                      >
+                    </div>
+                    <div class="ml-2">
+                      <button 
+                        onclick="editReply(${review.pk})" 
+                        class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 mr-1"
+                        id="edit-btn-${review.pk}"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onclick="saveEditedReply(${review.pk})" 
+                        class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors duration-200 hidden"
+                        id="save-btn-${review.pk}"
+                      >
+                        Save
+                      </button>
+                    </div>
                   </div>
+
                 ` : `
                   <div class="flex items-center space-x-2">
                     <input 
@@ -106,6 +134,7 @@
                   </div>
                 `}
               </div>
+
             </div>
           </div>
         `).join('')}
@@ -172,6 +201,74 @@
   //   e.preventDefault();
   //   addReviewEntry();
   // })
+  // Function untuk toggle edit mode
+// Fungsi untuk toggle ke mode edit
+  function editReply(reviewId) {
+    const replyText = document.getElementById(`reply-text-${reviewId}`);
+    const editInput = document.getElementById(`edit-reply-${reviewId}`);
+    const editButton = document.getElementById(`edit-btn-${reviewId}`);
+    const saveButton = document.getElementById(`save-btn-${reviewId}`);
+
+    console.log("replyText:", replyText);
+    console.log("editInput:", editInput);
+    console.log("editButton:", editButton);
+    console.log("saveButton:", saveButton);
+
+    if (!replyText || !editInput || !editButton || !saveButton) {
+      console.error("Elemen tidak ditemukan");
+      return;
+    }
+
+    // Toggle visibility
+    replyText.classList.add('hidden');
+    editInput.classList.remove('hidden');
+    editButton.classList.add('hidden');
+    saveButton.classList.remove('hidden');
+  }
+
+
+  // Fungsi untuk menyimpan balasan yang sudah diedit
+  async function saveEditedReply(reviewId) {
+    const editInput = document.getElementById(`edit-reply-${reviewId}`);
+    const newReplyText = editInput.value.trim();
+
+    if (!newReplyText) {
+      console.log("Tidak ada teks baru untuk disimpan");
+      return;
+    }
+
+    console.log(`Menyimpan balasan baru untuk review ID: ${reviewId} dengan teks: ${newReplyText}`);
+
+    try {
+      const response = await fetch("{% url 'review:update_reply' %}", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+          review_id: reviewId,
+          reply_text: newReplyText
+        })
+      });
+
+      console.log("Status Response:", response.status);
+
+      if (response.ok) {
+        console.log("Update berhasil");
+        // Kembali ke tampilan normal setelah update
+        refreshReviewEntries();
+      } else {
+        const data = await response.json();
+        console.error("Error Response:", data);
+        alert(data.message || 'Error updating reply');
+      }
+    } catch (error) {
+      console.error("Error updating reply:", error);
+      alert('Error updating reply');
+    }
+  }
+
 </script>
 
 {% endblock content %}
