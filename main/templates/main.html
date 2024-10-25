@@ -1,24 +1,80 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">SetakSetik</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temukan Steak Terbaik di Jakarta!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#5b3e39] text-[#f5f5dc] font-raleway">
 
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h5>Name:</h5>
-            <p>{{ name }}</p>
+    <!-- Container -->
+    <div class="max-w-screen-xl mx-auto py-16">
+
+        <!-- Features Section -->
+        <div class="text-center mt-16">
+            <h2 class="text-4xl font-playfair mb-12">Our Features</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Feature Card: Spin the Wheel -->
+                <div class="bg-[#f5f5dc] rounded-3xl p-8 text-center space-y-4">
+                    <div class="w-32 h-32 bg-[#5b3e39] rounded-full mx-auto"></div>
+                    <h3 class="text-2xl font-bold" style="font-family:'Playfair Display'">Spin the Wheel</h3>
+                    <button onclick="window.location.href='/spinthewheel'" 
+                            class="bg-[#6d4c41] text-white px-4 py-2 rounded-md border-2 border-white">
+                        Spin the Wheel
+                    </button>
+                </div>
+
+                <!-- Feature Card: Explore Menu -->
+                <div class="bg-[#f5f5dc] rounded-3xl p-8 text-center space-y-4">
+                    <div class="w-32 h-32 bg-[#5b3e39] rounded-full mx-auto"></div>
+                    <h3 class="text-2xl font-playfair font-bold">Explore Menu</h3>
+                    <button onclick="window.location.href='/explore'" 
+                            class="bg-[#6d4c41] text-white px-4 py-2 rounded-md border-2 border-white">
+                        Explore
+                    </button>
+                </div>
+
+                <!-- Feature Card: Meat Up -->
+                <div class="bg-[#f5f5dc] rounded-3xl p-8 text-center space-y-4">
+                    <div class="w-32 h-32 bg-[#5b3e39] rounded-full mx-auto"></div>
+                    <h3 class="text-2xl font-playfair font-bold">Meat Up!</h3>
+                    <button onclick="window.location.href='/meatup'" 
+                            class="bg-[#6d4c41] text-white px-4 py-2 rounded-md border-2 border-white">
+                        Meat Up!
+                    </button>
+                </div>
+
+                <!-- Feature Card: Review & Ratings -->
+                <div class="bg-[#f5f5dc] rounded-3xl p-8 text-center space-y-4">
+                    <div class="w-32 h-32 bg-[#5b3e39] rounded-full mx-auto"></div>
+                    <h3 class="text-2xl font-playfair font-bold">Review & Ratings</h3>
+                    <button onclick="window.location.href='/review'" 
+                            class="bg-[#6d4c41] text-white px-4 py-2 rounded-md border-2 border-white">
+                        Review
+                    </button>
+                </div>
+
+                <!-- Feature Card: Restaurant Booking -->
+                <div class="bg-[#f5f5dc] rounded-3xl p-8 text-center space-y-4">
+                    <div class="w-32 h-32 bg-[#5b3e39] rounded-full mx-auto"></div>
+                    <h3 class="text-2xl font-playfair font-bold">Restaurant Booking</h3>
+                    <button onclick="window.location.href='/booking'" 
+                            class="bg-[#6d4c41] text-white px-4 py-2 rounded-md border-2 border-white">
+                        Booking
+                    </button>
+                </div>
+
+            </div>
         </div>
-        <div class="col-md-6">
-            <h5>Class:</h5>
-            <p>{{ role }}</p>
-        </div>
+
     </div>
 
-    <div class="mt-4">
-        <a href="{% url 'main:logout' %}" class="btn btn-danger ml-3">Logout</a>
-    </div>
-
-    <h5 class="mt-3">Sesi terakhir login: {{ last_login }}</h5>
-</div>
+</body>
+</html>
 {% endblock content %}
