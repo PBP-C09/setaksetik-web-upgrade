@@ -27,9 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id"]
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'meatup'
+    'meatup',
 ]
 
 MIDDLEWARE = [

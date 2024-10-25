@@ -10,6 +10,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from main.forms import MenuItemForm  
 from main.models import MenuItem
+from .models import MeatupRequest, Wishlist
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -33,6 +34,58 @@ def create_menu_item(request):
 
     context = {'form': form}
     return render(request, "create_menu_item.html", context)
+
+@login_required(login_url='/login')
+def wishlist_list(request):
+    wishlist_items = Wishlist.objects.all()  # Fetch all wishlist items
+    
+    context = {
+        'wishlist_items': wishlist_items,
+        'last_login': request.COOKIES.get('last_login', 'Unknown'),  # Ensure 'last_login' cookie is handled
+    }
+
+    return render(request, 'wishlist_list.html', context)
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import MeatupRequest
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def agree_request(request, request_id):
+    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
+    
+    if meatup_request.status == 'pending':  # Only allow if the request is still pending
+        meatup_request.status = 'accepted'
+        meatup_request.save()
+        messages.success(request, 'You have accepted the meetup request.')
+    else:
+        messages.error(request, 'This request has already been processed.')
+    
+    return redirect('main:request_list')  # Redirect to the request list after action
+
+@login_required
+def decline_request(request, request_id):
+    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
+    
+    if meatup_request.status == 'pending':  # Only allow if the request is still pending
+        meatup_request.status = 'declined'
+        meatup_request.save()
+        messages.success(request, 'You have declined the meetup request.')
+    else:
+        messages.error(request, 'This request has already been processed.')
+    
+    return redirect('main:request_list')  # Redirect to the request list after action
+
+@login_required
+def request_list(request):
+    requests = MeatupRequest.objects.filter(receiver=request.user)
+
+    context = {
+        'requests': requests,
+    }
+
+    return render(request, 'request_list.html', context)
 
 def register(request):
     form = UserCreationForm()

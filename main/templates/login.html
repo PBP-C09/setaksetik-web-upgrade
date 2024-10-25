@@ -5,28 +5,28 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container-fluid form-section">
-    <div class="row w-100">
-        <div class="col-lg-6 side-image"></div>
-        <div class="col-lg-6 d-flex justify-content-center align-items-center">
-            <div class="login">
-                <h1 class="mb-4">Welcome to SetakSetik</h1>
+<div class="flex items-center justify-center min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full max-w-screen-lg">
+        <div class="hidden lg:block side-image"></div>
+        <div class="flex items-center justify-center p-8">
+            <div class="bg-[#5C4A4A] p-8 rounded-2xl shadow-lg w-full max-w-md">
+                <h1 class="text-2xl mb-4">Welcome to SetakSetik</h1>
                 <p>Makan apa hari ini?</p>
                 <form method="POST" action="">
                     {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.as_p }}
-                    </div>
-                    <input type="submit" class="btn btn-block" value="Login" />
+                    <div class="space-y-4">{{ form.as_p }}</div>
+                    <input type="submit" class="mt-6 w-full bg-[#D1C0B9] text-[#3B2929] rounded-full py-2 font-bold hover:bg-[#A69890] transition" value="Login">
                 </form>
                 {% if messages %}
-                <ul class="mt-3">
+                <ul class="mt-4 space-y-2">
                     {% for message in messages %}
                     <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <p class="mt-3">Don't have an account yet? <a href="{% url 'main:register' %}" style="color: #A69890;">Register Now</a></p>
+                <p class="mt-6 text-[#D1C0B9]">Don't have an account yet? 
+                    <a href="{% url 'main:register' %}" class="text-[#A69890]">Register Now</a>
+                </p>
             </div>
         </div>
     </div>
