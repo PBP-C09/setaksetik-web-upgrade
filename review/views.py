@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from review.forms import ReviewEntryForm
 from review.models import ReviewEntry
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.utils.html import strip_tags
 from django.contrib import messages
 from explore.models import Menu
 from explore.forms import MenuFilterForm
+from main.models import UserProfile
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -76,6 +78,38 @@ def create_review_entry(request):
 
     return render(request, 'create_review_entry.html', context)
 
+def edit_review(request, id):
+    # Get the review entry based on id
+    review = ReviewEntry.objects.get(pk=id)
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    # Allow only admins to edit
+    if user_profile.role != "admin":
+        messages.error(request, "You do not have permission to edit this review.")
+        return redirect('review:show_review')
+
+    # Set review entry as an instance of the form
+    form = ReviewEntryForm(request.POST or None, instance=review)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('review:show_review'))
+
+    context = {'form': form}
+    return render(request, "edit_review.html", context)
+
+def delete_product(request, id):
+    # Get the review based on id
+    review = ReviewEntry.objects.get(pk=id)
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    # Allow only admins to delete
+    if user_profile.role != "admin":
+        messages.error(request, "You do not have permission to delete this review.")
+        return redirect('review:show_review')
+
+    review.delete()
+    return HttpResponseRedirect(reverse('review:show_review'))
 
 # def create_review_entry(request):
 #     form = ReviewEntryForm(request.POST or None)
