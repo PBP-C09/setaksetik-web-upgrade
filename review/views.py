@@ -25,8 +25,15 @@ def show_review(request):
         'nama' : 'steak',
         'lokasi' : 'jaksel',
         'rating' : '5',
+        # 'is_admin': request.is_admin,
     }
     print(request.user.userprofile.role)
+
+    if request.user.userprofile.role == "admin":
+        return render(request, 'review_admin.html', context)
+
+
+
     if request.user.userprofile.role == "steakhouse owner":
         print(request.user.userprofile.role)
         return render(request, 'review_owner.html', context)
@@ -103,7 +110,7 @@ def edit_review(request, id):
     context = {'form': form}
     return render(request, "edit_review.html", context)
 
-def delete_product(request, id):
+def delete_review(request, id):
     # Get the review based on id
     review = ReviewEntry.objects.get(pk=id)
     user_profile = UserProfile.objects.get(user=request.user)
