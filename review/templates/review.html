@@ -67,10 +67,12 @@
         `;
     }
     else {
+      // if request.user.userprofile.role == "steakhouse owner":
       classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
       reviewEntries.forEach((item) => {
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
+        
         
         htmlString += `
           <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
@@ -98,10 +100,20 @@
                   <!-- Product Description -->
                   <p class="text-gray-600 mb-4">${item.fields.description}</p>
 
-                  <!-- Username -->
+                  <!-- Username, dia masih perlu biar konsisten bukan tergantung akun yg di logging in  -->
                   <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
                       by <br> {{ user.username }}
                   </p>
+                  
+                  {% if review.fields.owner_reply != null %}
+                    <div class="mt-4 border-t pt-4">
+                      <div class="bg-white p-3 rounded-lg">
+                        <p class="text-sm font-semibold text-[#5B3E39]"> Balasan Pemilik:</p>
+                        <p class="text-sm text-gray-600">${DOMPurify.sanitize(review.fields.owner_reply)}</p>
+                      </div>
+                    </div>
+                  {% endif %}
+                  
 
               </div>
           </div>`;
