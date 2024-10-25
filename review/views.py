@@ -14,6 +14,8 @@ from explore.models import Menu
 from explore.forms import MenuFilterForm
 from main.models import UserProfile
 import json
+from django.http import JsonResponse
+
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -142,14 +144,24 @@ def submit_reply(request):
         return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-# def create_review_entry(request):
-#     form = ReviewEntryForm(request.POST or None)
 
-#     if form.is_valid() and request.method == "POST":
-#         review_entry = form.save(commit=False)
-#         review_entry.user = request.user
-#         review_entry.save()
-#         return redirect('review:show_review')
-
-#     context = {'form': form}
-#     return render(request, "create_review_entry.html", context)
+@csrf_exempt
+@require_POST
+def update_reply(request):
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+        
+        review = ReviewEntry.objects.get(pk=review_id)
+        review.owner_reply = reply_text
+        review.save()
+        
+        return JsonResponse({'status': 'success'})
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
