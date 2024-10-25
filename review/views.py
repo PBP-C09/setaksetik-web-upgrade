@@ -30,6 +30,7 @@ def show_review(request):
     print(request.user.userprofile.role)
 
     if request.user.userprofile.role == "admin":
+        print("bener")
         return render(request, 'review_admin.html', context)
 
 
@@ -93,12 +94,12 @@ def create_review_entry(request):
 def edit_review(request, id):
     # Get the review entry based on id
     review = ReviewEntry.objects.get(pk=id)
-    user_profile = UserProfile.objects.get(user=request.user)
+    # user_profile = UserProfile.objects.get(user=request.user)
 
     # Allow only admins to edit
-    if user_profile.role != "admin":
-        messages.error(request, "You do not have permission to edit this review.")
-        return redirect('review:show_review')
+    # if user_profile.role != "admin":
+    #     messages.error(request, "You do not have permission to edit this review.")
+    #     return redirect('review:show_review')
 
     # Set review entry as an instance of the form
     form = ReviewEntryForm(request.POST or None, instance=review)
@@ -112,15 +113,12 @@ def edit_review(request, id):
 
 def delete_review(request, id):
     # Get the review based on id
+    print(ReviewEntry.objects.get(pk=id))
     review = ReviewEntry.objects.get(pk=id)
-    user_profile = UserProfile.objects.get(user=request.user)
-
-    # Allow only admins to delete
-    if user_profile.role != "admin":
-        messages.error(request, "You do not have permission to delete this review.")
-        return redirect('review:show_review')
-
+    print("ini review " +  str(review))
+    # user_profile = UserProfile.objects.get(user=request.user)
     review.delete()
+
     return HttpResponseRedirect(reverse('review:show_review'))
 
 
