@@ -1,9 +1,8 @@
 async function showAddMenuModal() {
     document.querySelector("#modal").classList.remove("hidden");
-  
-    document.getElementById("confirm-modal").onclick = async function () {
-        await addMenu();
-        closeModal();
+    document.getElementById("confirm-modal").onclick = async function () { 
+      await addMenu(); 
+      closeModal();
     };
   }
   
@@ -14,8 +13,9 @@ async function showAddMenuModal() {
   }
   
   async function addMenu() {
+    alert("ok") 
     const form = new FormData(document.querySelector("#form"));
-    const response = await fetch("/explore/add_menu/", {
+    const response = await fetch("/explore/", {
       method: "POST",
       body: form,
     });
