@@ -1,9 +1,8 @@
 async function showAddMenuModal() {
     document.querySelector("#modal").classList.remove("hidden");
-  
-    document.getElementById("confirm-modal").onclick = async function () {
-        await addMenu();
-        closeModal();
+    document.getElementById("confirm-modal").onclick = async function () { 
+      await addMenu(); 
+      closeModal();
     };
   }
   

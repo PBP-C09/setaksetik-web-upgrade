@@ -11,7 +11,7 @@
 {% block content %}
 <div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-        Makan apa <span class="italic">Hari ini?</span>
+        Claim apa <span class="italic">Hari ini?</span>
     </h1>
   
     <div class="flex justify-center items-center bg-[#5B3E39] py-4">
@@ -151,7 +151,7 @@
                 </div>
     
                 <div class="flex justify-center mt-auto p-4">
-                    <a href="{% url 'explore:menu_detail' menu.id %}" class="bg-[#6D4C41] hover:bg-[#B71C1C] text-white font-medium py-2 px-6 w-full text-center rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+                    <a href="{% url 'explore:owner_detail' menu.id %}" class="bg-[#6D4C41] hover:bg-[#B71C1C] text-white font-medium py-2 px-6 w-full text-center rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
                         See Details
                     </a>
                 </div>
