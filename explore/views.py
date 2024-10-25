@@ -2,31 +2,30 @@
 import json
 from django.shortcuts import render,redirect, get_object_or_404
 from .models import Menu
+from main.models import UserProfile
+from django.contrib.auth.decorators import login_required
 from .forms import MenuFilterForm
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
-
 
 from .models import Menu
 
 # Create your views here.
-# @login_required(login_url="authentication:login")
+@login_required(login_url="main:login")
 def show_menu(request):
     user = request.user
-    # user_profile = user.objects.get(user=user)
-
+    user_profile = UserProfile.objects.get(user=request.user)
+    role = user_profile.role
     # if user_profile.user_type.casefold() == "Admin":
     #     menu_list = serializers.serialize('json', Menu.objects.all())
     #     menu_list = serializers.deserialize('json', menu_list)
     #     menu_list = [menu.object for menu in menu_list]
 
     #     return render(request, 'admin_katalog.html', {'explore': menu_list})
-
     menus = Menu.objects.all()
     form = MenuFilterForm(request.GET)
-
+    # if role == "Customer":
     if form.is_valid():
         menu_name = form.cleaned_data.get("menu")
         kategori = form.cleaned_data.get("category")
@@ -57,12 +56,12 @@ def show_menu(request):
         if rate:
             menus = menus.filter(rating=rate)
 
-    context = {
-        'form': form,
-        'explore': menus,
-    }
+        context = {
+            'form': form,
+            'explore': menus,
+        }
 
-    return render(request, 'menu.html', context)
+        return render(request, 'menu.html', context)
 
 def menu_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
@@ -99,12 +98,6 @@ def get_menu(request):
 def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
-def add_to_cart(request, menu_id, user_id):
-    user =  get_object_or_404(User, id=user_id)
-    menu = get_object_or_404(Menu, id=menu_id)
-    user.cart.add(menu)
-    return redirect('explore:show_menu')
 
 @csrf_exempt
 def filter_menu(request):
