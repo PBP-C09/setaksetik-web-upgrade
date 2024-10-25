@@ -13,6 +13,7 @@ from django.contrib import messages
 from explore.models import Menu
 from explore.forms import MenuFilterForm
 from main.models import UserProfile
+import json
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -115,6 +116,27 @@ def delete_product(request, id):
     review.delete()
     return HttpResponseRedirect(reverse('review:show_review'))
 
+
+@csrf_exempt
+@require_POST
+def submit_reply(request):
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+        
+        review = ReviewEntry.objects.get(pk=review_id)
+        review.owner_reply = reply_text
+        review.save()
+        
+        return JsonResponse({'status': 'success'})
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 # def create_review_entry(request):
 #     form = ReviewEntryForm(request.POST or None)
 

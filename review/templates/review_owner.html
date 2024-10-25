@@ -9,29 +9,16 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen 5B3E39 flex flex-col">
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-[#5B3E39] flex flex-col">
   <div class="p-2 mb-2 relative">
-    <!-- Menambahkan kelas Tailwind untuk memperindah teks -->
-    <h1 class= "text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center">
-        Apa kata, <span class="italic">mereka</span>?
+    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center">
+      Apa kata, <span class="italic">mereka</span>?
     </h1>
-    <hr class="border-t-2 border-[#F5F5DC] my-6 w-full mx-auto" style="width: 460px;" /><!-- Garis di bawah H1 -->
-    <p class="text-center">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
+    <hr class="border-t-2 border-[#F5F5DC] my-6 w-[460px] mx-auto" />
+    <p class="text-center text-[#F5F5DC]">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
   </div>
 
-  <div class="flex justify-center mt-0 mb-8"> <!--mt-4 itu margin top-->
-    <a href="{% url 'review:create_review_entry' %}">
-      <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300">Tambah Review tanpa AJAX</button>
-    </a>
-    <!-- <button data-modal-target="crudModal" data-modal-toggle="crudModal"
-      class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-      onclick="showModal();">
-      Tambah Review
-    </button> -->
-  </div>
-  
   <div id="review_entry_cards"></div>
-  
 </div>
 
 <script>
@@ -39,87 +26,96 @@
     return fetch("{% url 'review:show_json' %}").then((res) => res.json())
   }
 
+  async function submitReply(reviewId, inputElement) {
+    const replyText = inputElement.value.trim();
+    console.log("ini reply text " + replyText)
+    if (!replyText) return;
+
+    try {
+      const response = await fetch("{% url 'review:submit_reply' %}", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+          review_id: reviewId,
+          reply_text: replyText
+        })
+      });
+      console.log("respon nya ok gasi " + response.ok)
+      if (response.ok) {
+        // Clear input and refresh reviews
+        inputElement.value = '';
+        refreshReviewEntries();
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Error submitting reply');
+      }
+    } catch (error) {
+      console.error("Error submitting reply:", error);
+      alert('Error submitting reply');
+    }
+  }
 
   async function refreshReviewEntries() {
-    document.getElementById("review_entry_cards").innerHTML = "";
-    document.getElementById("review_entry_cards").className = "";
-    const reviewEntries = await getReviewEntries();
-    let htmlString = "";
-    let classNameString = "";
+    const reviewContainer = document.getElementById("review_entry_cards");
+    reviewContainer.innerHTML = "";
+    
+    const reviews = await getReviewEntries();
+    
+    const html = `
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        ${reviews.map(review => `
+          <div class="bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden">
+            <div class="p-4">
+              <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${DOMPurify.sanitize(review.fields.menu)}</h3>
+              
+              <div class="flex items-center space-x-2 mb-2">
+                <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+                <p class="text-base font-semibold text-[#5B3E39]">${DOMPurify.sanitize(review.fields.place)}</p>
+              </div>
 
-    if (reviewEntries.length === 0) {
-      classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
-      htmlString = `
-            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-                <p class="text-center text-gray-600 mt-4">Belum ada data product pada mental health tracker.</p>
-            </div>
-        `;
-    }
-    else {
-      // if request.user.userprofile.role == "steakhouse owner":
-      classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
-      reviewEntries.forEach((item) => {
-        const menu = DOMPurify.sanitize(item.fields.menu);
-        const place = DOMPurify.sanitize(item.fields.place);
-        
-        
-        htmlString += `
-          <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
-              <!-- Product Details -->
-              <div class="p-4">
-                  <!-- Product Name -->
-                  <h1 class="font-bold text-xl text-[#5B3E39] mb-2">ini harusya owner</h1>
-                  <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
-
-                  <!-- Product Place with Pin Icon -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.place}
-                          
-                      </p>
+              <div class="flex items-center space-x-2 mb-2">
+                <i class="fas fa-star text-yellow-400"></i>
+                <p class="text-base font-semibold text-[#5B3E39]">${review.fields.rating} / 5</p>
+              </div>
+              
+              <p class="text-gray-600 mb-4">${DOMPurify.sanitize(review.fields.description)}</p>
+              
+              <div class="mt-4 border-t pt-4">
+                ${review.fields.owner_reply ? `
+                  <div class="bg-white p-3 rounded-lg">
+                    <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+                    <p class="text-sm text-gray-600">${DOMPurify.sanitize(review.fields.owner_reply)}</p>
                   </div>
-
-                  <!-- Product Rating -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.rating} / 5
-            
-                      </p>
-                  </div>
-                  
-                  <!-- Product Description -->
-                  <p class="text-gray-600 mb-4">${item.fields.description} </p>
-                  
-
-                  <!-- Username, dia masih perlu biar konsisten bukan tergantung akun yg di logging in  -->
-                  <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                      by <br> {{ user.username }}
-                  </p>
-
-                  <!--Input reply -->
-                    <input type="text" 
-                           class="flex-grow p-2 border rounded-l-lg focus:outline-none focus:border-[#F7B32B]" 
-                           placeholder="Type your reply here..."
-                           id="reply-input-${item.pk}">
-                    <button onclick="submitReply(${item.pk}, document.getElementById('reply-input-${item.pk}').value)"
-                            class="bg-[#F7B32B] text-white p-2 rounded-r-lg hover:bg-[#F7A52B]">
+                ` : `
+                  <div class="flex items-center space-x-2">
+                    <input 
+                      type="text" 
+                      class="flex-1 p-2 border rounded-l-lg focus:outline-none focus:border-[#F7B32B]" 
+                      placeholder="Ketik balasan Anda..."
+                      id="reply-${review.pk}"
+                    >
+                    <button 
+                      onclick="submitReply('${review.pk}', document.getElementById('reply-${review.pk}'))"
+                      class="bg-[#F7B32B] text-white p-2 rounded-r-lg hover:bg-[#F7A52B] transition-colors duration-200"
+                    >
                       <i class="fas fa-paper-plane"></i>
                     </button>
-
-                  
-
+                  </div>
+                `}
               </div>
-          </div>`;
-
-
-      });
-    }
-    document.getElementById("review_entry_cards").className = classNameString;
-    document.getElementById("review_entry_cards").innerHTML = htmlString;
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    
+    reviewContainer.innerHTML = html;
   }
+
+  // Initial load
   refreshReviewEntries();
 
   const modal = document.getElementById('crudModal');
