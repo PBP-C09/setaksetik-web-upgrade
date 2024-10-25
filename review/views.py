@@ -23,8 +23,12 @@ def show_review(request):
     context = {
         'nama' : 'steak',
         'lokasi' : 'jaksel',
-        'rating' : '5'
+        'rating' : '5',
     }
+    print(request.user.userprofile.role)
+    if request.user.userprofile.role == "steakhouse owner":
+        print(request.user.userprofile.role)
+        return render(request, 'review_owner.html', context)
     return render(request, 'review.html', context)
 
 

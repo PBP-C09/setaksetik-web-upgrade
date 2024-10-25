@@ -17,17 +17,6 @@
     </h1>
     <hr class="border-t-2 border-[#F5F5DC] my-6 w-full mx-auto" style="width: 460px;" /><!-- Garis di bawah H1 -->
     <p class="text-center">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
-    <!-- Menghapus bagian yang membuat garis -->
-    <!--
-    <div class="w-full px-6 absolute top-[44px] left-0 z-20 hidden md:flex">
-      <div class="w-full min-h-4 bg-indigo-700">
-      </div>
-    </div>
-    <div class="h-full w-full py-6 absolute top-0 left-0 z-20 md:hidden flex ">
-      <div class="h-full min-w-4 bg-indigo-700 mx-auto">
-      </div>
-    </div>
-    -->
   </div>
 
   <div class="flex justify-center mt-0 mb-8"> <!--mt-4 itu margin top-->
@@ -49,6 +38,7 @@
   async function getReviewEntries() {
     return fetch("{% url 'review:show_json' %}").then((res) => res.json())
   }
+
 
   async function refreshReviewEntries() {
     document.getElementById("review_entry_cards").innerHTML = "";
@@ -79,6 +69,7 @@
               <!-- Product Details -->
               <div class="p-4">
                   <!-- Product Name -->
+                  <h1 class="font-bold text-xl text-[#5B3E39] mb-2">ini harusya owner</h1>
                   <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
 
                   <!-- Product Place with Pin Icon -->
@@ -86,6 +77,7 @@
                       <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
                       <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
                           ${item.fields.place}
+                          
                       </p>
                   </div>
 
@@ -94,16 +86,30 @@
                       <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
                       <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
                           ${item.fields.rating} / 5
+            
                       </p>
                   </div>
                   
                   <!-- Product Description -->
-                  <p class="text-gray-600 mb-4">${item.fields.description}</p>
+                  <p class="text-gray-600 mb-4">${item.fields.description} </p>
+                  
 
                   <!-- Username, dia masih perlu biar konsisten bukan tergantung akun yg di logging in  -->
                   <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
                       by <br> {{ user.username }}
                   </p>
+
+                  <!--Input reply -->
+                    <input type="text" 
+                           class="flex-grow p-2 border rounded-l-lg focus:outline-none focus:border-[#F7B32B]" 
+                           placeholder="Type your reply here..."
+                           id="reply-input-${item.pk}">
+                    <button onclick="submitReply(${item.pk}, document.getElementById('reply-input-${item.pk}').value)"
+                            class="bg-[#F7B32B] text-white p-2 rounded-r-lg hover:bg-[#F7A52B]">
+                      <i class="fas fa-paper-plane"></i>
+                    </button>
+
+                  
 
               </div>
           </div>`;
