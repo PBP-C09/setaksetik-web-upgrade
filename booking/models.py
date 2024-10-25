@@ -6,7 +6,7 @@ import uuid
 # Create your models here.
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    menu_items = models.ForeignKey(Menu, on_delete=models.CASCADE) # One to many
+    menu_items = models.ForeignKey(Menu, on_delete=models.CASCADE)
     booking_date = models.DateTimeField()
     number_of_people = models.PositiveIntegerField()
 
