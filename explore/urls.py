@@ -10,7 +10,7 @@ urlpatterns = [
     path('add_menu/<int:menu_id>/<int:user_id>/', add_menu, name='add_menu'),
     path('get_menu/', get_menu, name='get_menu'),
     path('get_menu/<int:id>/', get_menu_by_id, name="get_menu_by_id"),
-   # path('add_menu/', add_menu, name='add_menu'),
+    path('add_menu/', add_menu, name='add_menu'),
     path('form/<int:menu_id>/', booking_form, name='booking_form'),
     path('filter_menu/', filter_menu, name='filter_menu'),
 ]
