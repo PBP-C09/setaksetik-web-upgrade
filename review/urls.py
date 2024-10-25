@@ -15,5 +15,5 @@ urlpatterns = [
     path('submit_reply/', views.submit_reply, name='submit_reply'),
     path('edit-review/<uuid:id>', views.edit_review, name='edit_review'),
     path('delete-review/<uuid:id>', views.delete_review, name='delete_review'),
-
+    
 ]
