@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
 <title>Spin the Wheel</title>
 <div class="header text-center mt-2 mb-2">
@@ -92,7 +91,7 @@
     <!-- The Wheel -->
     <div class="wheel mx-auto">
         <canvas id="canvas" width="500" height="500"></canvas>
-        <div class="center-circle" onclick="check()">
+        <div class="center-circle" onclick="spin()">
             <div class="triangle"></div>
         </div>
     </div>
@@ -128,17 +127,18 @@
 
 <!-- Winner Modal -->
 <div id="winnerModal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-    <div class="bg-[#f5f5dc] rounded-[20px] p-5 w-[400px] flex flex-col gap-4">
+    <div class="bg-[#f5f5dc] rounded-[20px] p-5 w-[400px] flex flex-col gap-2">
         <div class="flex justify-center items-center">
             <div id="winnerName" class="flex justify-center text-[#5b3e39] text-2xl font-bold text-center" style="font-family: 'Playfair Display'; font-style: italic"></div>
         </div>
+        <div class="border-t-2 border-[#5b3e39] mx-auto w-full"></div>
         <div class="flex flex-col">
             <div id="winnerRestaurant" class="flex justify-center items-center text-[#5b3e39] text-base font-normal font-['Raleway']"></div>
             <div id="winnerCity" class="flex justify-center items-center text-[#5b3e39] text-base font-normal font-['Raleway']"></div>
         </div>
         
         <div class="flex justify-between gap-2 mt-4">
-            <button id="addSpinHistoryBtn" class="w-[250px] h-[53px] bg-[#6d4c41] rounded-[10px] text-[#eaeaea] text-base font-medium font-['Raleway'] leading-normal transition duration-300 hover:bg-[#8d6e63]" onclick="addSpinHistory()">
+            <button id="addSpinHistoryBtn" class="w-[250px] h-[53px] bg-[#6d4c41] rounded-[10px] text-[#eaeaea] text-base font-medium font-['Raleway'] leading-normal transition duration-300 hover:bg-[#8d6e63]">
                 Add to Spin History
             </button>
             <button id="closeModalBtn" class="w-[250px] h-[53px] bg-[#c62828] rounded-[10px] text-[#ececec] text-base font-medium font-['Raleway'] leading-normal transition duration-300 hover:bg-[#ef5350]" onclick="hideWinnerModal()">
@@ -147,9 +147,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 <!-- Script of helper wheel functions -->
 <script>
@@ -168,8 +165,7 @@
     }
 </script>
 
-
-<!-- Script to handle spinning the wheel, adding items, and clearing all items -->
+<!-- Script to handle spinning the wheel, updating items, and clearing all items -->
 <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -202,6 +198,7 @@
         });
     });
 
+    // Asynchronous function to refresh options based on selected category
     async function refreshOptions(selectedCategory){
         document.getElementById("menuList").innerHTML = "";
         options = await getOptions(selectedCategory);
@@ -226,6 +223,7 @@
 
     }
 
+    // Asynchronous function to get options in json format
     async function getOptions(selectedCategory){
       return fetch(`/spinthewheel/option-json/${selectedCategory}/`).then((res) => res.json())
     }
@@ -282,21 +280,21 @@
 
         var randomText = texts[Math.floor(Math.random() * texts.length)];
         document.getElementById("winner").innerHTML = randomText;
-        
     }
 </script>
 
 <!-- Wheel creation script -->
+<!-- The source of wheel creation and spinning animation are credited to: https://youtu.be/-FNm58Z9GHM?si=F4i5fjn3LcXIv1QZ -->
 <script>    
-    // Function to create and redraw the wheel
+    // Function to create and update wheel settings
     function createWheel() {
         const baseColors = [
-        {r: 132, g: 35, b: 35},     // 842323 (Red)
-        {r: 255, g: 213, b: 79},    // FFD54F (Yellow)
-        {r: 62, g: 39, b: 35}       // 3E2723 (Brown)
+        {r: 132, g: 35, b: 35},                         // 842323 (Red)
+        {r: 255, g: 213, b: 79},                        // FFD54F (Yellow)
+        {r: 62, g: 39, b: 35}                           // 3E2723 (Brown)
         ];
 
-        const bufferColor = {r: 245, g: 245, b: 220};  // F5F5DC (Beige)
+        const bufferColor = {r: 245, g: 245, b: 220};   // F5F5DC (Beige)
         colors = [];
         let numItems = items.length;
         step = 360 / numItems;
@@ -315,12 +313,11 @@
                 colorIndex = (colorIndex + 1) % baseColors.length;
             }
         }
-
         draw();
     }
     draw()
 
-    // Drawing function of the wheel
+    // Function to draw the wheel
     function draw() {
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, toRad(0), toRad(360));
@@ -349,7 +346,6 @@
             ctx.lineTo(centerX, centerY);
             ctx.fill()
 
-            // draw text
             ctx.save();
             ctx.translate(centerX, centerY);
             ctx.rotate(toRad((startDeg + endDeg)/2));
@@ -390,6 +386,7 @@
     let maxRotation = randomRange(360 * 3, 360 * 6);
     let pause = false;
 
+    // Function to animate the wheel
     function animate() {
         if (pause) return
 
@@ -407,12 +404,10 @@
         
     }
 
-    function check() {
-        if (items.length != 0) spin()
-    }
-
+    // Function to spin the wheel
     function spin() {
-        if(speed != 0){
+        if (items.length != 0) {
+            if(speed != 0){
                 return
             }
 
@@ -421,8 +416,8 @@
             maxRotation = randomRange(360 * 3, 360 * 6)
             pause = false
             window.requestAnimationFrame(animate);
+        }
     }
-
 </script>
 
 <!-- Script to show winner and add to history with AJAX -->
@@ -430,6 +425,7 @@
     const addSpinHistoryBtn = document.getElementById("addSpinHistoryBtn");
     const closeModalBtn = document.getElementById("closeModalBtn");
 
+    // Function to show winner modal
     function showWinnerModal(winnerName) {
         document.getElementById("winnerName").innerText = winnerName;
         document.getElementById("winnerRestaurant").innerText = itemsDict[winnerName]["restaurant"];
@@ -441,9 +437,13 @@
         document.getElementById("winnerModal").classList.add("hidden");
     }
 
+    // Function to add spin history
     function addSpinHistory() {
         const formData = new FormData();
         const winnerId = itemsDict[globalWinner]['id'];
+        console.log("addspinhist")
+        ngitung += 1
+        console.log(ngitung)
 
         formData.append("winner", globalWinner);
         formData.append("winnerId", winnerId);
@@ -460,10 +460,16 @@
         return false;
     }
   
+    var ngitung = 0
+    // Asynchronous function to refresh spin history
     async function refreshSpinHistory() {
+        console.log("refreshspinhist")
+        ngitung += 1
+        console.log(ngitung)
         document.getElementById("spin-history-container").innerHTML = "";
         document.getElementById("spin-history-container").className = "";
         const spinHistory = await getSpinHistory();
+        console.log(spinHistory)
         let htmlString = `
         <h1 class="text-4xl text-center">
             Yang <span class="italic">pernah</span> kamu spin
@@ -502,11 +508,14 @@
     }
     refreshSpinHistory();
  
+    // Asynchronous function to get spin history in json format
     async function getSpinHistory(){
       return fetch("{% url 'spinthewheel:history_json' %}").then((res) => res.json())
     }
-    
+  
+    // Asynchronous function to delete spin history based on primary key
     async function deleteSpinHistory(pk) {
+        console.log("delete")
         const response = await fetch(`/spinthewheel/delete/${pk}`, {
             method: 'DELETE',
             headers: {
@@ -516,18 +525,19 @@
         });
 
         if (response.ok) {
-            // Refresh the spin history after successful deletion
             refreshSpinHistory();
         } else {
             console.error("Error deleting spin history:", response.statusText);
         }
     }
 
+    // Event listener for the click of addSpinHistoryBtn
     document.getElementById("addSpinHistoryBtn").addEventListener("click", () => {
         addSpinHistory();
         hideWinnerModal();
     });
 
+    // Function to get cookie
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -543,6 +553,5 @@
         }
         return cookieValue;
     }
-    
 </script>
 {% endblock %}

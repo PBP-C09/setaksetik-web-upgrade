@@ -57,7 +57,7 @@ def add_spin_history(request):
 def delete_spin_history(request, id):
     spin_history = SpinHistory.objects.get(pk = id)
     spin_history.delete()
-    return HttpResponseRedirect(reverse('spinthewheel:menu_view'))
+    return HttpResponseRedirect(reverse('spinthewheel:spin_view'))
 
 def secret_view(request):
     context = {
