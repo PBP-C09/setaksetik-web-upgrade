@@ -1,6 +1,5 @@
-# Create your views here.
-import json
-from django.shortcuts import render,redirect, get_object_or_404
+# Create your views here
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Menu
 from main.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -8,24 +7,21 @@ from .forms import MenuFilterForm
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from .models import Menu
-
-# Create your views here.
-@login_required(login_url="main:login")
+@login_required(login_url='/login')
 def show_menu(request):
-    user = request.user
     user_profile = UserProfile.objects.get(user=request.user)
-    role = user_profile.role
-    # if user_profile.user_type.casefold() == "Admin":
-    #     menu_list = serializers.serialize('json', Menu.objects.all())
-    #     menu_list = serializers.deserialize('json', menu_list)
-    #     menu_list = [menu.object for menu in menu_list]
-
-    #     return render(request, 'admin_katalog.html', {'explore': menu_list})
     menus = Menu.objects.all()
     form = MenuFilterForm(request.GET)
-    # if role == "Customer":
+   
+    context = {
+        'form': form,
+        'explore': menus,  
+    }
+
     if form.is_valid():
         menu_name = form.cleaned_data.get("menu")
         kategori = form.cleaned_data.get("category")
@@ -37,37 +33,35 @@ def show_menu(request):
 
         if menu_name:
             menus = menus.filter(menu__icontains=menu_name)
-
         if kategori:
             menus = menus.filter(category__icontains=kategori)
-
         if harga:
             menus = menus.filter(price=harga)
-
         if restaurant:
             menus = menus.filter(restaurant_name__icontains=restaurant)
-
         if kota:
             menus = menus.filter(city__icontains=kota)
-
         if specialization:
             menus = menus.filter(specialized__icontains=specialization)
-
         if rate:
             menus = menus.filter(rating=rate)
 
-        context = {
-            'form': form,
-            'explore': menus,
-        }
+        context['explore'] = menus  
 
-        return render(request, 'menu.html', context)
+    # Jika pengguna adalah admin
+    if user_profile.role.casefold() == "admin":
+        return render(request, 'menu_admin.html', context)
+
+    return render(request, 'menu.html', context)
+
 
 def menu_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
     return render(request, 'menu_detail.html', context)
 
+@csrf_exempt
+@require_POST
 def add_menu(request):
     if request.method == "POST":
         menu = request.POST.get('menu')
@@ -98,6 +92,22 @@ def get_menu(request):
 def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def edit_menu(request, id):
+    data = Menu.objects.filter(pk=id)
+    form = MenuFilterForm(request.POST or None, instance=data)
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('explore:show_menu'))
+
+    context = {'form': form}
+    return render(request, "edit_menu.html", context)
+
+def delete_menu(request, id):
+    data = Menu.objects.filter(pk=id)
+    data.delete()
+    return HttpResponseRedirect(reverse('explore:show_menu'))
 
 @csrf_exempt
 def filter_menu(request):

@@ -3,24 +3,27 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         {% if user.is_authenticated %}
-          <span class="text-[#6d4c41] mr-4 text-2xl font-bold" style="font-family: 'Playfair Display'">
-            Setak <span class="italic font-normal">Setik</span>
-          </span>
-          
-          {% if request.user.userprofile.role == 'steak lover' %}
-            <a href="/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/' %}font-bold{% else %}font-normal{% endif %}">Home</a>
+        <a href="/" class="text-[#6d4c41] mr-4 text-2xl font-bold" style="font-family: 'Playfair Display'">
+          Setak <span class="italic font-normal">Setik</span>
+        </a> tes
+        
+          {% if user.userprofile.role == 'steak lover' %}
             <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Explore</a>
             <a href="/spinthewheel/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/spinthewheel/' %}font-bold{% else %}font-normal{% endif %}">Spin</a>
             <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Review</a>
             <a href="/meatup/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/meatup/' %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
             <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Booking</a>
+
+          {% elif user.userprofile.role == 'steakhouse owner' %}
+            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Claim Resto</a>
+            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Pantau Review</a>
+            <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Pantau Booking</a>
             
-          {% elif request.user.userprofile.role == 'steakhouse owner' %}
-            <a href="/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/' %}font-bold{% else %}font-normal{% endif %}">Home</a>
-            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Explore</a>
-            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Review</a>
-            <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Booking</a>
-            <a href="/claim/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/claim/' %}font-bold{% else %}font-normal{% endif %}">Claim</a>
+          {% elif user.userprofile.role == 'admin' %}
+            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Manage Explore</a>
+            <a href="/spinthewheel/secret/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/spinthewheel/secret/' %}font-bold{% else %}font-normal{% endif %}">Spin</a>
+            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Manage Review</a>
+            <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Manage Ownership</a>
           {% endif %}
         {% endif %}
       </div>
