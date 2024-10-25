@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'meatup',
+    'review',
+    'explore',
+    'booking',
+    'spinthewheel'
 ]
 
 MIDDLEWARE = [

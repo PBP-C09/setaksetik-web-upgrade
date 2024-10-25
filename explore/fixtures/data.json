@@ -1,0 +1,2102 @@
+[
+  {
+    "pk": 1,
+    "model": "explore.menu",
+    "fields": {
+      "id": 1,
+      "menu": "Classic Beef 90 Minutes",
+      "category": "Beef",
+      "restaurant_name": "Tucanos Churrascaria",
+      "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/67/6b/0d/the-authentic-brazilian.jpg?w=1200&h=-1&s=1",
+      "city": "Central Jakarta",
+      "price": 268000,
+      "rating": 4.7,
+      "specialized": "Brazilian",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 2,
+    "model": "explore.menu",
+    "fields": {
+      "id": 2,
+      "menu": "Baby Back Ribs with Fish Fillet",
+      "category": "Pork",
+      "restaurant_name": "Tony Romas",
+      "image": "https://www.tonyromas.com.my/i/m-combo-Lamb-Ribs-Quarter-Chicken.jpg",
+      "city": "Central Jakarta",
+      "price": 170000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 3,
+    "model": "explore.menu",
+    "fields": {
+      "id": 3,
+      "menu": "Wagyu Top Side",
+      "category": "Wagyu",
+      "restaurant_name": "Joni Steak",
+      "image": "https://www.hgwalter.com/cdn/shop/articles/221103_HGWalter_Xmas_TopsideWagyu_18.jpg?v=1669726190",
+      "city": "Central Jakarta",
+      "price": 72000,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 4,
+    "model": "explore.menu",
+    "fields": {
+      "id": 4,
+      "menu": "Tomahawk Bone In Rib Eye Steak",
+      "category": "Rib Eye",
+      "restaurant_name": "MUCCA Steak",
+      "image": "https://i0.wp.com/dreamcatcherbeef.com/wp-content/uploads/2021/05/AdobeStock_611241259-1-scaled.jpeg?fit=2560%2C1434&quality=89&ssl=1",
+      "city": "Central Jakarta",
+      "price": 940000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 5,
+    "model": "explore.menu",
+    "fields": {
+      "id": 5,
+      "menu": "Chivito Plato",
+      "category": "Sirloin",
+      "restaurant_name": "El Machote",
+      "image": "https://www.cocina-uruguaya.com/base/stock/Recipe/chivito-al-plato/chivito-al-plato_web.jpg",
+      "city": "Central Jakarta",
+      "price": 150000,
+      "rating": 4.1,
+      "specialized": "Mexican",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 6,
+    "model": "explore.menu",
+    "fields": {
+      "id": 6,
+      "menu": "Wagyu Rib Eye Rangers Valley",
+      "category": "Rib Eye",
+      "restaurant_name": "Holycow! Menteng",
+      "image": "https://image.popbela.com/content-images/post/20190202/rib-eye-d3acb5e9386ac64a3046a2c542b975ac.jpg?width=1600&format=webp&w=1600",
+      "city": "Central Jakarta",
+      "price": 199000,
+      "rating": 4.3,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 7,
+    "model": "explore.menu",
+    "fields": {
+      "id": 7,
+      "menu": "Australian Prime Tenderloin",
+      "category": "Tenderloin",
+      "restaurant_name": "Holycow! Pecenongan",
+      "image": "https://amyunus.com/wp-content/uploads/2017/12/p9500424.jpg",
+      "city": "Central Jakarta",
+      "price": 133000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 8,
+    "model": "explore.menu",
+    "fields": {
+      "id": 8,
+      "menu": "Sirloin Strip",
+      "category": "Sirloin",
+      "restaurant_name": "La Posta",
+      "image": "https://images.squarespace-cdn.com/content/v1/58572f228419c246cf703663/1611234178491-LTHJN6E65M1X6FT57ZI1/170707_La_Posta_Photo_Session_228-W2048.jpg",
+      "city": "Central Jakarta",
+      "price": 395000,
+      "rating": 4.6,
+      "specialized": "Argentinian",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 9,
+    "model": "explore.menu",
+    "fields": {
+      "id": 9,
+      "menu": "Saikoro Tenderloin Steak",
+      "category": "Tenderloin",
+      "restaurant_name": "Benihana Japanese Steakhouse",
+      "image": "https://www.ruparupa.com/blog/wp-content/uploads/2022/04/steak-tenderloin-air-fryer.jpeg",
+      "city": "Central Jakarta",
+      "price": 525000,
+      "rating": 4.6,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 10,
+    "model": "explore.menu",
+    "fields": {
+      "id": 10,
+      "menu": "US Prime Sirloin Steak",
+      "category": "Sirloin",
+      "restaurant_name": "Public Markette",
+      "image": "https://cdn.idntimes.com/content-images/community/2019/06/images-27-b4b32c4a4d1c02e37e6a9c4cd3118417_600x400.jpeg",
+      "city": "Central Jakarta",
+      "price": 375000,
+      "rating": 4.5,
+      "specialized": "Breakfast Cafe",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 11,
+    "model": "explore.menu",
+    "fields": {
+      "id": 11,
+      "menu": "Waterfall Sirloin on Hot Plate",
+      "category": "Sirloin",
+      "restaurant_name": "Greyhound Cafe",
+      "image": "https://cdn1-production-images-kly.akamaized.net/cJ2leoWtivfj6PJjhRejajtVc_0=/1200x900/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/872850/original/026901200_1431165060-food_steak_desktop_1302x1020_wallpaper-420339.jpg",
+      "city": "Central Jakarta",
+      "price": 245000,
+      "rating": 4.5,
+      "specialized": "Fushioned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 12,
+    "model": "explore.menu",
+    "fields": {
+      "id": 12,
+      "menu": "Wagyu Beef Tagliata",
+      "category": "Beef",
+      "restaurant_name": "Caffe Milano",
+      "image": "https://www.abubasteak.co.id/web/image/product.template/2548/image_1024?unique=8633846",
+      "city": "Central Jakarta",
+      "price": 380000,
+      "rating": 4.5,
+      "specialized": "Italian",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 13,
+    "model": "explore.menu",
+    "fields": {
+      "id": 13,
+      "menu": "Australian Gras Fed Tenderloin 160gr",
+      "category": "Tenderloin",
+      "restaurant_name": "Ninety Nine",
+      "image": "https://img.ws.mms.shopee.co.id/b44dade501873d6136202811e26b52fc",
+      "city": "Central Jakarta",
+      "price": 325000,
+      "rating": 4.4,
+      "specialized": "Indonesian, Singaporean",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 14,
+    "model": "explore.menu",
+    "fields": {
+      "id": 14,
+      "menu": "Filetto di Manzo in Salsa Al Gorgonzola",
+      "category": "Lamb",
+      "restaurant_name": "Rosso",
+      "image": "https://assets-pergikuliner.com/9rLPm7U_a3K0T-DR_BE-jTrFKyw=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/2427974/picture-1644914572.jpg",
+      "city": "Central Jakarta",
+      "price": 490000,
+      "rating": 4.5,
+      "specialized": "Italian",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 15,
+    "model": "explore.menu",
+    "fields": {
+      "id": 15,
+      "menu": "La Spada",
+      "category": "Fish",
+      "restaurant_name": "Ocha & Bella",
+      "image": "https://img.ws.mms.shopee.co.id/3e3969dc856ca87fc166a6f6d5bb06df",
+      "city": "Central Jakarta",
+      "price": 460000,
+      "rating": 4.5,
+      "specialized": "Italian, Japanese",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 16,
+    "model": "explore.menu",
+    "fields": {
+      "id": 16,
+      "menu": "Kobe Beef 200gr",
+      "category": "Beef",
+      "restaurant_name": "Angus House",
+      "image": "https://img.qraved.co/v2/image/data/main-photo-1545042173177-x.png",
+      "city": "Central Jakarta",
+      "price": 1570000,
+      "rating": 4.6,
+      "specialized": "Japanese",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 17,
+    "model": "explore.menu",
+    "fields": {
+      "id": 17,
+      "menu": "Porterhouse Steak Florentine Style",
+      "category": "T-Bone",
+      "restaurant_name": "Akira Watanabe",
+      "image": "https://cdn.idntimes.com/content-images/community/2024/05/whatsapp-image-2024-05-22-at-053718-b69131d0e63c1e8764173f4db6e9487c-2540b625f1cb724e8e2b6fe3eb462703.jpeg",
+      "city": "Central Jakarta",
+      "price": 1200000,
+      "rating": 4.5,
+      "specialized": "Japanese",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 18,
+    "model": "explore.menu",
+    "fields": {
+      "id": 18,
+      "menu": "Angus Rib Eye",
+      "category": "Rib Eye",
+      "restaurant_name": "OSCAR",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoTyM8T4R20afQZ6E7DS5lIJnACxDUq75u4xfL6uqm-s57hg361G_cCaOpeqV_iePKzyk&usqp=CAU",
+      "city": "Central Jakarta",
+      "price": 480000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 19,
+    "model": "explore.menu",
+    "fields": {
+      "id": 19,
+      "menu": "Tenderloin 200gr",
+      "category": "Tenderloin",
+      "restaurant_name": "Open Restaurant",
+      "image": "https://kurio-img.kurioapps.com/21/02/22/3f68a325-d222-47e1-b58c-0a712f1ad436.jpe",
+      "city": "Central Jakarta",
+      "price": 359000,
+      "rating": 4.4,
+      "specialized": "Fushioned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 20,
+    "model": "explore.menu",
+    "fields": {
+      "id": 20,
+      "menu": "Grilled Steak Sandwich with Black Angus Tenderloin",
+      "category": "Tenderloin",
+      "restaurant_name": "Signatures Restaurant",
+      "image": "https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2023/07/31072204/Ini-Cara-Membuat-Steak-Daging-Ala-Restoran-yang-Empuk-dan-Juicy.jpg.webp",
+      "city": "Central Jakarta",
+      "price": 235000,
+      "rating": 4.5,
+      "specialized": "Fushioned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 21,
+    "model": "explore.menu",
+    "fields": {
+      "id": 21,
+      "menu": "USDA Prime Rib Eye Pepper Steak",
+      "category": "Rib Eye",
+      "restaurant_name": "SKYE",
+      "image": "https://radarjabar.disway.id/upload/c92934863639124ed9542801a3ef16d5.png",
+      "city": "Central Jakarta",
+      "price": 220000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 22,
+    "model": "explore.menu",
+    "fields": {
+      "id": 22,
+      "menu": "US Tenderloin",
+      "category": "Tenderloin",
+      "restaurant_name": "Holycow! Kalimalang",
+      "image": "https://assets-pergikuliner.com/3bYNlwOvYA5wS29RS69AFpYYyuU=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/831007/picture-1519119990.jpeg",
+      "city": "East Jakarta",
+      "price": 149000,
+      "rating": 4.6,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 23,
+    "model": "explore.menu",
+    "fields": {
+      "id": 23,
+      "menu": "AUS Wagyu Meltique Rib Eye 150gr",
+      "category": "Rib Eye",
+      "restaurant_name": "iSTEAKu",
+      "image": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/3b6726cb-eb96-47a2-85be-8ad019028e32_Go-Biz_20210905_163212.jpeg",
+      "city": "East Jakarta",
+      "price": 119000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 24,
+    "model": "explore.menu",
+    "fields": {
+      "id": 24,
+      "menu": "Supreme Tenderloin Regular 200gr",
+      "category": "Tenderloin",
+      "restaurant_name": "Steak 21",
+      "image": "https://steak21.id/assets/images/lp1/sirloin-wagyu-lp.png",
+      "city": "East Jakarta",
+      "price": 166000,
+      "rating": 3.6,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 25,
+    "model": "explore.menu",
+    "fields": {
+      "id": 25,
+      "menu": "Wagyu Top Blade",
+      "category": "Beef",
+      "restaurant_name": "Blue Fire Steakhouse",
+      "image": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/3a8227b8-9708-4e14-99fc-b50ec742cebf_IMG_20190809_161930_204.jpg",
+      "city": "East Jakarta",
+      "price": 106000,
+      "rating": 4.6,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 26,
+    "model": "explore.menu",
+    "fields": {
+      "id": 26,
+      "menu": "Steak Waroeng with Cheese Sauce",
+      "category": "Beef",
+      "restaurant_name": "Waroeng Steak & Shake",
+      "image": "https://waroengsteakandshake.com/img/img_menu/STEAK_WAROENG.png",
+      "city": "East Jakarta",
+      "price": 32727,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 27,
+    "model": "explore.menu",
+    "fields": {
+      "id": 27,
+      "menu": "Burger Steak",
+      "category": "Other",
+      "restaurant_name": "Andakar",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0d/f8/a3/8e/cymera-20161226-192015.jpg",
+      "city": "East Jakarta",
+      "price": 56000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 28,
+    "model": "explore.menu",
+    "fields": {
+      "id": 28,
+      "menu": "Steak Tepung Beef Double",
+      "category": "Beef",
+      "restaurant_name": "Obonk Steak & Ribs",
+      "image": "https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/radarjogja/2023/02/IMG-20230214-WA0134.jpg",
+      "city": "East Jakarta",
+      "price": 32000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 29,
+    "model": "explore.menu",
+    "fields": {
+      "id": 29,
+      "menu": "Hokubee Rib Eye",
+      "category": "Rib Eye",
+      "restaurant_name": "Holycow! Halim Perdanakusuma",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/10/96/49/9b/wagyu-9.jpg",
+      "city": "East Jakarta",
+      "price": 158000,
+      "rating": 4.1,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 30,
+    "model": "explore.menu",
+    "fields": {
+      "id": 30,
+      "menu": "Sirloin Crispy Steak",
+      "category": "Sirloin",
+      "restaurant_name": "Industrial Steak & Blend",
+      "image": "https://news.cgtn.com/news/2020-07-01/You-could-soon-order-your-beef-steak-in-3D-printed-form-RLP6k7dukE/img/4e0abfd9563f4d3a8d425aaefc736b35/4e0abfd9563f4d3a8d425aaefc736b35-1280.png",
+      "city": "East Jakarta",
+      "price": 41000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 31,
+    "model": "explore.menu",
+    "fields": {
+      "id": 31,
+      "menu": "Mozarella Sirloin",
+      "category": "Sirloin",
+      "restaurant_name": "Besteak",
+      "image": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/63035262-590d-4d12-8bb4-d00d98a69159_master-menu-item-image_1615035467973.jpg",
+      "city": "East Jakarta",
+      "price": 57000,
+      "rating": 3.8,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 32,
+    "model": "explore.menu",
+    "fields": {
+      "id": 32,
+      "menu": "Fried Chicken Steak",
+      "category": "Chicken",
+      "restaurant_name": "Roellies",
+      "image": "https://assets-pergikuliner.com/vVkbJvjeOnam3bUCpyJz3arUEFA=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1483367/picture-1562831351.jpg",
+      "city": "East Jakarta",
+      "price": 63500,
+      "rating": 2.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 33,
+    "model": "explore.menu",
+    "fields": {
+      "id": 33,
+      "menu": "Grill Ribs Large 1000gr",
+      "category": "Pork",
+      "restaurant_name": "OMG Octavs Meat & Grill",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3dpWNinNvjVYYTMl_UmetdFwzH1ZRXFSQj8WWHtgsZ2qEpgda2Tns-BvMlg8GNIgUDg&usqp=CAU",
+      "city": "East Jakarta",
+      "price": 170000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 34,
+    "model": "explore.menu",
+    "fields": {
+      "id": 34,
+      "menu": "Chicken Steak",
+      "category": "Chicken",
+      "restaurant_name": "El Bana Steak & Ribs",
+      "image": "https://img.qraved.co/v2/image/data/steak-3-1518835554721-t.jpeg",
+      "city": "East Jakarta",
+      "price": 32000,
+      "rating": 4.2,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 35,
+    "model": "explore.menu",
+    "fields": {
+      "id": 35,
+      "menu": "Sanchoku Wagyu Rib Eye 200gr",
+      "category": "Rib Eye",
+      "restaurant_name": "Pepperloin Steakhouse",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ43dfsDn1Hej6DUitq5N-jlDjorGJjeJTATA&s",
+      "city": "North Jakarta",
+      "price": 210000,
+      "rating": 4.5,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 36,
+    "model": "explore.menu",
+    "fields": {
+      "id": 36,
+      "menu": "Australian Prime Big Bite Sirloin",
+      "category": "Sirloin",
+      "restaurant_name": "Holycow! Pantai Indah Kapuk",
+      "image": "https://assets-pergikuliner.com/RAyYvZdyVojSTFuM5zlx6yTEysc=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/3018490/picture-1692840759.jpg",
+      "city": "North Jakarta",
+      "price": 170000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 37,
+    "model": "explore.menu",
+    "fields": {
+      "id": 37,
+      "menu": "Park Lane Steak 200gr",
+      "category": "Beef",
+      "restaurant_name": "Street Steak",
+      "image": "https://www.eatthis.com/wp-content/uploads/sites/4/2023/04/Applebees-Bourbon-Street-Steak.jpg?quality=82&strip=all",
+      "city": "North Jakarta",
+      "price": 129000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 38,
+    "model": "explore.menu",
+    "fields": {
+      "id": 38,
+      "menu": "Victorian Tenderloin",
+      "category": "Tenderloin",
+      "restaurant_name": "BSteak Grill & Pancake",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-p/18/4a/79/c3/20190712-193911-largejpg.jpg",
+      "city": "North Jakarta",
+      "price": 268500,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 39,
+    "model": "explore.menu",
+    "fields": {
+      "id": 39,
+      "menu": "Rib Eye Australia",
+      "category": "Rib Eye",
+      "restaurant_name": "Warung Wagyu",
+      "image": "https://asset-2.tstatic.net/tribunnews/foto/bank/images/wagyu-steak_20180817_083818.jpg",
+      "city": "North Jakarta",
+      "price": 95000,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 40,
+    "model": "explore.menu",
+    "fields": {
+      "id": 40,
+      "menu": "Volcano and The Ring of Fire",
+      "category": "Other",
+      "restaurant_name": "BarBarRibs",
+      "image": "https://assets-pergikuliner.com/PdyuVIJ35y0ipAIRWCUL0dqaz8s=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/1322913/picture-1553150447.jpg",
+      "city": "North Jakarta",
+      "price": 299000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 41,
+    "model": "explore.menu",
+    "fields": {
+      "id": 41,
+      "menu": "Wagyu Rib Eye Steak",
+      "category": "Rib Eye",
+      "restaurant_name": "Alter Five Beer & Restaurant",
+      "image": "https://assets-pergikuliner.com/OZmlnFLxmVYQT9fLco149AcPMas=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1333597/picture-1553834798.jpeg",
+      "city": "North Jakarta",
+      "price": 330000,
+      "rating": 5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 42,
+    "model": "explore.menu",
+    "fields": {
+      "id": 42,
+      "menu": "New Zealand Lamb Chop",
+      "category": "Lamb",
+      "restaurant_name": "Abuba Steak",
+      "image": "https://images.tokopedia.net/img/JFrBQq/2022/9/30/cc7b2b83-5cf4-4422-8460-cc7cefcfed51.jpg",
+      "city": "North Jakarta",
+      "price": 95000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": false,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 43,
+    "model": "explore.menu",
+    "fields": {
+      "id": 43,
+      "menu": "Kolonel Burger Steak",
+      "category": "Other",
+      "restaurant_name": "Kapten Steak",
+      "image": "https://scontent.fcgk12-1.fna.fbcdn.net/v/t39.30808-6/461521079_27263342473264175_2899008999139634378_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=0b6b33&_nc_ohc=pXGSa8BtG6MQ7kNvgEVFCjo&_nc_ht=scontent.fcgk12-1.fna&_nc_gid=AjZRJ5DcAbYDAXXvXwEhy4S&oh=00_AYCacz3NOQ3oRVcrNlVR_-i2ldppf55ISScmUfGqlzOCDg&oe=670C8791",
+      "city": "North Jakarta",
+      "price": 68000,
+      "rating": 4.3,
+      "specialized": "Local",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 44,
+    "model": "explore.menu",
+    "fields": {
+      "id": 44,
+      "menu": "Paket C Supreme",
+      "category": "Other",
+      "restaurant_name": "Steak 21 Buffet",
+      "image": "https://assets-pergikuliner.com/J0GooPMGlO2aFS8XGCuc55VWyG4=/770x580/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1578175/picture-1568010930.jpg",
+      "city": "North Jakarta",
+      "price": 368000,
+      "rating": 4.2,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 45,
+    "model": "explore.menu",
+    "fields": {
+      "id": 45,
+      "menu": "Rib Eye Large",
+      "category": "Rib Eye",
+      "restaurant_name": "Aya Steak",
+      "image": "https://www.smokeandsear.world/wp-content/uploads/2021/02/Rib-eye-steak-Medium-Rare.jpg",
+      "city": "North Jakarta",
+      "price": 50000,
+      "rating": 4.3,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 46,
+    "model": "explore.menu",
+    "fields": {
+      "id": 46,
+      "menu": "Wagyu OZ",
+      "category": "Wagyu",
+      "restaurant_name": "Steak Gunting",
+      "image": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/dd4d91bc-6102-43a0-9c29-a6b6db79ecda_Go-Biz_20220701_104044.jpeg",
+      "city": "North Jakarta",
+      "price": 199000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 47,
+    "model": "explore.menu",
+    "fields": {
+      "id": 47,
+      "menu": "Norwegian Salmon Grill",
+      "category": "Fish",
+      "restaurant_name": "Good Friend",
+      "image": "https://www.fromnorway.com/globalassets/recipes/salmon/grilled-salmon-with-salsaverde.jpg?width=1100&height=964&transform=downFill&hash=99a924832e165fa5da93a2a739187cc3",
+      "city": "North Jakarta",
+      "price": 158000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 48,
+    "model": "explore.menu",
+    "fields": {
+      "id": 48,
+      "menu": "Parkiran T-Bone 200gr",
+      "category": "T-Bone",
+      "restaurant_name": "Parkiran Steak & Bar",
+      "image": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2007/1/2/0/valentines_steak.jpg.rend.hgtvcom.616.462.suffix/1557859049553.webp",
+      "city": "North Jakarta",
+      "price": 122000,
+      "rating": 3,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 49,
+    "model": "explore.menu",
+    "fields": {
+      "id": 49,
+      "menu": "Pleasure Pork Ribs",
+      "category": "Pork",
+      "restaurant_name": "The Garden",
+      "image": "https://assets-pergikuliner.com/alh_MLbN4PC4ghQrdAfOBg-lZfs=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/2883678/picture-1681799973.jpg",
+      "city": "North Jakarta",
+      "price": 170000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 50,
+    "model": "explore.menu",
+    "fields": {
+      "id": 50,
+      "menu": "Hibachi Steak Hokubee Sirloin",
+      "category": "Sirloin",
+      "restaurant_name": "Beatrice Quarters",
+      "image": "https://xoxobella.com/wp-content/uploads/2024/08/steak_hibachi_killet_15.jpg",
+      "city": "North Jakarta",
+      "price": 175000,
+      "rating": 4.3,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 51,
+    "model": "explore.menu",
+    "fields": {
+      "id": 51,
+      "menu": "Salmon Trout",
+      "category": "Fish",
+      "restaurant_name": "Frankfurter Hotdog & Steak",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3Dwu0ZBZ65tZRejrqxzonhZnf23VYU59WKA&s",
+      "city": "North Jakarta",
+      "price": 175000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 52,
+    "model": "explore.menu",
+    "fields": {
+      "id": 52,
+      "menu": "Tomahawk",
+      "category": "Rib Eye",
+      "restaurant_name": "PAVVO Kitchen Bar & Lounge",
+      "image": "https://golftimes.id/wp-content/uploads/2023/08/Tomahawk-444x628.jpg",
+      "city": "North Jakarta",
+      "price": 1850000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 53,
+    "model": "explore.menu",
+    "fields": {
+      "id": 53,
+      "menu": "US T-Bone Steak",
+      "category": "T-Bone",
+      "restaurant_name": "PVBLIC Bistro & Bar",
+      "image": "https://www.eatthis.com/wp-content/uploads/sites/4/2022/10/T-Bone-steak.jpg?quality=82&strip=1",
+      "city": "North Jakarta",
+      "price": 250000,
+      "rating": 4.3,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 54,
+    "model": "explore.menu",
+    "fields": {
+      "id": 54,
+      "menu": "Kitchenette Steak Frites",
+      "category": "Beef",
+      "restaurant_name": "Kitchenette",
+      "image": "https://assets-pergikuliner.com/V9boTDdZG-yOcm7koGiCHp9r9jk=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2223598/picture-1621186565.jpeg",
+      "city": "South Jakarta",
+      "price": 205000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 55,
+    "model": "explore.menu",
+    "fields": {
+      "id": 55,
+      "menu": "Dry Aged Beef",
+      "category": "Beef",
+      "restaurant_name": "Indoguna Meat Shop",
+      "image": "https://lh3.googleusercontent.com/proxy/LJRfU4uf4kfwxQAgaRBhq8OuakJPvVHYxnRH3RNzhXTChDFU6DjA4hMEZqvNgFmmlPj3j32s8Khi5NF9o1aWCLLw99lmSAeIZLyTrjXa2I7RiQSGGcdZJuVJ7soOJNizIIf0sLE3U3IvCi38ytBAHsqVpS9iiP-yEsv15sLf0DvB6zcYxUF0XF8glTmMtL42GZddQ_jR8_e1sei4",
+      "city": "South Jakarta",
+      "price": 125000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 56,
+    "model": "explore.menu",
+    "fields": {
+      "id": 56,
+      "menu": "Steak aus Champignons",
+      "category": "Other",
+      "restaurant_name": "Cafe de Paris",
+      "image": "https://www.jurnalasia.com/wp-content/uploads/2014/10/HLsteak-lezat.jpg",
+      "city": "South Jakarta",
+      "price": 98000,
+      "rating": 4,
+      "specialized": "French",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 57,
+    "model": "explore.menu",
+    "fields": {
+      "id": 57,
+      "menu": "Australian Wagyu Tomahawk",
+      "category": "Rib Eye",
+      "restaurant_name": "Cut & Grill",
+      "image": "https://img.okezone.com/content/2010/10/27/299/387101/Bt3DHuOjCu.jpg",
+      "city": "South Jakarta",
+      "price": 1800000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 58,
+    "model": "explore.menu",
+    "fields": {
+      "id": 58,
+      "menu": "Petite Filet and Shrimp",
+      "category": "Fish",
+      "restaurant_name": "Ruths Chris Steakhouse",
+      "image": "https://asset-a.grid.id/crop/0x0:0x0/945x630/photo/grid/original/132740_daging.jpg",
+      "city": "South Jakarta",
+      "price": 770000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 59,
+    "model": "explore.menu",
+    "fields": {
+      "id": 59,
+      "menu": "Beef Parmigiana",
+      "category": "Beef",
+      "restaurant_name": "Meat Me Steak House & Butchery",
+      "image": "https://www.aussiebutchernewlynn.co.nz/cdn/shop/articles/Beef_Parmigiana_recipe_-_Aussie_Butcher_New_Lynn_1024x1024.png?v=1634857430",
+      "city": "South Jakarta",
+      "price": 125000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 60,
+    "model": "explore.menu",
+    "fields": {
+      "id": 60,
+      "menu": "Beef Ribs Lollipop",
+      "category": "Pork",
+      "restaurant_name": "The Real Holysteak!",
+      "image": "https://asset.kompas.com/crops/_dGf2HGdZG6Q2n9dz1RACUkg1ME=/60x156:1571x1163/1200x800/data/photo/2019/07/13/1626531559.jpg",
+      "city": "South Jakarta",
+      "price": 199000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 61,
+    "model": "explore.menu",
+    "fields": {
+      "id": 61,
+      "menu": "Meatville Australian PR Striploin (per gram)",
+      "category": "Beef",
+      "restaurant_name": "J Steak",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0e/a9/c9/0f/striploin-steak-australian.jpg",
+      "city": "South Jakarta",
+      "price": 85000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 62,
+    "model": "explore.menu",
+    "fields": {
+      "id": 62,
+      "menu": "Southern Styles Beef Ribs Half Rack (2 sides)",
+      "category": "Pork",
+      "restaurant_name": "Holy Smokes",
+      "image": "https://assets-pergikuliner.com/HX_B9n6H9my-ZYPxPQChzAFrhrM=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/1961222/picture-1594118309.jpg",
+      "city": "South Jakarta",
+      "price": 295000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 63,
+    "model": "explore.menu",
+    "fields": {
+      "id": 63,
+      "menu": "Hickhory Back Ribs",
+      "category": "Pork",
+      "restaurant_name": "Couz Steakhouse",
+      "image": "https://popmenucloud.com/cdn-cgi/image/width=1920,height=1920,format=auto,fit=scale-down/dvximepw/861fee56-71db-448f-90ad-6350e0fbd0d8.jpg",
+      "city": "South Jakarta",
+      "price": 155000,
+      "rating": 4.7,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 64,
+    "model": "explore.menu",
+    "fields": {
+      "id": 64,
+      "menu": "New York Striploin 300gr",
+      "category": "Rib Eye",
+      "restaurant_name": "Bistecca",
+      "image": "https://assets-pergikuliner.com/yNnmVdCcFhj2dN8VffaUZDlJzcU=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/1518023/picture-1564852082.JPG",
+      "city": "South Jakarta",
+      "price": 660000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 65,
+    "model": "explore.menu",
+    "fields": {
+      "id": 65,
+      "menu": "Wagyu Riserva 9+ Picanha 100gr",
+      "category": "Beef",
+      "restaurant_name": "AGED+ Butchered Steakhouse",
+      "image": "https://assets-pergikuliner.com/e1Wxis3rIBuTGdCFF4Byj4AzAQ4=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/2474769/picture-1649779998.jpg",
+      "city": "South Jakarta",
+      "price": 320000,
+      "rating": 4.8,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 66,
+    "model": "explore.menu",
+    "fields": {
+      "id": 66,
+      "menu": "Vins Aust Special",
+      "category": "Beef",
+      "restaurant_name": "Vins Steak",
+      "image": "https://img.qraved.co/v2/image/data/instagramphoto/1511337302068_20181086_332441317192435_3193814745903792128_n-m.jpg",
+      "city": "South Jakarta",
+      "price": 83500,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 67,
+    "model": "explore.menu",
+    "fields": {
+      "id": 67,
+      "menu": "Sirloin Double Mushroom",
+      "category": "Sirloin",
+      "restaurant_name": "Lokananta",
+      "image": "https://assets-pergikuliner.com/fWe6jyUJFMQBeVaQDUN_H1pGDlE=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/1455585/picture-1561121065.jpg",
+      "city": "South Jakarta",
+      "price": 180000,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 68,
+    "model": "explore.menu",
+    "fields": {
+      "id": 68,
+      "menu": "Filetto Al Pepe Verde",
+      "category": "Other",
+      "restaurant_name": "Volare",
+      "image": "https://assets-pergikuliner.com/o1SRpGz0U8N0sCDXuBCJwY-jJLU=/166x164/smart/https://assets-pergikuliner.com/uploads/image/picture/1109071/picture-1539529252.JPG",
+      "city": "South Jakarta",
+      "price": 295000,
+      "rating": 4,
+      "specialized": "Italian",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 69,
+    "model": "explore.menu",
+    "fields": {
+      "id": 69,
+      "menu": "Sirloin Double",
+      "category": "Sirloin",
+      "restaurant_name": "Stallo Steak & Spaghetti",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-p/19/8b/31/20/steak-kakapnya-ok-steak.jpg",
+      "city": "South Jakarta",
+      "price": 22000,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 70,
+    "model": "explore.menu",
+    "fields": {
+      "id": 70,
+      "menu": "Porterhouse for Two",
+      "category": "T-Bone",
+      "restaurant_name": "Wolfgangs Steakhouse",
+      "image": "https://assets-pergikuliner.com/ypA8_ZP-d7IwksPItTuWrLGdTSQ=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/1892700/picture-1584006271.jpg",
+      "city": "South Jakarta",
+      "price": 1950000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 71,
+    "model": "explore.menu",
+    "fields": {
+      "id": 71,
+      "menu": "Black Angus Sirloin",
+      "category": "Sirloin",
+      "restaurant_name": "Madgrill Steak",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGOjsowUusBf8PwU3aeTos8GFXZppUruUPkQ&s",
+      "city": "South Jakarta",
+      "price": 92000,
+      "rating": 3,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 72,
+    "model": "explore.menu",
+    "fields": {
+      "id": 72,
+      "menu": "Bifes Con Cebolla",
+      "category": "Beef",
+      "restaurant_name": "El Asador",
+      "image": "https://assets-pergikuliner.com/nwYunbaTPyU2MkbomkmgqRnmYfA=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/3075108/picture-1697970803.jpg",
+      "city": "South Jakarta",
+      "price": 190000,
+      "rating": 4.5,
+      "specialized": "Mexican",
+      "takeaway": false,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 73,
+    "model": "explore.menu",
+    "fields": {
+      "id": 73,
+      "menu": "USDA Choice Beef Striploin 300gr",
+      "category": "Beef",
+      "restaurant_name": "Tokyo Skipjack",
+      "image": "https://assets-pergikuliner.com/41_pBNulzsusU5neXJESwp-21rU=/312x0/smart/https://assets-pergikuliner.com/uploads/image/picture/2923050/picture-1684947505.PNG",
+      "city": "South Jakarta",
+      "price": 235000,
+      "rating": 4.6,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 74,
+    "model": "explore.menu",
+    "fields": {
+      "id": 74,
+      "menu": "Tenderloin Mushroom Steak",
+      "category": "Tenderloin",
+      "restaurant_name": "Soeryo Cafe & Steak",
+      "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0b/7e/68/88/australian-tenderloin.jpg?w=900&h=500&s=1",
+      "city": "South Jakarta",
+      "price": 119500,
+      "rating": 4.5,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 75,
+    "model": "explore.menu",
+    "fields": {
+      "id": 75,
+      "menu": "Beef Sirloin Marsala Sauce",
+      "category": "Sirloin",
+      "restaurant_name": "VIN+ Wine & Beyond",
+      "image": "https://assets-pergikuliner.com/oY5eHBhGtkqKFgDtKPab-45IaAM=/fit-in/1138x598/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/939986/picture-1527517887.JPG",
+      "city": "South Jakarta",
+      "price": 190000,
+      "rating": 4.6,
+      "specialized": "Fushioned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 76,
+    "model": "explore.menu",
+    "fields": {
+      "id": 76,
+      "menu": "Steak Lidah",
+      "category": "Other",
+      "restaurant_name": "Iga Ku",
+      "image": "https://assets-pergikuliner.com/9AeKwq3tO25x5md9UUMmB-rX1Ng=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/1465834/picture-1561700824.jpg",
+      "city": "South Jakarta",
+      "price": 58000,
+      "rating": 4.5,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 77,
+    "model": "explore.menu",
+    "fields": {
+      "id": 77,
+      "menu": "30 Days NY Strip",
+      "category": "Beef",
+      "restaurant_name": "Animale Restaurant",
+      "image": "https://assets-pergikuliner.com/0tbGM0I3ybz-kpKWAsohYeVK7Cg=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1893246/picture-1584047464.jpeg",
+      "city": "South Jakarta",
+      "price": 695000,
+      "rating": 4.6,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 78,
+    "model": "explore.menu",
+    "fields": {
+      "id": 78,
+      "menu": "AUS Chateaubriand",
+      "category": "Beef",
+      "restaurant_name": "Cork & Screw",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/04/c5/22/11/cork-screw.jpg",
+      "city": "South Jakarta",
+      "price": 290000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 79,
+    "model": "explore.menu",
+    "fields": {
+      "id": 79,
+      "menu": "Aussie Lamb Chop",
+      "category": "Lamb",
+      "restaurant_name": "Odysseia",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0f/80/c5/bd/aussie-lamb-chops.jpg",
+      "city": "South Jakarta",
+      "price": 288000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 80,
+    "model": "explore.menu",
+    "fields": {
+      "id": 80,
+      "menu": "Denver Steak 200gr",
+      "category": "Beef",
+      "restaurant_name": "Carbon",
+      "image": "https://assets-pergikuliner.com/5fzUGfxT_QbpK_N5CaFm1CbzAq0=/385x290/smart/https://assets-pergikuliner.com/uploads/image/picture/2244063/picture-1623208899.jpg",
+      "city": "South Jakarta",
+      "price": 295000,
+      "rating": 4.7,
+      "specialized": "Mexican",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 81,
+    "model": "explore.menu",
+    "fields": {
+      "id": 81,
+      "menu": "The Middleweight",
+      "category": "Beef",
+      "restaurant_name": "Bakerzin",
+      "image": "https://assets-pergikuliner.com/tkddgaOZ170AyjP6eK0GJA1LEmg=/fit-in/1366x768/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2357661/picture-1637047813.jpg",
+      "city": "South Jakarta",
+      "price": 188000,
+      "rating": 4.3,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 82,
+    "model": "explore.menu",
+    "fields": {
+      "id": 82,
+      "menu": "T-Bone Steak",
+      "category": "T-Bone",
+      "restaurant_name": "The Brotherhood",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/d4/22/0a/t-bone.jpg",
+      "city": "South Jakarta",
+      "price": 880000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 83,
+    "model": "explore.menu",
+    "fields": {
+      "id": 83,
+      "menu": "Prime Kuroge Chateaubriand",
+      "category": "Beef",
+      "restaurant_name": "Yawara",
+      "image": "https://assets-pergikuliner.com/d_bpfD8UigQcNlrzATqwMgnSIJs=/770x580/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/574084/picture-1496049660.JPG",
+      "city": "South Jakarta",
+      "price": 980000,
+      "rating": 4.6,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 84,
+    "model": "explore.menu",
+    "fields": {
+      "id": 84,
+      "menu": "Braised Beef Pie and Chips",
+      "category": "Beef",
+      "restaurant_name": "Queens Head",
+      "image": "https://assets-pergikuliner.com/GoZCLOtux8jE2fRZyxcCbMyfPf8=/fit-in/758x598/smart/https://assets-pergikuliner.com/uploads/image/picture/723567/picture-1509603292.JPG",
+      "city": "South Jakarta",
+      "price": 140000,
+      "rating": 4.4,
+      "specialized": "British",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 85,
+    "model": "explore.menu",
+    "fields": {
+      "id": 85,
+      "menu": "Signature Beef Ribs Half Rack",
+      "category": "Pork",
+      "restaurant_name": "Hurricanes Grill",
+      "image": "https://assets-pergikuliner.com/cjd9eG3dqzmkWYW7kIbUMBe1l5Y=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/3206978/picture-1709326257.JPG",
+      "city": "South Jakarta",
+      "price": 368000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 86,
+    "model": "explore.menu",
+    "fields": {
+      "id": 86,
+      "menu": "Australian Wagyu T-Bone Steak",
+      "category": "T-Bone",
+      "restaurant_name": "Sumibi",
+      "image": "https://assets-pergikuliner.com/UVgStD1NDtYPA3n5DlZ-5qT1IBo=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/2647694/picture-1664267900.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2748754/picture-1670409099.jpg",
+      "city": "South Jakarta",
+      "price": 460000,
+      "rating": 4.7,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 87,
+    "model": "explore.menu",
+    "fields": {
+      "id": 87,
+      "menu": "Beef Stroganof",
+      "category": "Beef",
+      "restaurant_name": "Lobbyn Sky Terrace",
+      "image": "https://assets-pergikuliner.com/NR6tYVpstBNPuP3Qpu1FCU0PsOg=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/457497/picture-1486372597.jpg",
+      "city": "South Jakarta",
+      "price": 120000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 88,
+    "model": "explore.menu",
+    "fields": {
+      "id": 88,
+      "menu": "Porcini Coffee Rubbed Steak",
+      "category": "Other",
+      "restaurant_name": "Bottega Ristorante",
+      "image": "https://assets-pergikuliner.com/L5Dng4eGRqfTQ9YkR_0LFwEY8IM=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/3149269/picture-1704522661.JPG",
+      "city": "South Jakarta",
+      "price": 295000,
+      "rating": 4.4,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 89,
+    "model": "explore.menu",
+    "fields": {
+      "id": 89,
+      "menu": "Crispy Breaded Chicken Steak",
+      "category": "Chicken",
+      "restaurant_name": "Amano Steakhouse",
+      "image": "https://assets-pergikuliner.com/5kD10EfMS6_u5qLrp4AxKKMovuA=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/854505/picture-1521167197.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1271661/picture-1550053508.JPG",
+      "city": "West Jakarta",
+      "price": 80000,
+      "rating": 4.3,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 90,
+    "model": "explore.menu",
+    "fields": {
+      "id": 90,
+      "menu": "Prime Rib Eye 200gr",
+      "category": "Rib Eye",
+      "restaurant_name": "Barapi Meat and Grill",
+      "image": "https://assets-pergikuliner.com/NjtgsqzH8ZFf82EIUb2Y9vCyd9Y=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2704260/picture-1667829713.jpg",
+      "city": "West Jakarta",
+      "price": 89000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 91,
+    "model": "explore.menu",
+    "fields": {
+      "id": 91,
+      "menu": "Angus Sirloin 150gr + Chicken Steak",
+      "category": "Sirloin",
+      "restaurant_name": "Meat Me Cafe & Butchery",
+      "image": "https://assets-pergikuliner.com/5OSJNU70Gp8geiG3SunscvPLoEw=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/325457/picture-1472967344.JPG",
+      "city": "West Jakarta",
+      "price": 115000,
+      "rating": 4.3,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 92,
+    "model": "explore.menu",
+    "fields": {
+      "id": 92,
+      "menu": "Tokusen Wagyu Rib Eye",
+      "category": "Rib Eye",
+      "restaurant_name": "Holycow! Puri Indah",
+      "image": "https://assets-pergikuliner.com/ZQ9hHwMb6PEm3neimhYZTg-5xkM=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2112878/picture-1609403090.jpg",
+      "city": "West Jakarta",
+      "price": 139000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 93,
+    "model": "explore.menu",
+    "fields": {
+      "id": 93,
+      "menu": "Jujuyaki Steak",
+      "category": "Beef",
+      "restaurant_name": "Fiesta Steak",
+      "image": "https://assets-pergikuliner.com/SqeWrAkYTESunGIr8bxYCIJqKqM=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2070029/picture-1604851635.jpg",
+      "city": "West Jakarta",
+      "price": 52727,
+      "rating": 3.5,
+      "specialized": "Local",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 94,
+    "model": "explore.menu",
+    "fields": {
+      "id": 94,
+      "menu": "Steak Combo Jumbo Keju Mayonaise",
+      "category": "Beef",
+      "restaurant_name": "Warung Steak 76",
+      "image": "https://assets-pergikuliner.com/dqn5Vmb_GAU7JBjAyK_VW06MkCI=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/2063160/picture-1604337574.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1709698/picture-1574845479.jpg",
+      "city": "West Jakarta",
+      "price": 35000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 95,
+    "model": "explore.menu",
+    "fields": {
+      "id": 95,
+      "menu": "Filet Amignon & Malibu Chicken",
+      "category": "Chicken",
+      "restaurant_name": "American Grill",
+      "image": "https://assets-pergikuliner.com/65MwOgmX2oDFPL0XrQRZoQewIwY=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/680020/picture-1505913253.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/691985/picture-1507010586.jpg",
+      "city": "West Jakarta",
+      "price": 325000,
+      "rating": 3.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 96,
+    "model": "explore.menu",
+    "fields": {
+      "id": 96,
+      "menu": "WB Steak Tokusen Rib Eye 160gr",
+      "category": "Rib Eye",
+      "restaurant_name": "Wb. Steak",
+      "image": "https://assets-pergikuliner.com/psoiiLJnXIB3XumMOV0-5mrKQlI=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1823464/picture-1580547714.jpg",
+      "city": "West Jakarta",
+      "price": 95000,
+      "rating": 4.3,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 97,
+    "model": "explore.menu",
+    "fields": {
+      "id": 97,
+      "menu": "Norwegian Salmon Steak",
+      "category": "Fish",
+      "restaurant_name": "DCore",
+      "image": "https://assets-pergikuliner.com/0S5mBeFQkaSFNtQjng71gHkyN5s=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/83721/picture-1441619943.jpg",
+      "city": "West Jakarta",
+      "price": 140000,
+      "rating": 4.3,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 98,
+    "model": "explore.menu",
+    "fields": {
+      "id": 98,
+      "menu": "Tatsuya Course",
+      "category": "Wagyu",
+      "restaurant_name": "Maison Tatsuya",
+      "image": "https://assets-pergikuliner.com/NSVodLyrjSBN8LRvFaZKiTUtUy0=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/2153272/picture-1614069897.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2289166/picture-1630141435.jpg",
+      "city": "West Jakarta",
+      "price": 458000,
+      "rating": 4.5,
+      "specialized": "Japanese",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": false
+    }
+  },
+  {
+    "pk": 99,
+    "model": "explore.menu",
+    "fields": {
+      "id": 99,
+      "menu": "Wagyu Minute Steak",
+      "category": "Rib Eye",
+      "restaurant_name": "Tamani Kafe",
+      "image": "https://assets-pergikuliner.com/HEWEnKPazG2NSVEihEvzj_KCYxc=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/99679/picture-1444459349.JPG",
+      "city": "West Jakarta",
+      "price": 124000,
+      "rating": 4.4,
+      "specialized": "Local Westerned",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 100,
+    "model": "explore.menu",
+    "fields": {
+      "id": 100,
+      "menu": "Buddys Special",
+      "category": "Beef",
+      "restaurant_name": "Holycow! Kebon Jeruk",
+      "image": "https://assets-pergikuliner.com/a4BbIiw8kRIsbWFlBsyfhJV7fnU=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2939342/picture-1686496623.jpg",
+      "city": "West Jakarta",
+      "price": 99000,
+      "rating": 4.6,
+      "specialized": "Local Westerned",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 101,
+    "model": "explore.menu",
+    "fields": {
+      "id": 101,
+      "menu": "Honey Baby Back Ribs Large",
+      "category": "Pork",
+      "restaurant_name": "Meaters Steak & Ribs",
+      "image": "https://assets-pergikuliner.com/lYd1onO6PEHu1UF3t_dbXufKIj0=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/3047359/picture-1695405870.jpg",
+      "city": "West Jakarta",
+      "price": 149000,
+      "rating": 4.4,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": true,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 102,
+    "model": "explore.menu",
+    "fields": {
+      "id": 102,
+      "menu": "Triple Sirloin",
+      "category": "Sirloin",
+      "restaurant_name": "Djakartas Steak",
+      "image": "https://assets-pergikuliner.com/k8P25UCSxBv0JrlROBb16mDWUEI=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2347621/picture-1636002818.jpg",
+      "city": "West Jakarta",
+      "price": 25000,
+      "rating": 4.2,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 103,
+    "model": "explore.menu",
+    "fields": {
+      "id": 103,
+      "menu": "Grilled Australian Lamb Leg",
+      "category": "Lamb",
+      "restaurant_name": "Gandy Steak House",
+      "image": "https://assets-pergikuliner.com/F5R9-RvIoWGRbljB9_nHA2hc2dw=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/401541/picture-1481204600.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/3270856/picture-1719064879.jpg",
+      "city": "West Jakarta",
+      "price": 129000,
+      "rating": 3.3,
+      "specialized": "Western",
+      "takeaway": false,
+      "delivery": false,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 104,
+    "model": "explore.menu",
+    "fields": {
+      "id": 104,
+      "menu": "DS Steak Platter",
+      "category": "Beef",
+      "restaurant_name": "Dunia Steak",
+      "image": "https://assets-pergikuliner.com/Hulj3jIDxxs8wpn5A8Pq4TFtOIs=/fit-in/1516x1196/smart/filters:no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/2380890/picture-1639649981.jpg",
+      "city": "West Jakarta",
+      "price": 63500,
+      "rating": 4.3,
+      "specialized": "Local",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": false,
+      "wifi": true
+    }
+  },
+  {
+    "pk": 105,
+    "model": "explore.menu",
+    "fields": {
+      "id": 105,
+      "menu": "Full Rack BBQ Baby Back Ribs",
+      "category": "Pork",
+      "restaurant_name": "SOULSPIN",
+      "image": "https://assets-pergikuliner.com/Mlo-b3G0-NHVhaqBCWpGDGfzaNE=/fit-in/1516x1196/smart/filters:watermark(https://assets-pergikuliner.com/uploads/image/picture/911485/picture-1525613238.png,-0,-3,20):no_upscale()/https://assets-pergikuliner.com/uploads/image/picture/1241501/picture-1548769839.jpeg",
+      "city": "West Jakarta",
+      "price": 389000,
+      "rating": 4.5,
+      "specialized": "Western",
+      "takeaway": true,
+      "delivery": true,
+      "outdoor": false,
+      "smoking_area": true,
+      "wifi": true
+    }
+  }
+]
