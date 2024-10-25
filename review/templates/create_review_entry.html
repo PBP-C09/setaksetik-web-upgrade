@@ -11,12 +11,6 @@
 
 {% block content %}
 <div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
-    <!-- <div class="filter-box">
-        <form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm()">
-            {{ form.as_p }}
-            <button type="submit" class="filter-btn">Filter</button>
-        </form>            
-    </div> -->
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
       Ingin<span class="italic"> review</span> menu apa?
     </h1>    
@@ -96,15 +90,16 @@
         <div class="mb-4">
             <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
             <input type="number" id="rating" name="rating" min="1"
-                class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Rating (1-5)" required>
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black" 
+            placeholder="Rating (1-5)" required>
         </div>
 
         <!-- Review Description -->
         <div class="mb-4">
             <label for="description" class="block text-sm font-medium text-gray-700">Review Description</label>
-            <textarea id="description" name="description" rows="3"
-                class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700"
-                placeholder="Jelaskan rating yang Anda berikan" required></textarea>
+<textarea id="description" name="description" rows="3"
+    class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
+    placeholder="Jelaskan rating yang Anda berikan" required></textarea>
         </div>
       </form>
 
@@ -116,7 +111,8 @@
         <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
           id="cancelButton">Cancel</button>
         <button type="submit" id="submitReviewEntry" form="ReviewEntryForm"
-          class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+          data-menu="{{ menu.menu }}"
+          class="btn bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">Save</button>
       </div>
   </div>
 

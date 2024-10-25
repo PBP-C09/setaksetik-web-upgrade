@@ -4,6 +4,7 @@ from django.http import HttpResponseNotFound
 from booking.forms import BookingForm, FilterForm
 from booking.models import Booking
 from explore.models import Menu
+from django.contrib.auth.models import User
 
 # Create your views here.
 def main_booking_page(request):

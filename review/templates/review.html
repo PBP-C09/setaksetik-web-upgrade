@@ -41,7 +41,8 @@
     </button> -->
   </div>
   
-  <div id="review_entry_cards"></div>
+  <div id="review_entry_cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"></div>
+
   
 </div>
 
@@ -69,6 +70,7 @@
     else {
       classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
       reviewEntries.forEach((item) => {
+        console.log("item " + item)
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
         const image = DOMPurify.sanitize(item.fields.image);
@@ -78,10 +80,6 @@
           <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
               <!-- Product Details -->
               <div class="p-4">
-                  <!-- Product Image -->
-                  <div class="flex items-center space-x-4 mb-4">
-                      <img class="w-24 h-24 rounded-lg object-cover" src="${image}" alt="${menu}">
-                  </div>
                   <!-- Product Name -->
                   <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
 
@@ -89,7 +87,7 @@
                   <div class="flex items-center space-x-2 mb-2">
                       <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
                       <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.place}
+                          ${place}
                       </p>
                   </div>
 
@@ -103,6 +101,13 @@
                   
                   <!-- Product Description -->
                   <p class="text-gray-600 mb-4">${item.fields.description}</p>
+
+
+                  <!-- Username -->
+                  <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
+                      by <br> {{ user.username }}
+                  </p>
+
               </div>
           </div>`;
 
