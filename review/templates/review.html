@@ -71,17 +71,11 @@
       reviewEntries.forEach((item) => {
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
-        const image = DOMPurify.sanitize(item.fields.image);
-        console.log(item);
         
         htmlString += `
           <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
               <!-- Product Details -->
               <div class="p-4">
-                  <!-- Product Image -->
-                  <div class="flex items-center space-x-4 mb-4">
-                      <img class="w-24 h-24 rounded-lg object-cover" src="${image}" alt="${menu}">
-                  </div>
                   <!-- Product Name -->
                   <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
 
@@ -148,8 +142,8 @@
     }, 150);
   }
 
-  document.getElementById("cancelButton").addEventListener("click", hideModal);
-  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+  // document.getElementById("cancelButton").addEventListener("click", hideModal);
+  // document.getElementById("closeModalBtn").addEventListener("click", hideModal);
 
   function addReviewEntry() {
     fetch("{% url 'review:create-review-entry-ajax' %}", {
@@ -158,22 +152,22 @@
     })
       .then(response => {
 
-        console.log(response);
+        console.log("masuk add");
         refreshReviewEntries()
         console.log("AKOWKOWKOWOK");
       }).catch(e => {
         console.log(e);
       })
 
-    document.getElementById("ReviewEntryForm").reset();
+    // document.getElementById("ReviewEntryForm").reset();
     document.querySelector("[data-modal-toggle='crudModal']").click();
 
     return false;
   }
-  document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    addReviewEntry();
-  })
+  // document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
+  //   e.preventDefault();
+  //   addReviewEntry();
+  // })
 </script>
 
 {% endblock content %}
