@@ -51,7 +51,10 @@ def show_menu(request):
     # Jika pengguna adalah admin
     if user_profile.role.casefold() == "admin":
         return render(request, 'menu_admin.html', context)
-
+    
+    if user_profile.role.casefold() == "steakhouse owner":
+        return render(request, 'menu_owner.html', context)
+    
     return render(request, 'menu.html', context)
 
 
@@ -60,23 +63,33 @@ def menu_detail(request, menu_id):
     context = {'menu': menu}
     return render(request, 'menu_detail.html', context)
 
+def admin_detail(request, menu_id):
+    menu = get_object_or_404(Menu, id=menu_id)
+    context = {'menu': menu}
+    return render(request, 'admin_detail.html', context)
+
+def owner_detail(request, menu_id):
+    menu = get_object_or_404(Menu, id=menu_id)
+    context = {'menu': menu}
+    return render(request, 'owner_detail.html', context)
+
 @csrf_exempt
 @require_POST
 def add_menu(request):
     if request.method == "POST":
-        menu = request.POST.get('menu')
+        menu = request.POST.get('menu_name')
         category = request.POST.get('category')
         restaurant_name = request.POST.get('restaurant_name')
         city = request.POST.get('city')
         price = request.POST.get('price')
         rating = request.POST.get('rating')
         specialized = request.POST.get('specialized')
-        takeaway = request.POST.get('takeaway')
-        delivery = request.POST.get('delivery')
-        outdoor = request.POST.get('outdoor')
-        smoking_area = request.POST.get('smoking_area')
-        wifi = request.POST.get('wifi')
-        image = request.POST.get('image')
+        takeaway = request.POST.get('takeaway') == 'on'
+        delivery = request.POST.get('delivery') == 'on'
+        outdoor = request.POST.get('outdoor') == 'on'
+        smoking_area = request.POST.get('smoking_area') == 'on'
+        wifi = request.POST.get('wifi') == 'on'
+        image = request.POST.get('image_url')
 
         new_menu = Menu(menu=menu, category=category, restaurant_name=restaurant_name, city=city, 
                         price=price, rating=rating, specialized=specialized, takeaway=takeaway, delivery=delivery, 
