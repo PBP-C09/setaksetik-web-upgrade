@@ -13,9 +13,8 @@ async function showAddMenuModal() {
   }
   
   async function addMenu() {
-    alert("ok") 
     const form = new FormData(document.querySelector("#form"));
-    const response = await fetch("/explore/", {
+    const response = await fetch("/explore/add_menu/", {
       method: "POST",
       body: form,
     });
