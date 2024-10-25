@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+
 {% endblock meta %}
 
 {% block content %}
@@ -122,57 +124,6 @@
   </div>
 
 <script>
-async function getReviewEntries() {
-    return fetch("{% url 'review:show_json' %}").then((res) => res.json())
-  }
-
-async function refreshReviewEntries() {
-    document.getElementById("review_entry_cards").innerHTML = "";
-    document.getElementById("review_entry_cards").className = "";
-    const reviewEntries = await getReviewEntries();
-    let htmlString = "";
-    let classNameString = "";
-
-    if (reviewEntries.length === 0) {
-      classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
-      htmlString = `
-            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-                <p class="text-center text-gray-600 mt-4">Belum ada data product pada mental health tracker.</p>
-            </div>
-        `;
-    }
-    else {
-      classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
-      reviewEntries.forEach((item) => {
-        const menu = DOMPurify.sanitize(item.fields.menu);
-        const place = DOMPurify.sanitize(item.fields.place);
-        console.log(item);
-        
-        htmlString += `
-            <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
-            <!-- Product Details -->
-            <div class="p-4">
-                <!-- Product Name -->
-                <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${item.fields.menu}</h3>
-                
-                <!-- Product Price -->
-                <div class="flex items-center space-x-2 mb-2">
-                <p class="text-xl font-semibold text-indigo-600">${item.fields.place},</p>
-                </div>
-                
-                <!-- Product Description -->
-                <p class="text-gray-600 mb-4">${item.fields.description}</p>
-            </div>
-            </div>`
-
-      });
-    }
-    document.getElementById("review_entry_cards").className = classNameString;
-    document.getElementById("review_entry_cards").innerHTML = htmlString;
-  }
-  refreshReviewEntries();
-
   const modal = document.getElementById('crudModal');
   console.log(modal)
   const modalContent = document.getElementById('crudModalContent');
