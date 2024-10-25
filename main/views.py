@@ -43,19 +43,6 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
-# def register(request):
-#     form = UserProfileForm()
-
-#     if request.method == "POST":
-#         form = UserProfileForm(request.POST)
-        
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Your account has been successfully created!')
-#             return redirect('main:login')
-#     context = {'form':form}
-#     return render(request, 'register.html', context)
-
 def login_user(request):
    if request.method == 'POST':
       form = AuthenticationForm(data=request.POST)
