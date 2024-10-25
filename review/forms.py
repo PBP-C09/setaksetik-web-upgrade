@@ -9,6 +9,8 @@ class ReviewEntryForm(ModelForm):
 
     # Pastikan untuk menambahkan validasi untuk field image jika diperlukan
 
+        fields = ["menu", "place", "rating", "description"]
+        
     def clean_menu(self):
         menu = self.cleaned_data["menu"]
         return strip_tags(menu)

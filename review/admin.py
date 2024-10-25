@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import ReviewEntry  # Import your model
+from review.models import ReviewEntry  # Import your model
 
 class ReviewEntryAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'rating', 'menu', 'place', 'description')  # Adjust fields as necessary

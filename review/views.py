@@ -35,6 +35,7 @@ def show_xml(request):
 
 def show_json(request):
     data = ReviewEntry.objects.filter(user=request.user)
+    data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):

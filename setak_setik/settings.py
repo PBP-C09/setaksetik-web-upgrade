@@ -40,6 +40,11 @@ INSTALLED_APPS = [
     'explore',
     'booking',
     'spinthewheel'
+    'explore',
+    'spinthewheel',
+    'review',
+    'meatup',
+    'booking',
 ]
 
 MIDDLEWARE = [

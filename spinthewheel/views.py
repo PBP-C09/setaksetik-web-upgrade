@@ -4,10 +4,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
+<<<<<<< HEAD
 import json
 
 from explore.models import Menu
 from .models import Option, SpinHistory
+=======
+
+from explore.models import Menu
+from .models import SpinHistory
+>>>>>>> 1077b3d03aed717edf531ab4bad1169598601a5e
 
 @login_required(login_url='/login')
 def menu_view(request):
