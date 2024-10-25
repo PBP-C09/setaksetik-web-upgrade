@@ -6,7 +6,7 @@ class ReviewEntryForm(ModelForm):
     class Meta:
         model = ReviewEntry
         fields = ["menu", "place", "rating", "description"]
-
+        
     def clean_menu(self):
         menu = self.cleaned_data["menu"]
         return strip_tags(menu)
