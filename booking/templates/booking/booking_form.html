@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% include 'navbar.html' %}
 
+{% load static %} 
+
 {% block meta %}
     <title>Book a Restaurant</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock meta %}
 
 {% block content %}
@@ -22,12 +24,54 @@
                 <label for="number_of_people" class="block text-lg font-semibold">Jumlah orang:</label>
                 <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input mt-1 block w-full" required>
             </div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Submit Booking</button>
+            <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Submit Booking</button>
         </form>
+
+        <div id="successMessage" class="hidden mt-4 p-4 bg-green-500 text-white rounded">
+            Booking berhasil disubmit!
+        </div>
+
+        <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500 text-white rounded">
+            Terjadi kesalahan saat menyimpan booking.
+        </div>
     </div>
 </div>
 {% endblock content %}
 
 {% block script %}
-<script src="/static/js/ajax_booking.js"></script>
+<script src="{% static 'js/ajax_booking.js' %}"></script>
+<script>
+    // AJAX submission for booking form
+    const form = document.getElementById('bookingForm');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(form);
+
+        fetch("{% url 'booking:booking_form' menu.id %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                successMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+                form.reset();
+            } else {
+                errorMessage.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+            }
+        })
+        .catch(error => {
+            errorMessage.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+        });
+    });
+</script>
 {% endblock script %}

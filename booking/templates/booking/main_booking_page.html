@@ -8,11 +8,11 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container mx-auto text-center">
-    <h1 class="text-4xl font-bold mb-8 text-yellow-200">Booking Menu</h1>
+<div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8">
+    <h1 class="text-4xl font-bold mb-6">Booking Menu</h1>
     <div class="text-center space-x-4 mb-12">
-        <a href="{% url 'booking:create_booking' %}" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">Buat Booking</a>
-        <a href="{% url 'booking:lihat_booking' %}" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded">Lihat Booking</a>
+        <a href="{% url 'booking:create_booking' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Buat Booking</a>
+        <a href="{% url 'booking:lihat_booking' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Lihat Booking</a>
     </div>
 </div>
 {% endblock content %}
