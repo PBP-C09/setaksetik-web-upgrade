@@ -5,6 +5,18 @@ from .models import MeatupRequest, Wishlist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/login')
+def show_requests(request):
+
+    requests = MeatupRequest.objects.filter(receiver=request.user)
+
+    context = {
+        'nama' : 'steak',
+        'lokasi' : 'jaksel',
+        'rating' : '5',
+    }
+    return render(request, 'meatup.html', context)
+
 @login_required
 def request_list(request):
     requests = MeatupRequest.objects.filter(receiver=request.user)

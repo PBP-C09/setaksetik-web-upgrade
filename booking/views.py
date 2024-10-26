@@ -61,7 +61,7 @@ def booking_form(request, menu_id):
             booking.menu_items = menu
             booking.user = request.user
             booking.save()
-            return redirect('booking:create_booking')
+            return redirect('booking:lihat_booking')
     else:
         form = BookingForm()
 
