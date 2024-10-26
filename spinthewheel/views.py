@@ -8,6 +8,7 @@ from django.core import serializers
 from explore.models import Menu
 from main.models import UserProfile
 from spinthewheel.models import SpinHistory, SecretHistory
+from spinthewheel.forms import SpinHistoryForm
 
 @login_required(login_url='/login')
 def spin_view(request):
@@ -37,17 +38,12 @@ def option_json(request, selected_category="All Categories"):
 @csrf_exempt
 @require_POST
 def add_spin_history(request):
-    user = request.user
-    winner = request.POST.get("winner")
-    winnerId = request.POST.get("winnerId")
+    form = SpinHistoryForm(request.POST or None)
 
     # Create new SpinHistory entry
-    if winner:
-        spin_history = SpinHistory(
-            user=user,
-            winner=winner,
-            winnerId=winnerId
-        )
+    if form.is_valid() and request.method == "POST":
+        spin_history = form.save(commit=False)
+        spin_history.user = request.user
         spin_history.save()
 
         return HttpResponse(b"CREATED", status=201)
