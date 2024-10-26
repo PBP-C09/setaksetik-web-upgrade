@@ -105,6 +105,23 @@ def edit_booking(request, booking_id):
 
     return render(request, 'booking/edit_booking.html', context)
 
+@login_required
+def pantau_booking_owner(request):
+    # Cek apakah user memiliki restoran yang sudah di-claim
+    user = request.user
+    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+
+    context = {
+        'restaurant': claimed_restaurant
+    }
+
+    # Jika user memiliki restoran yang sudah di-claim, ambil daftar booking
+    if claimed_restaurant:
+        bookings = Booking.objects.filter(menu_items=claimed_restaurant)
+        context['bookings'] = bookings
+
+    return render(request, 'booking/pantau_booking_owner.html', context)
+
 @csrf_exempt
 @require_POST
 def add_booking_ajax(request):
