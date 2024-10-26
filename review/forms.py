@@ -5,6 +5,10 @@ from django.utils.html import strip_tags
 class ReviewEntryForm(ModelForm):
     class Meta:
         model = ReviewEntry
+        fields = ["menu", "place", "rating", "description"]  # Tambahkan image
+
+    # Pastikan untuk menambahkan validasi untuk field image jika diperlukan
+
         fields = ["menu", "place", "rating", "description"]
         
     def clean_menu(self):

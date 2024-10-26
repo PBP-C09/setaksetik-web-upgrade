@@ -17,4 +17,5 @@ urlpatterns = [
     path('delete-review/<uuid:id>', views.delete_review, name='delete_review'),
     # path('update-reply/', views.update_reply, name='update_reply'),
     
+    path('update-reply/', views.update_reply, name='update_reply'),
 ]

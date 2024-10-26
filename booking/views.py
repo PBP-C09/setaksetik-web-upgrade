@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from booking.forms import BookingForm, FilterForm
@@ -61,7 +61,7 @@ def booking_form(request, menu_id):
             booking.menu_items = menu
             booking.user = request.user
             booking.save()
-            return redirect('booking:main_booking_page')
+            return redirect('booking:lihat_booking')
     else:
         form = BookingForm()
 
@@ -104,6 +104,33 @@ def edit_booking(request, booking_id):
     }
 
     return render(request, 'booking/edit_booking.html', context)
+
+@login_required
+def pantau_booking_owner(request):
+    # Cek apakah user memiliki restoran yang sudah di-claim
+    user = request.user
+    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+
+    context = {
+        'restaurant': claimed_restaurant
+    }
+
+    # Jika user memiliki restoran yang sudah di-claim, ambil daftar booking
+    if claimed_restaurant:
+        bookings = Booking.objects.filter(menu_items=claimed_restaurant)
+        context['bookings'] = bookings
+
+    return render(request, 'booking/pantau_booking_owner.html', context)
+
+@login_required
+def approve_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    
+    if request.user == booking.menu_items.claimed_by:  # Memastikan hanya owner yang bisa approve
+        booking.status = 'approved'
+        booking.save()
+
+    return redirect('booking:pantau_booking_owner')  # Redirect kembali ke pantau booking owner
 
 @csrf_exempt
 @require_POST
