@@ -24,7 +24,18 @@
         <!-- Image Section -->
         <div class="w-1/2 flex justify-start items-center">
             <img src="static/image/landing-image.png" alt="Steak Image" class="object-contain max-w-[80%]">
+
+<div class="container mx-auto mt-10 px-6">
+    <h1 class="text-center text-3xl">SetakSetik</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div>
+            <h5>Name:</h5>
+            <p>{{ name }}</p>
         </div>
+        <div>
+            <h5>Class:</h5>
+            <p>{{ role }}</p>
 
         <!-- Button Section -->
         <div class="flex flex-col justify-center space-y-4 w-[360px]">
@@ -78,7 +89,56 @@
                 </span>
             </div>
         </div>
-    </div>
+
+    <h2 class="mt-10 text-2xl">Menu Items</h2>
+
+    {% if not menu_items %}
+    <p>Belum ada data menu yang tersedia.</p>
+    {% else %}
+    <table class="table-auto w-full mt-4 border border-gray-300">
+        <thead class="bg-gray-800 text-white">
+            <tr>
+                <th class="p-2">Menu</th>
+                <th class="p-2">Category</th>
+                <th class="p-2">Restaurant Name</th>
+                <th class="p-2">City</th>
+                <th class="p-2">Price</th>
+                <th class="p-2">Rating</th>
+                <th class="p-2">Specialized</th>
+                <th class="p-2">Takeaway</th>
+                <th class="p-2">Delivery</th>
+                <th class="p-2">Outdoor</th>
+                <th class="p-2">Smoking Area</th>
+                <th class="p-2">WiFi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in menu_items %}
+            <tr class="border-t">
+                <td class="p-2">{{ item.menu }}</td>
+                <td class="p-2">{{ item.category }}</td>
+                <td class="p-2">{{ item.restaurant_name }}</td>
+                <td class="p-2">{{ item.city }}</td>
+                <td class="p-2">{{ item.price }}</td>
+                <td class="p-2">{{ item.rating }}</td>
+                <td class="p-2">{{ item.specialized }}</td>
+                <td class="p-2">{{ item.takeaway|yesno:"Yes,No" }}</td>
+                <td class="p-2">{{ item.delivery|yesno:"Yes,No" }}</td>
+                <td class="p-2">{{ item.outdoor|yesno:"Yes,No" }}</td>
+                <td class="p-2">{{ item.smoking_area|yesno:"Yes,No" }}</td>
+                <td class="p-2">{{ item.wifi|yesno:"Yes,No" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div class="mt-6 space-x-4">
+        <a href="{% url 'main:create_menu_item' %}" class="btn bg-blue-500 text-white py-2 px-4 rounded-lg">Add New Menu Item</a>
+        <a href="{% url 'main:logout' %}" class="btn bg-red-500 text-white py-2 px-4 rounded-lg">Logout</a>
+    <div class="mt-4">
+        <a href="{% url 'main:logout' %}" class="btn btn-danger ml-3">Logout</a>
+
 </body>
 </html>
 

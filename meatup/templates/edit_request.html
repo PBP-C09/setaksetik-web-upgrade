@@ -1,0 +1,53 @@
+<!-- Trigger Modal -->
+<button id="edit-request-btn" class="text-blue-500">Edit Request</button>
+
+<!-- Edit Request Modal -->
+<div id="edit-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Edit Meatup Request</h2>
+
+        <form id="edit-request-form" method="POST">
+            {% csrf_token %}
+            <textarea id="note" name="note" rows="4" class="w-full border p-2 rounded">{{ request_obj.note }}</textarea>
+            
+            <select id="status" name="status" class="mt-4 w-full border p-2 rounded">
+                {% for value, label in request_obj.STATUS_CHOICES %}
+                <option value="{{ value }}" {% if request_obj.status == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <div class="mt-4 flex justify-end space-x-2">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                <button type="button" id="close-edit-modal" class="text-gray-500">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('edit-request-btn').addEventListener('click', () => {
+        document.getElementById('edit-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('close-edit-modal').addEventListener('click', () => {
+        document.getElementById('edit-modal').classList.add('hidden');
+    });
+
+    document.getElementById('edit-request-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const response = await fetch("{% url 'meatup:edit_request' request_obj.id %}", {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert('Request updated successfully!');
+            location.reload(); 
+        } else {
+            alert('Failed to update request.');
+        }
+    });
+</script>

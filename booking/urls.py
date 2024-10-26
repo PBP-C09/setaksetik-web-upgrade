@@ -1,12 +1,12 @@
 from django.urls import path
-from booking.views import main_booking_page, create_booking, lihat_booking, booking_form, delete_booking, edit_booking, add_booking_ajax
+from booking.views import create_booking, lihat_booking, booking_form, delete_booking, edit_booking, add_booking_ajax, pantau_booking_owner, approve_booking
 from booking.views import show_booking_xml, show_booking_json, show_booking_xml_by_id, show_booking_json_by_id
 
 
 app_name = 'booking'
 
 urlpatterns = [
-    path('', main_booking_page, name='main_booking_page'),
+    path('', create_booking, name='create_booking'),
     path('create/', create_booking, name='create_booking'),
     path('lihat/', lihat_booking, name='lihat_booking'),
     path('form/<int:menu_id>/', booking_form, name='booking_form'),
@@ -17,4 +17,6 @@ urlpatterns = [
     path('booking/json/', show_booking_json, name='show_booking_json'),
     path('booking/xml/<int:booking_id>/', show_booking_xml_by_id, name='show_booking_xml_by_id'),
     path('booking/json/<int:booking_id>/', show_booking_json_by_id, name='show_booking_json_by_id'),
+    path('pantau/', pantau_booking_owner, name='pantau_booking_owner'),
+    path('approve/<int:booking_id>/', approve_booking, name='approve_booking'),
 ]

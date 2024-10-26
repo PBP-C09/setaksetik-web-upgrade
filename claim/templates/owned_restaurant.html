@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Your Owned Restaurant</h1>
+
+<p>{{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
+<a href="{% url 'claim:delete_ownership' restaurant.id %}" class="btn btn-danger">Delete Ownership</a>
+
+{% endblock %}

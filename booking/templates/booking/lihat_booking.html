@@ -23,7 +23,8 @@
                             Jumlah orang: {{ booking.number_of_people }} <br>
                             Menu: {{ booking.menu_items.menu }} <br>
                             Lokasi: {{ booking.menu_items.city }} <br>
-                            Rating: {{ booking.menu_items.rating }}
+                            Rating: {{ booking.menu_items.rating }}<br>
+                            Status: {{ booking.get_status_display }}
                         </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
@@ -37,6 +38,6 @@
         <p class="text-white">Anda belum memiliki booking.</p>
     {% endif %}
 
-    <a href="{% url 'booking:main_booking_page' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Kembali ke halaman booking</a>
+    <a href="{% url 'booking:create_booking' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Kembali ke halaman booking</a>
 </div>
 {% endblock content %}

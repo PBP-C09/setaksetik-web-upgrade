@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Available Restaurants for Claim</h1>
+
+{% if available_menus %}
+<ul>
+    {% for menu in available_menus %}
+    <li>
+        {{ menu.restaurant_name }} - {{ menu.city }}
+        <a href="{% url 'claim:claim_restaurant' menu.id %}">Claim</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No available restaurants for claim.</p>
+{% endif %}
+{% endblock %}

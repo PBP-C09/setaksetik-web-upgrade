@@ -14,6 +14,8 @@ from explore.models import Menu
 from explore.forms import MenuFilterForm
 from main.models import UserProfile
 import json
+from django.http import JsonResponse
+
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -47,6 +49,7 @@ def show_xml(request):
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
+    data = ReviewEntry.objects.filter(user=request.user)
     data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
@@ -133,23 +136,60 @@ def submit_reply(request):
         review_id = data.get('review_id')
         reply_text = data.get('reply_text')
         
+        # Verifikasi bahwa review ini milik steakhouse owner yang bersangkutan
         review = ReviewEntry.objects.get(pk=review_id)
+        # Uncomment jika sudah ada relasi ke steakhouse
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
         review.owner_reply = reply_text
         review.save()
         
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply submitted successfully'
+        })
     except ReviewEntry.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-# def create_review_entry(request):
-#     form = ReviewEntryForm(request.POST or None)
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
 
-#     if form.is_valid() and request.method == "POST":
-#         review_entry = form.save(commit=False)
-#         review_entry.user = request.user
-#         review_entry.save()
-#         return redirect('review:show_review')
-
-#     context = {'form': form}
-#     return render(request, "create_review_entry.html", context)
+@csrf_exempt
+@require_POST
+def update_reply(request):
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+        
+        review = ReviewEntry.objects.get(pk=review_id)
+        # Verifikasi ownership
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
+        review.owner_reply = reply_text
+        review.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply updated successfully'
+        })
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
