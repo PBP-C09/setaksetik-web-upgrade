@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from booking.forms import BookingForm, FilterForm
@@ -61,7 +61,7 @@ def booking_form(request, menu_id):
             booking.menu_items = menu
             booking.user = request.user
             booking.save()
-            return redirect('booking:main_booking_page')
+            return redirect('booking:create_booking')
     else:
         form = BookingForm()
 
@@ -121,6 +121,16 @@ def pantau_booking_owner(request):
         context['bookings'] = bookings
 
     return render(request, 'booking/pantau_booking_owner.html', context)
+
+@login_required
+def approve_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    
+    if request.user == booking.menu_items.claimed_by:  # Memastikan hanya owner yang bisa approve
+        booking.status = 'approved'
+        booking.save()
+
+    return redirect('booking:pantau_booking_owner')  # Redirect kembali ke pantau booking owner
 
 @csrf_exempt
 @require_POST
