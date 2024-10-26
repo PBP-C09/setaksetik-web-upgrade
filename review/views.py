@@ -135,15 +135,29 @@ def submit_reply(request):
         review_id = data.get('review_id')
         reply_text = data.get('reply_text')
         
+        # Verifikasi bahwa review ini milik steakhouse owner yang bersangkutan
         review = ReviewEntry.objects.get(pk=review_id)
+        # Uncomment jika sudah ada relasi ke steakhouse
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
         review.owner_reply = reply_text
         review.save()
         
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply submitted successfully'
+        })
     except ReviewEntry.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
 
 @csrf_exempt
 @require_POST
@@ -157,11 +171,24 @@ def update_reply(request):
         reply_text = data.get('reply_text')
         
         review = ReviewEntry.objects.get(pk=review_id)
+        # Verifikasi ownership
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
         review.owner_reply = reply_text
         review.save()
         
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply updated successfully'
+        })
     except ReviewEntry.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)

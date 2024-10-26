@@ -67,74 +67,81 @@
     const html = `
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         ${reviews.map(review => `
-          <div class="bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden">
-            <div class="p-4">
-              <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${DOMPurify.sanitize(review.fields.menu)}</h3>
+          <div class="bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+            <div class="p-6">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-xl text-[#5B3E39]">${DOMPurify.sanitize(review.fields.menu)}</h3>
+                <div class="flex items-center space-x-1">
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <span class="font-semibold text-[#5B3E39]">${review.fields.rating}/5</span>
+                </div>
+              </div>
               
-              <div class="flex items-center space-x-2 mb-2">
+              <div class="flex items-center space-x-2 mb-3">
                 <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
-                <p class="text-base font-semibold text-[#5B3E39]">${DOMPurify.sanitize(review.fields.place)}</p>
+                <p class="text-sm font-medium text-[#5B3E39]">${DOMPurify.sanitize(review.fields.place)}</p>
               </div>
 
-              <div class="flex items-center space-x-2 mb-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <p class="text-base font-semibold text-[#5B3E39]">${review.fields.rating} / 5</p>
-              </div>
+              <p class="text-gray-600 text-sm mb-4">${DOMPurify.sanitize(review.fields.description)}</p>
               
-              <p class="text-gray-600 mb-4">${DOMPurify.sanitize(review.fields.description)}</p>
-              
-              <div class="mt-4 border-t pt-4">
+              <div class="mt-4 pt-4 border-t border-gray-200">
                 ${review.fields.owner_reply ? `
-                  <div class="bg-white p-3 rounded-lg flex items-start justify-between">
-                    <div class="flex-1">
-                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
-                      <p class="text-sm text-gray-600" id="reply-text-${review.pk}">
-                        ${DOMPurify.sanitize(review.fields.owner_reply)}
-                      </p>
-                      <!-- Input untuk edit balasan -->
-                      <input 
-                        type="text" 
-                        class="flex-1 p-2 border rounded-lg focus:outline-none focus:border-[#F7B32B] text-black mt-2 hidden" 
-                        id="edit-reply-${review.pk}"
-                        value="${DOMPurify.sanitize(review.fields.owner_reply)}"
-                      >
-                    </div>
-                    <div class="ml-2">
+                  <!-- View Mode -->
+                  <div id="view-mode-${review.pk}" class="space-y-2">
+                    <div class="flex justify-between items-center mb-2">
+                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan Anda:</p>
                       <button 
-                        onclick="editReply(${review.pk})" 
-                        class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 mr-1"
-                        id="edit-btn-${review.pk}"
+                        onclick="toggleEdit('${review.pk}')"
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200"
                       >
-                        Edit
+                        <i class="fas fa-edit"></i>
                       </button>
-                      <button 
-                        onclick="saveEditedReply(${review.pk})" 
-                        class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors duration-200 hidden"
-                        id="save-btn-${review.pk}"
+                    </div>
+                    <p id="reply-text-${review.pk}" class="text-sm text-gray-600 bg-white p-3 rounded-lg">
+                      ${DOMPurify.sanitize(review.fields.owner_reply)}
+                    </p>
+                  </div>
+
+                  <!-- Edit Mode -->
+                  <div id="edit-mode-${review.pk}" class="hidden space-y-3">
+                    <p class="text-sm font-semibold text-[#5B3E39]">Edit Balasan:</p>
+                    <textarea
+                      id="edit-textarea-${review.pk}"
+                      class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#F7B32B] focus:border-transparent text-sm text-black"
+                      rows="3"
+                    ></textarea>
+                    <div class="flex justify-end space-x-2">
+                      <button
+                        onclick="toggleEdit('${review.pk}')"
+                        class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200"
                       >
-                        Save
+                        Batal
+                      </button>
+                      <button
+                        onclick="updateReply('${review.pk}')"
+                        class="px-4 py-2 text-sm bg-[#F7B32B] text-white rounded-lg hover:bg-[#F7A52B] transition-colors duration-200"
+                      >
+                        Simpan
                       </button>
                     </div>
                   </div>
-
                 ` : `
                   <div class="flex items-center space-x-2">
                     <input 
                       type="text" 
-                      class="flex-1 p-2 border rounded-l-lg focus:outline-none focus:border-[#F7B32B] text-black" 
+                      class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-[#F7B32B] focus:border-transparent text-sm" 
                       placeholder="Ketik balasan Anda..."
                       id="reply-${review.pk}"
                     >
                     <button 
                       onclick="submitReply('${review.pk}', document.getElementById('reply-${review.pk}'))"
-                      class="bg-[#F7B32B] text-white p-2 rounded-r-lg hover:bg-[#F7A52B] transition-colors duration-200"
+                      class="bg-[#F7B32B] text-white p-3 rounded-lg hover:bg-[#F7A52B] transition-colors duration-200"
                     >
                       <i class="fas fa-paper-plane"></i>
                     </button>
                   </div>
                 `}
               </div>
-
             </div>
           </div>
         `).join('')}
@@ -197,47 +204,10 @@
 
     return false;
   }
-  // document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   addReviewEntry();
-  // })
-  // Function untuk toggle edit mode
-// Fungsi untuk toggle ke mode edit
-  function editReply(reviewId) {
-    const replyText = document.getElementById(`reply-text-${reviewId}`);
-    const editInput = document.getElementById(`edit-reply-${reviewId}`);
-    const editButton = document.getElementById(`edit-btn-${reviewId}`);
-    const saveButton = document.getElementById(`save-btn-${reviewId}`);
-
-    console.log("replyText:", replyText);
-    console.log("editInput:", editInput);
-    console.log("editButton:", editButton);
-    console.log("saveButton:", saveButton);
-
-    if (!replyText || !editInput || !editButton || !saveButton) {
-      console.error("Elemen tidak ditemukan");
-      return;
-    }
-
-    // Toggle visibility
-    replyText.classList.add('hidden');
-    editInput.classList.remove('hidden');
-    editButton.classList.add('hidden');
-    saveButton.classList.remove('hidden');
-  }
-
-
-  // Fungsi untuk menyimpan balasan yang sudah diedit
-  async function saveEditedReply(reviewId) {
-    const editInput = document.getElementById(`edit-reply-${reviewId}`);
-    const newReplyText = editInput.value.trim();
-
-    if (!newReplyText) {
-      console.log("Tidak ada teks baru untuk disimpan");
-      return;
-    }
-
-    console.log(`Menyimpan balasan baru untuk review ID: ${reviewId} dengan teks: ${newReplyText}`);
+  
+  async function updateReply(reviewId) {
+    const textArea = document.getElementById(`edit-textarea-${reviewId}`);
+    const replyText = textArea.value.trim();
 
     try {
       const response = await fetch("{% url 'review:update_reply' %}", {
@@ -248,24 +218,37 @@
         },
         body: JSON.stringify({
           review_id: reviewId,
-          reply_text: newReplyText
+          reply_text: replyText
         })
       });
 
-      console.log("Status Response:", response.status);
-
       if (response.ok) {
-        console.log("Update berhasil");
-        // Kembali ke tampilan normal setelah update
+        toggleEdit(reviewId); // Hide edit mode
         refreshReviewEntries();
       } else {
         const data = await response.json();
-        console.error("Error Response:", data);
         alert(data.message || 'Error updating reply');
       }
     } catch (error) {
       console.error("Error updating reply:", error);
       alert('Error updating reply');
+    }
+  }
+
+  function toggleEdit(reviewId) {
+    const viewMode = document.getElementById(`view-mode-${reviewId}`);
+    const editMode = document.getElementById(`edit-mode-${reviewId}`);
+    
+    if (viewMode.classList.contains('hidden')) {
+      // Switching back to view mode
+      viewMode.classList.remove('hidden');
+      editMode.classList.add('hidden');
+    } else {
+      // Switching to edit mode
+      const currentText = document.getElementById(`reply-text-${reviewId}`).textContent.trim();
+      document.getElementById(`edit-textarea-${reviewId}`).value = currentText;
+      viewMode.classList.add('hidden');
+      editMode.classList.remove('hidden');
     }
   }
 

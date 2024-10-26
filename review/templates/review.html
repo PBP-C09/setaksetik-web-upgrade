@@ -60,6 +60,7 @@
       reviewEntries.forEach((item) => {
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
+
         
         
         htmlString += `
@@ -87,20 +88,19 @@
                   
                   <!-- Product Description -->
                   <p class="text-gray-600 mb-4">${item.fields.description}</p>
+                  
+                  ${item.fields.owner_reply ? `
+                  <div class="bg-white p-3 rounded-lg">
+                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+                      <p class="text-sm text-gray-600">${DOMPurify.sanitize(item.fields.owner_reply)}</p>
+                  </div>
+                  ` : ''}
+
 
                   <!-- Username, dia masih perlu biar konsisten bukan tergantung akun yg di logging in  -->
-                  <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                      by <br> {{ user.username }}
+                  <p style="font-size: 12px; color: #6b7280; margin-bottom: 2px">
+                      by {{ user.username }}
                   </p>
-                  
-                  {% if review.fields.owner_reply != null %}
-                    <div class="mt-4 border-t pt-4">
-                      <div class="bg-white p-3 rounded-lg">
-                        <p class="text-sm font-semibold text-[#5B3E39]"> Balasan Pemilik:</p>
-                        <p class="text-sm text-gray-600">${DOMPurify.sanitize(review.fields.owner_reply)}</p>
-                      </div>
-                    </div>
-                  {% endif %}
                   
 
               </div>
