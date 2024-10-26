@@ -20,10 +20,10 @@
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen">
-    <div class="flex justify-center items-center w-full max-w-screen-xl h-full space-x-2 mt-10 pt-20">
+    <div class="flex justify-center items-center w-full h-full space-x-2 mt-10 pt-10">
         <!-- Image Section -->
         <div class="w-1/2 flex justify-start items-center">
-            <img src="static/image/landing-image.png" alt="Steak Image" class="object-contain max-w-[80%]">
+            <img id="landingImage" src="static/image/landing-image-0.png" alt="Steak Image" class="object-contain max-w-[80%] cursor-pointer">
         </div>
 
         <!-- Button Section -->
@@ -77,8 +77,29 @@
                     di restoran favoritmu!
                 </span>
             </div>
+            <div class="flex items-center justify-center">
+                <div class="text-[#3E2723] font-medium italic border-none w-auto hover:bg-[#F5F5DC] hover:text-[#6D4C41] transition-all duration-300 p-3" style="font-family:'Raleway';">
+                    <a href="https://github.com/PBP-C09/setaksetik-web.git">SetakSetik | 2024</a>
+                </div>
+            </div>
+            
         </div>
     </div>
+
+    <script>
+        const images = [
+            "static/image/landing-image-0.png",
+            "static/image/landing-image-1.png",
+            "static/image/landing-image-2.png",
+            "static/image/landing-image-3.png"
+        ];
+        let currentIndex = 0;
+
+        document.getElementById("landingImage").addEventListener("click", function() {
+            currentIndex = (currentIndex + 1) % images.length;
+            this.src = images[currentIndex];
+        });
+    </script>
 </body>
 </html>
 
