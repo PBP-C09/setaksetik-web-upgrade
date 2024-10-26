@@ -23,7 +23,8 @@
                             Jumlah orang: {{ booking.number_of_people }} <br>
                             Menu: {{ booking.menu_items.menu }} <br>
                             Lokasi: {{ booking.menu_items.city }} <br>
-                            Rating: {{ booking.menu_items.rating }}
+                            Rating: {{ booking.menu_items.rating }}<br>
+                            Status: {{ booking.get_status_display }}
                         </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">

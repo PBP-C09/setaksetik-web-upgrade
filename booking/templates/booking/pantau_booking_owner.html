@@ -21,6 +21,12 @@
                 {% for booking in bookings %}
                     <li class="mt-2">
                         {{ booking.user.username }} booked {{ booking.menu.food_name }} on {{ booking.booking_date }} for {{ booking.number_of_people }} people.
+                        {% if booking.status == 'waiting' %}
+                            <form method="POST" action="{% url 'booking:approve_booking' booking.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-green-500 text-white p-2 rounded">Approve</button>
+                            </form>
+                        {% endif %}
                     </li>
                 {% empty %}
                     <li class="mt-2">Belum ada booking yang dilakukan.</li>
