@@ -1,5 +1,5 @@
 from django.urls import path
-from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail
+from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu
 from booking.views import booking_form, lihat_booking
 from review.views import show_review
 
@@ -19,4 +19,6 @@ urlpatterns = [
     path('filter_menu/', filter_menu, name='filter_menu'),
     path('', show_review, name='show_review'),
     path('lihat/', lihat_booking, name='lihat_booking'),
+    path('edit-menu/<int:menu_id>/', edit_menu, name='edit_menu'),
+    path('delete/<int:menu_id>', delete_menu, name='delete_menu'),
 ]
