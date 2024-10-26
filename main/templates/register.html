@@ -5,6 +5,107 @@
 {% endblock meta %}
 
 {% block content %}
+<div class="flex items-center justify-center min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full max-w-screen-lg">
+        <div class="hidden lg:block side-image"></div>
+        <div class="flex items-center justify-center p-8">
+            <div class="bg-[#5C4A4A] p-8 rounded-2xl shadow-lg w-full max-w-md">
+                <h1 class="text-2xl mb-4">Join SetakSetik</h1>
+                <p>Let's get started!</p>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="space-y-4">{{ form.as_p }}</div>
+                    <input type="submit" class="mt-6 w-full bg-[#D1C0B9] text-[#3B2929] rounded-full py-2 font-bold hover:bg-[#A69890] transition" value="Register">
+                </form>
+                {% if messages %}
+                <ul class="mt-4 space-y-2">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p class="mt-6 text-[#D1C0B9]">Already have an account? 
+                    <a href="{% url 'main:login' %}" class="text-[#A69890]">Login Here</a>
+                </p>
+<title>Register to SetakSetik!</title>
+<style>
+    input, select {
+        color: #3E2723;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    input, select {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+    }
+    .submit-button {
+        background-color: #A69890;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+    .submit-button:hover {
+        background-color: #D1C0B9;
+    }
+
+</style>
+
+<div class="flex items-center container mx-auto" style="height: calc(100vh - 2rem); font-family: 'Raleway', sans-serif;">
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
+        
+        <div class="flex items-center justify-center p-5 w-full">
+            <div class="bg-[#5C4A4A] p-8 rounded-2xl shadow-lg w-full max-w-md">
+                <h1 class="text-2xl mb-8" style="font-family: 'Raleway', sans-serif;">
+                    Register to <span class="text-4xl italic" style="font-family: 'Playfair Display', serif;">SetakSetik</span>
+                </h1>
+                <form class="mt-8 space-y-6" method="POST">
+                    {% csrf_token %}                      
+                    <div class="space-y-4">
+                        {% for field in form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <div>{{ field }}</div>
+                            {% if field.help_text %}
+                            <small class="text-sm text-gray-400">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="text-red-500">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+
+                        {% if request.resolver_match.url_name == 'register-admin' %}
+
+                        <div class="checkbox-label" style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <label for="is_admin" style="display: flex; align-items: center; white-space: nowrap;">
+                                <input type="checkbox" id="is_admin" name="is_admin" value="true" style="margin-right: 0.5rem; margin-top: 18px;">
+                                Are you an admin?
+                            </label>
+                        </div>                                               
+                        
+                        {% endif %}
+
+                    </div>
+                    {% if messages %}
+                    <ul class="mt-4 space-y-2">
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <button type="submit" class="submit-button mt-6" style="font-weight: bold;">Register now!</button>
+                    <p class="mt-6 text-[#F5F5DC]">Already have an account? 
+                        <a href="{% url 'main:login' %}" class="text-[#F5F5DC] hover:text-[#A69890] transition duration-300" style="font-weight: bold;">Login Here</a>
+                    </p>
+                </form>
 <title>Register to SetakSetik!</title>
 <style>
     input, select {
