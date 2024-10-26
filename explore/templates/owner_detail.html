@@ -42,18 +42,6 @@
             <p class="text-lg text-[#5B3E39] mb-4">
                 <strong>Rating:</strong> {{ menu.rating }}
             </p>
-
-            <p class="text-lg text-[#5B3E39] mb-4">
-                <strong>
-                    Owned by: 
-                {% if menu.claimed_by %}
-                    SetakSetik and {{ menu.claimed_by.username }}
-                {% else %}
-                    SetakSetik
-                {% endif %}
-                </strong>
-            </p>
-            
             
             <div class="mb-4">
                 <h2 class="text-xl font-bold text-[#3E2723]">Additional Information</h2>
@@ -72,11 +60,11 @@
                 </button>
                 <div class="flex space-x-4">
                     <a href="{% url 'review:show_review' %}" class="bg-[#F7B32B] hover:bg-[#FFD54F] text-white font-bold py-2 px-6 rounded-full">
-                        Review
+                        Claim Ownership
                     </a>
                     
-                    <a href="{% url 'booking:booking_form' menu.id %}" class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
-                        Booking
+                    <a href="{% url 'booking:lihat_booking'%}" class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
+                        See Bookings
                     </a>
                 </div>
             </div>

@@ -13,6 +13,9 @@ from django.contrib import messages
 from explore.models import Menu
 from explore.forms import MenuFilterForm
 from main.models import UserProfile
+import json
+from django.http import JsonResponse
+
 
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -23,8 +26,20 @@ def show_review(request):
     context = {
         'nama' : 'steak',
         'lokasi' : 'jaksel',
-        'rating' : '5'
+        'rating' : '5',
+        # 'is_admin': request.is_admin,
     }
+    print(request.user.userprofile.role)
+
+    if request.user.userprofile.role == "admin":
+        print("bener")
+        return render(request, 'review_admin.html', context)
+
+
+
+    if request.user.userprofile.role == "steakhouse owner":
+        print(request.user.userprofile.role)
+        return render(request, 'review_owner.html', context)
     return render(request, 'review.html', context)
 
 
@@ -81,12 +96,12 @@ def create_review_entry(request):
 def edit_review(request, id):
     # Get the review entry based on id
     review = ReviewEntry.objects.get(pk=id)
-    user_profile = UserProfile.objects.get(user=request.user)
+    # user_profile = UserProfile.objects.get(user=request.user)
 
     # Allow only admins to edit
-    if user_profile.role != "admin":
-        messages.error(request, "You do not have permission to edit this review.")
-        return redirect('review:show_review')
+    # if user_profile.role != "admin":
+    #     messages.error(request, "You do not have permission to edit this review.")
+    #     return redirect('review:show_review')
 
     # Set review entry as an instance of the form
     form = ReviewEntryForm(request.POST or None, instance=review)
@@ -98,27 +113,82 @@ def edit_review(request, id):
     context = {'form': form}
     return render(request, "edit_review.html", context)
 
-def delete_product(request, id):
+def delete_review(request, id):
     # Get the review based on id
+    print(ReviewEntry.objects.get(pk=id))
     review = ReviewEntry.objects.get(pk=id)
-    user_profile = UserProfile.objects.get(user=request.user)
-
-    # Allow only admins to delete
-    if user_profile.role != "admin":
-        messages.error(request, "You do not have permission to delete this review.")
-        return redirect('review:show_review')
-
+    print("ini review " +  str(review))
+    # user_profile = UserProfile.objects.get(user=request.user)
     review.delete()
+
     return HttpResponseRedirect(reverse('review:show_review'))
 
-# def create_review_entry(request):
-#     form = ReviewEntryForm(request.POST or None)
 
-#     if form.is_valid() and request.method == "POST":
-#         review_entry = form.save(commit=False)
-#         review_entry.user = request.user
-#         review_entry.save()
-#         return redirect('review:show_review')
+@csrf_exempt
+@require_POST
+def submit_reply(request):
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+        
+        # Verifikasi bahwa review ini milik steakhouse owner yang bersangkutan
+        review = ReviewEntry.objects.get(pk=review_id)
+        # Uncomment jika sudah ada relasi ke steakhouse
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
+        review.owner_reply = reply_text
+        review.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply submitted successfully'
+        })
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
 
-#     context = {'form': form}
-#     return render(request, "create_review_entry.html", context)
+@csrf_exempt
+@require_POST
+def update_reply(request):
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+        
+        review = ReviewEntry.objects.get(pk=review_id)
+        # Verifikasi ownership
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
+        review.owner_reply = reply_text
+        review.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply updated successfully'
+        })
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Review not found'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
