@@ -49,7 +49,7 @@ class MenuFilterForm(forms.Form):
     specialize = forms.ChoiceField(choices=[('', 'Select specialized')] + SPECIALIZED_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
     rating = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'placeholder': 'rating'}))
 
-class AddMenuForm(forms.Form):
+class AddMenuForm(forms.ModelForm):
    class Meta:
        model = Menu
        fields = ['menu', 'category', 'restaurant_name', 'image', 'city', 'price', 'rating', 'specialized', 'takeaway', 'delivery', 'outdoor', 'smoking_area', 'wifi']
