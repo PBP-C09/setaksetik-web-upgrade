@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User # Import user untuk keperluan claim resto
 
 # Create your models here.
 
@@ -69,4 +70,5 @@ class Menu(models.Model):
     outdoor = models.BooleanField(null = True, blank = True)
     smoking_area = models.BooleanField(null = True, blank = True)
     wifi = models.BooleanField(null = True, blank = True)
+    claimed_by = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL) # Nambah atribut models.py claimed_by (bismillah)
     image = models.URLField(null = True, blank = True)
