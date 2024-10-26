@@ -1,65 +1,64 @@
 from django.db import models
+from django.contrib.auth.models import User # Import user untuk keperluan claim resto
 
 # Create your models here.
 
 CATEGORY_CHOICES = [
-    ('beef', 'Beef'),
-    ('chicken', 'Chicken'),
-    ('fish', 'Fish'),
-    ('lamb', 'Lamb'),
-    ('other', 'Other'),
-    ('pork', 'Pork'),
-    ('rib_eye', 'Rib Eye'),
-    ('sirloin', 'Sirloin'),
-    ('t_bone', 'T-Bone'),
-    ('tenderloin', 'Tenderloin'),
-    ('wagyu', 'Wagyu'),
+    ('Beef', 'Beef'),
+    ('Chicken', 'Chicken'),
+    ('Fish', 'Fish'),
+    ('Lamb', 'Lamb'),
+    ('Pork', 'Pork'),
+    ('Rib Eye', 'Rib Eye'),
+    ('Sirloin', 'Sirloin'),
+    ('T-bone', 'T-Bone'),
+    ('Tenderloin', 'Tenderloin'),
+    ('Wagyu', 'Wagyu'),
+    ('Other', 'Other'),
 ]
 
 CITY_CHOICES = [
-    ('central_jakarta', 'Central Jakarta'),
-    ('east_jakarta', 'East Jakarta'),
-    ('north_jakarta', 'North Jakarta'),
-    ('south_jakarta', 'South Jakarta'),
-    ('west_jakarta', 'West Jakarta'),
+    ('Central Jakarta', 'Central Jakarta'),
+    ('East Jakarta', 'East Jakarta'),
+    ('North Jakarta', 'North Jakarta'),
+    ('South Jakarta', 'South Jakarta'),
+    ('West Jakarta', 'West Jakarta'),
 ]
 
 SPECIALIZED_CHOICES = [
-    ('argentinian', 'Argentinian'),
-    ('brazilian', 'Brazilian'),
-    ('breakfast_cafe', 'Breakfast Cafe'),
-    ('british', 'British'),
-    ('french', 'French'),
-    ('fushioned', 'Fushioned'),
-    ('italian', 'Italian'),
-    ('japanese', 'Japanese'),
-    ('local', 'Local'),
-    ('local_westerned', 'Local Westerned'),
-    ('mexican', 'Mexican'),
-    ('western', 'Western'),
-    ('singaporean', 'Singaporean'),
+    ('Argentinian', 'Argentinian'),
+    ('Brazilian', 'Brazilian'),
+    ('Breakfast Cafe', 'Breakfast Cafe'),
+    ('British', 'British'),
+    ('French', 'French'),
+    ('Fushioned', 'Fushioned'),
+    ('Italian', 'Italian'),
+    ('Japanese', 'Japanese'),
+    ('Local', 'Local'),
+    ('Local Westerned', 'Local Westerned'),
+    ('Mexican', 'Mexican'),
+    ('Western', 'Western'),
+    ('Singaporean', 'Singaporean'),
 ]
 
 class Menu(models.Model):
     id = models.AutoField(primary_key=True)
-    menu = models.TextField(null = True, blank = True)
+    menu = models.CharField(max_length=50, null = True, blank = True)
+    restaurant_name = models.CharField(max_length=50, null = True, blank = True)
+    price = models.IntegerField(null = True, blank = True)
+    rating = models.FloatField(null = True, blank = True)
     category = models.CharField(
         max_length=50,
         choices=CATEGORY_CHOICES,
         null=True,
         blank=True
     )
-    restaurant_name = models.TextField(null = True, blank = True)
-    image = models.URLField(null = True, blank = True)
     city = models.CharField(
         max_length=50,
         choices=CITY_CHOICES,
         null=True,
         blank=True
     )
-
-    price = models.IntegerField(null = True, blank = True)
-    rating = models.FloatField(null = True, blank = True)
     specialized = models.CharField(
         max_length=50,
         choices=SPECIALIZED_CHOICES,
@@ -71,3 +70,5 @@ class Menu(models.Model):
     outdoor = models.BooleanField(null = True, blank = True)
     smoking_area = models.BooleanField(null = True, blank = True)
     wifi = models.BooleanField(null = True, blank = True)
+    claimed_by = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL) # Nambah atribut models.py claimed_by (bismillah)
+    image = models.URLField(null = True, blank = True)

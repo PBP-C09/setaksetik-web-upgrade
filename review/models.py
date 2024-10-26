@@ -10,7 +10,7 @@ class ReviewEntry(models.Model):
     place = models.CharField(max_length=255)
     rating = models.IntegerField()
     description= models.TextField()
-    
+    owner_reply = models.TextField(null=True, blank=True)
 
     @property
     def is_menu_recommended(self):

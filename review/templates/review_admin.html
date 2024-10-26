@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Setak Setik</title>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-[#5B3E39] flex flex-col">
+  <div class="p-2 mb-2 relative">
+    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center">
+      Apa kata <span class="italic">mereka</span>?
+    </h1>
+    <hr class="border-t-2 border-[#F5F5DC] my-6 w-[460px] mx-auto" />
+    <p class="text-center text-[#F5F5DC]">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
+  </div>
+
+  <div id="review_entry_cards"></div>
+</div>
+
+<script>
+  async function getReviewEntries() {
+    return fetch("{% url 'review:show_json' %}").then((res) => res.json())
+  }
+
+  async function refreshReviewEntries() {
+    const reviewContainer = document.getElementById("review_entry_cards");
+    reviewContainer.innerHTML = "";
+    
+    const reviews = await getReviewEntries();
+    
+    const html = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            ${reviews.map(review => `
+            <div class="bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden relative p-4">
+                <!-- Tombol Delete -->
+                <a href="delete-review/${review.pk}" 
+                   class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 flex items-center justify-center transition duration-300 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+
+                <!-- Konten Review -->
+                <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${DOMPurify.sanitize(review.fields.menu)}</h3>
+
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+                    <p class="text-base font-semibold text-[#5B3E39]">${DOMPurify.sanitize(review.fields.place)}</p>
+                </div>
+
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <p class="text-base font-semibold text-[#5B3E39]">${review.fields.rating} / 5</p>
+                </div>
+
+                <p class="text-gray-600 mb-4">${DOMPurify.sanitize(review.fields.description)}</p>
+
+                ${review.fields.owner_reply ? `
+                <div class="bg-white p-3 rounded-lg">
+                    <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+                    <p class="text-sm text-gray-600">${DOMPurify.sanitize(review.fields.owner_reply)}</p>
+                </div>
+                ` : ''}
+            </div>
+            `).join('')}
+        </div>
+    `;
+
+    reviewContainer.innerHTML = html;
+  }
+
+
+  // Initial load
+  refreshReviewEntries();
+
+  const modal = document.getElementById('crudModal');
+  const modalContent = document.getElementById('crudModalContent');
+
+  function showModal() {
+    console.log("HELLO");
+
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modalContent.classList.remove('opacity-0', 'scale-95');
+      modalContent.classList.add('opacity-100', 'scale-100');
+    }, 50);
+  }
+
+  function hideModal() {
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    modalContent.classList.remove('opacity-100', 'scale-100');
+    modalContent.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 150);
+  }
+
+  // document.getElementById("cancelButton").addEventListener("click", hideModal);
+  // document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+
+  function addReviewEntry() {
+    fetch("{% url 'review:create-review-entry-ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#ReviewEntryForm')),
+    })
+      .then(response => {
+
+        console.log("masuk add");
+        refreshReviewEntries()
+        console.log("AKOWKOWKOWOK");
+      }).catch(e => {
+        console.log(e);
+      })
+
+    // document.getElementById("ReviewEntryForm").reset();
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+  // document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
+  //   e.preventDefault();
+  //   addReviewEntry();
+  // })
+</script>
+
+{% endblock content %}

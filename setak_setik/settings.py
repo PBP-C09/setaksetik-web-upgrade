@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'review',
     'meatup',
     'booking',
+    'claim',
 ]
 
 MIDDLEWARE = [

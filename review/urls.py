@@ -12,8 +12,8 @@ urlpatterns = [
     path('json/', show_json, name='show_json'),
     path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
     path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
-
-
-
-
+    path('submit_reply/', views.submit_reply, name='submit_reply'),
+    path('edit-review/<uuid:id>', views.edit_review, name='edit_review'),
+    path('delete-review/<uuid:id>', views.delete_review, name='delete_review'),
+    path('update-reply/', views.update_reply, name='update_reply'),
 ]
