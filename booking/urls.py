@@ -6,7 +6,7 @@ from booking.views import show_booking_xml, show_booking_json, show_booking_xml_
 app_name = 'booking'
 
 urlpatterns = [
-    path('', main_booking_page, name='main_booking_page'),
+    path('', create_booking, name='create_booking'),
     path('create/', create_booking, name='create_booking'),
     path('lihat/', lihat_booking, name='lihat_booking'),
     path('form/<int:menu_id>/', booking_form, name='booking_form'),
