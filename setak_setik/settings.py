@@ -35,11 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'meatup',
-    'review',
-    'explore',
-    'booking',
-    'spinthewheel'
     'explore',
     'spinthewheel',
     'review',
