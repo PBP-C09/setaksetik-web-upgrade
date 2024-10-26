@@ -25,4 +25,5 @@ urlpatterns = [
     path('review/', include('review.urls')),
     # path('meatup/', include('meatup.urls')),
     path('booking/', include('booking.urls')),
+    path('claim/', include('claim.urls')),
 ]
