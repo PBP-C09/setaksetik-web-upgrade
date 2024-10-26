@@ -23,7 +23,7 @@ urlpatterns = [
     path('explore/', include('explore.urls')),
     path('spinthewheel/', include('spinthewheel.urls')),
     path('review/', include('review.urls')),
-    # path('meatup/', include('meatup.urls')),
+    path('meatup/', include('meatup.urls')),
     path('booking/', include('booking.urls')),
     path('claim/', include('claim.urls')),
 ]
