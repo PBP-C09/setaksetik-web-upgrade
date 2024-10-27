@@ -29,16 +29,13 @@ def show_review(request):
         'rating' : '5',
         # 'is_admin': request.is_admin,
     }
-    print(request.user.userprofile.role)
 
     if request.user.userprofile.role == "admin":
-        print("bener")
         return render(request, 'review_admin.html', context)
 
 
 
     if request.user.userprofile.role == "steakhouse owner":
-        print(request.user.userprofile.role)
         return render(request, 'review_owner.html', context)
     return render(request, 'review.html', context)
 
@@ -84,9 +81,6 @@ def create_review_entry(request):
     # Retrieve all menu entries without filtering
     menus = Menu.objects.all()
     
-    # Print menus to check in console/logs
-    print("Menus: ", menus)
-    
     # Context data for rendering the template
     context = {
         'menus': menus,  # Pass the query result
@@ -116,10 +110,7 @@ def edit_review(request, id):
 
 def delete_review(request, id):
     # Get the review based on id
-    print(ReviewEntry.objects.get(pk=id))
     review = ReviewEntry.objects.get(pk=id)
-    print("ini review " +  str(review))
-    # user_profile = UserProfile.objects.get(user=request.user)
     review.delete()
 
     return HttpResponseRedirect(reverse('review:show_review'))

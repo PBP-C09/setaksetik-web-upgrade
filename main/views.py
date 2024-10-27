@@ -67,3 +67,6 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def forbidden(request):
+    return render(request, 'forbidden.html')
