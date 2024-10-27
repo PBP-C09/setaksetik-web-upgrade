@@ -6,7 +6,7 @@
 <ul id="request-list" class="mt-4">
     {% for req in requests %}
     <li id="req-{{ req.id }}" class="p-4 bg-gray-100 rounded mb-2">
-        {{ req.requested_at|date:"d/m/Y" }} - User {{ req.sender.username }} requested a meetup with you.
+        {{ req.requested_at|date:"d/m/Y" }} - {{ req.sender.username }} requested a meetup with you
 
         <div class="flex mt-2 space-x-4">
             {% if req.status == 'pending' %}
@@ -21,48 +21,44 @@
     {% endfor %}
 </ul>
 
-<div class="mt-4">
-    <a href="{% url 'meatup:create_request' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Write A Meat Up Request</a>
-</div>
-
 <script>
 async function handleRequest(requestId, action) {
-    const response = await fetch(`/meatup/handle/${requestId}/${action}/`, {
+    const response = await fetch(/meatup/handle/${requestId}/${action}/, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': '{{ csrf_token }}',
         },
-        body: JSON.stringify({ action: action }),
+        body: JSON.stringify({ action: action }), // Sending the action as a JSON payload
     });
 
     if (response.ok) {
         const data = await response.json();
-        alert(data.message);
-        document.getElementById(`req-${requestId}`).remove();
+        alert(data.message ); // Display success message from the server
+        document.getElementById(req-${requestId}).remove(); // Remove the request from the DOM
     } else {
         const errorData = await response.json();
-        alert(errorData.error || 'Failed to handle the request.');
+        alert(errorData.error || 'Failed to handle the request.'); // Display error message if available
     }
 }
 
 async function deleteRequest(requestId) {
-    const response = await fetch(`/meatup/delete/${requestId}/`, {
+    const response = await fetch(/meatup/delete/${requestId}/, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': '{{ csrf_token }}',
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({}), // Sending an empty JSON payload for delete
     });
 
     if (response.ok) {
-        document.getElementById(`req-${requestId}`).remove();
+        document.getElementById(req-${requestId}).remove(); // Remove the request from the DOM
         alert('Request deleted successfully!');
     } else {
         const errorData = await response.json();
-        alert(errorData.error || 'Failed to delete the request.');
+        alert(errorData.error || 'Failed to delete the request.'); // Display error message if available
     }
 }
 </script>
-{% endblock %}
+{% endblock content %}
