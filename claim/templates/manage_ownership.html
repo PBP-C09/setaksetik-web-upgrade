@@ -1,0 +1,34 @@
+<!-- claim/templates/manage_ownership.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Manage Claimed Restaurants</h1>
+    {% if claimed_restaurants %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Restaurant Name</th>
+                    <th>Owner</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for menu in claimed_restaurants %}
+                    <tr>
+                        <td>{{ menu.restaurant_name }}</td>
+                        <td>{{ menu.claimed_by.username }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'claim:manage_ownership' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="menu_id" value="{{ menu.id }}">
+                                <button type="submit">Revoke Ownership</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No claimed restaurants found.</p>
+    {% endif %}
+{% endblock %}

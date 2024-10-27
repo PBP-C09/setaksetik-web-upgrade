@@ -33,23 +33,28 @@ async function updateStatus(requestId, newStatus) {
 
     if (response.ok) {
         const data = await response.json();
-        alert(data.message);
+        alert(data.message); // Success message from the server
     } else {
-        alert('Failed to update status.');
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to update status.'); // Display any error returned by the server
     }
 }
 
 async function deleteRequest(requestId) {
     const response = await fetch(`/meatup/requests/delete/${requestId}/`, {
         method: 'POST',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
     });
 
     if (response.ok) {
         document.getElementById(`req-${requestId}`).remove();
         alert('Request deleted successfully!');
     } else {
-        alert('Failed to delete request.');
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to delete request.'); // Display any error returned by the server
     }
 }
 </script>
