@@ -11,6 +11,7 @@ from django.core import serializers
 
 # Create your views here.
 # Steak Lover (Customer)
+@login_required
 def create_booking(request):
     form_filter = FilterForm(request.GET or None)
     menus = Menu.objects.all()
@@ -37,6 +38,7 @@ def create_booking(request):
     }
     return render(request, 'booking/create_booking.html', context)
 
+@login_required
 def lihat_booking(request):
     bookings = Booking.objects.filter(user=request.user)
     print(bookings)
@@ -161,18 +163,24 @@ def approve_booking(request, booking_id):
 
     return redirect('booking:pantau_booking_owner')  # Redirect kembali ke pantau booking owner
 
+
+@login_required
 def show_booking_xml(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+
+@login_required
 def show_booking_json(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required
 def show_booking_xml_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required
 def show_booking_json_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
