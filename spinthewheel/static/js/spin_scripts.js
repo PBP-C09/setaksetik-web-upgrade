@@ -333,13 +333,13 @@ async function refreshSpinHistory() {
                         <p class="text-[#3E2723]"><span style="font-style: italic">Note</span>: ${history.fields.note}</p>
                     </div>
                     <div class="p-3 flex justify-between items-center gap-1">
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="window.location.href='/booking/form/${history.fields.winnerId}'">
-                        Booking
+                        <button class="hover:text-[#F5F5DC] text-[#842323] rounded-lg px-4 py-2 transition duration-300 ml-6" style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: bold;" onclick="window.location.href='/booking/form/${history.fields.winnerId}'">
+                        Book
                         </button>
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="window.location.href='/explore/menu_detail/${history.fields.winnerId}'">
+                        <button class="hover:text-[#F5F5DC] text-[#842323] rounded-lg px-4 py-2 transition duration-300" style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: bold;" onclick="window.location.href='/explore/menu_detail/${history.fields.winnerId}'">
                         Detail
                         </button>
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="deleteSpinHistory('${history.pk}')">
+                        <button class="hover:text-[#F5F5DC] text-[#842323] rounded-lg px-4 py-2 transition duration-300 mr-6" style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: bold;" onclick="deleteSpinHistory('${history.pk}')">
                         Hapus
                         </button>
                     </div>
