@@ -8,8 +8,8 @@ async function showAddMenuModal() {
   
   function closeModal() {
     document.querySelector("#form").reset();
-    window.location.href="/explore";
     document.querySelector("#modal").classList.add("hidden");
+    // window.location.href="/explore";
   }
   
   async function addMenu() {
@@ -22,14 +22,36 @@ async function showAddMenuModal() {
     if (!response.ok) {
       throw new Error("Failed to add menu");
     }
-    return false;
+    document.querySelector("#form").reset();
   }
 
-  function submitFilterForm() {
-    var form = document.getElementById('filterForm');
-    form.reset();
- 
-    form.submit();
+  function submitFilterForm(event) {
+    event.preventDefault(); // Mencegah form dari submit default
+
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+
+    // Mengirim data form menggunakan Fetch API
+    fetch(form.action, {
+        method: 'GET',
+        body: formData
+    })
+    then(response => {
+      if (response.ok) {
+          return response.text(); // Atau response.json() tergantung pada respons yang dikirim
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Di sini, Anda dapat memproses data yang diterima dari server.
+        // Misalnya, jika Anda ingin menampilkan data ke dalam elemen tertentu, lakukan di sini.
+
+        // Reset form setelah data berhasil dikirim
+        form.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
   }
   
   function returnToList(){
@@ -104,7 +126,5 @@ function updateMenu() {
       }
   });
 }
-
   
-  document.getElementById("cancel-modal").addEventListener("click", closeModal);
-  
+document.getElementById("cancel-modal").addEventListener("click", closeModal);

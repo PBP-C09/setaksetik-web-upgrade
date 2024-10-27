@@ -1,33 +1,59 @@
 {% extends "base.html" %}
 {% include 'navbar.html' %}
 
+{% load static %}
+
 {% block meta %}
-    <title>Book a Restaurant</title>
+    <title>Edit Your Booking</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8"> 
+<div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8">
     <h1 class="text-4xl font-bold mb-6">Edit Your Booking</h1>
-    
+
+    <!-- Pesan sukses atau gagal -->
+    {% if success %}
+        <div class="bg-green-500 text-white p-4 rounded-lg mb-6">Booking berhasil diperbarui!</div>
+    {% elif error %}
+        <div class="bg-red-500 text-white p-4 rounded-lg mb-6">Terjadi kesalahan saat menyimpan booking. Silakan periksa input Anda.</div>
+    {% endif %}
+
+    <!-- Form untuk edit booking -->
     <div class="booking-box bg-brown-800 p-6 rounded-lg mb-6 w-full max-w-lg">
-        <form id="bookingForm" method="POST">
+        <form method="POST">
             {% csrf_token %}
             <div class="mb-4">
                 <label for="booking_date" class="block text-lg font-semibold">Tanggal Booking:</label>
-                <input id="booking_date" name="booking_date" type="date" class="form-input mt-1 block w-full" required>
+                <input id="booking_date" name="booking_date" type="date" class="form-input mt-1 block w-full bg-white text-black rounded" value="{{ booking.booking_date }}" required>
             </div>
             <div class="mb-4">
                 <label for="number_of_people" class="block text-lg font-semibold">Jumlah orang:</label>
-                <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input mt-1 block w-full" required>
+                <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input mt-1 block w-full bg-white text-black rounded" value="{{ booking.number_of_people }}" required>
             </div>
             <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Edit Booking</button>
         </form>
     </div>
+
+    <!-- Kartu booking yang sedang diedit -->
+    <h2 class="text-3xl font-bold mb-6">Booking yang sedang diedit</h2>
+    <div id="editedBookingCard" class="max-w-sm rounded overflow-hidden shadow-lg bg-white text-black">
+        <img class="w-full h-48 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
+        <div class="px-6 py-4">
+            <div class="font-bold text-xl mb-2">{{ booking.menu_items.restaurant_name }}</div>
+            <p class="text-gray-700 text-base">
+                Booking di tanggal: {{ booking.booking_date | date:"F d, Y"}} <br>
+                Jumlah orang: {{ booking.number_of_people }} <br>
+                Menu: {{ booking.menu_items.menu }} <br>
+                Lokasi: {{ booking.menu_items.city }} <br>
+                Rating: {{ booking.menu_items.rating }} <br>
+                Status: {{ booking.get_status_display }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Tombol kembali ke halaman booking -->
+    <a href="{% url 'booking:lihat_booking' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mt-6">Kembali ke Halaman Booking</a>
 </div>
 {% endblock content %}
-
-{% block script %}
-<script src="/static/js/ajax_booking.js"></script>
-{% endblock script %}
