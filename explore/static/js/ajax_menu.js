@@ -9,7 +9,6 @@ async function showAddMenuModal() {
   function closeModal() {
     document.querySelector("#form").reset();
     document.querySelector("#modal").classList.add("hidden");
-    // window.location.href="/explore";
   }
   
   async function addMenu() {
@@ -38,15 +37,11 @@ async function showAddMenuModal() {
     })
     then(response => {
       if (response.ok) {
-          return response.text(); // Atau response.json() tergantung pada respons yang dikirim
+          return response.text(); 
       }
       throw new Error('Network response was not ok.');
     })
     .then(data => {
-        // Di sini, Anda dapat memproses data yang diterima dari server.
-        // Misalnya, jika Anda ingin menampilkan data ke dalam elemen tertentu, lakukan di sini.
-
-        // Reset form setelah data berhasil dikirim
         form.reset();
     })
     .catch(error => {
