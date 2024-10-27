@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 @login_required(login_url='/login')
 def show_menu(request):
@@ -59,17 +60,19 @@ def show_menu(request):
     
     return render(request, 'menu.html', context)
 
-
+@login_required(login_url='/login')
 def menu_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
     return render(request, 'menu_detail.html', context)
 
+@login_required(login_url='/login')
 def admin_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
     return render(request, 'admin_detail.html', context)
 
+@login_required(login_url='/login')
 def owner_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
@@ -77,11 +80,12 @@ def owner_detail(request, menu_id):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/login')
 def add_menu(request):
     if request.method == "POST":
-        menu = request.POST.get('menu_name')
+        menu = strip_tags(request.POST.get('menu_name'))
         category = request.POST.get('category').title()
-        restaurant_name = request.POST.get('restaurant_name')
+        restaurant_name = strip_tags(request.POST.get('restaurant_name'))
         city = request.POST.get('city').title()
         price = request.POST.get('price')
         rating = request.POST.get('rating')
@@ -100,10 +104,12 @@ def add_menu(request):
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
 
+@login_required(login_url='/login')
 def get_menu(request):
     data = Menu.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login')
 def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
@@ -129,14 +135,17 @@ def delete_menu(request, menu_id):
     return redirect('explore:show_menu')
 
 @csrf_exempt
+@login_required(login_url='/login')
 def filter_menu(request):
     menu_name = request.GET.get('menu', '')
     kategori = request.GET.get('category', '')
-    harga = request.GET.get('price', None)
+    min_harga = request.GET.get('min_price', None)
+    max_harga = request.GET.get('max_price', None)
     restaurant = request.GET.get('restaurant', '')
     kota = request.GET.get('city', '')
     specialization = request.GET.get('specialize', '')
-    rate = request.GET.get('rating', None)
+    min_rate = request.GET.get('min_rating', None)
+    max_rate = request.GET.get('max_rating', None)
 
     menus = Menu.objects.all()
     if menu_name:
@@ -145,8 +154,8 @@ def filter_menu(request):
     if kategori:
         menus = menus.filter(category__icontains=kategori)
 
-    if harga:
-        menus = menus.filter(price=harga)
+    if min_harga is not None and max_harga is not None:
+        menus = menus.filter(price__gte=min_harga, price__lte=max_harga)
 
     if restaurant:
         menus = menus.filter(restaurant_name__icontains=restaurant)
@@ -157,23 +166,27 @@ def filter_menu(request):
     if specialization:
         menus = menus.filter(specialized__icontains=specialization)
 
-    if rate:
-        menus = menus.filter(rating=rate)
+    if min_rate is not None and max_rate is not None:
+            menus = menus.filter(rating__gte=min_rate, rating__lte=max_rate)
     menu_json = serializers.serialize('json', menus)
     return JsonResponse(menu_json, safe=False)
 
+@login_required(login_url='/login')
 def show_xml(request):
     data = Menu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required(login_url='/login')
 def show_json(request):
     data = Menu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")

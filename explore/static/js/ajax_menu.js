@@ -1,15 +1,15 @@
 async function showAddMenuModal() {
-  document.querySelector("#modal").classList.remove("hidden");
-  document.getElementById("confirm-modal").onclick = async function () { 
-    await addMenu(); 
-    closeModal();
-  };
-}
+    document.querySelector("#modal").classList.remove("hidden");
+    document.getElementById("confirm-modal").onclick = async function () { 
+      await addMenu(); 
+      closeModal();
+    };
+  }
   
   function closeModal() {
     document.querySelector("#form").reset();
-    window.location.href="/explore";
     document.querySelector("#modal").classList.add("hidden");
+    // window.location.href="/explore";
   }
   
   async function addMenu() {
@@ -22,7 +22,7 @@ async function showAddMenuModal() {
     if (!response.ok) {
       throw new Error("Failed to add menu");
     }
-    return false;
+    document.querySelector("#form").reset();
   }
 
   function submitFilterForm(event) {
