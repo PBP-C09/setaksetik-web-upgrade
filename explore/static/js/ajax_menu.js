@@ -24,29 +24,10 @@ async function showAddMenuModal() {
     document.querySelector("#form").reset();
   }
 
-  function submitFilterForm(event) {
-    event.preventDefault(); // Mencegah form dari submit default
-
-    const form = document.getElementById('filterForm');
-    const formData = new FormData(form);
-
-    // Mengirim data form menggunakan Fetch API
-    fetch(form.action, {
-        method: 'GET',
-        body: formData
-    })
-    then(response => {
-      if (response.ok) {
-          return response.text(); 
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then(data => {
-        form.reset();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+  function submitFilterForm() {
+    var form = document.getElementById('filterForm');
+    form.reset();
+    form.submit();
   }
   
   function returnToList(){
