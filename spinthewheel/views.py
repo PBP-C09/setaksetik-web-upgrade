@@ -6,8 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
 
 from explore.models import Menu
-from main.models import UserProfile
 from spinthewheel.models import SpinHistory, SecretHistory
+from spinthewheel.forms import SpinHistoryForm, SecretHistoryForm
 
 @login_required(login_url='/login')
 def spin_view(request):
@@ -20,12 +20,17 @@ def spin_view(request):
         'options': options, 
     }
 
+    if request.user.userprofile.role == "admin":
+        return render(request, 'spin-secret.html', context)
+
     return render(request, 'spin.html', context)
 
+@login_required(login_url='/login')
 def history_json(request):
     data = SpinHistory.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login')
 def option_json(request, selected_category="All Categories"):
     if selected_category == "All Categories":
         data = Menu.objects.all()
@@ -36,29 +41,27 @@ def option_json(request, selected_category="All Categories"):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/login')
 def add_spin_history(request):
-    user = request.user
-    winner = request.POST.get("winner")
-    winnerId = request.POST.get("winnerId")
+    form = SpinHistoryForm(request.POST or None)
 
     # Create new SpinHistory entry
-    if winner:
-        spin_history = SpinHistory(
-            user=user,
-            winner=winner,
-            winnerId=winnerId
-        )
+    if form.is_valid() and request.method == "POST":
+        spin_history = form.save(commit=False)
+        spin_history.user = request.user
         spin_history.save()
 
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponse(b"BAD REQUEST", status=400)
 
+@login_required(login_url='/login')
 def delete_spin_history(request, id):
     spin_history = SpinHistory.objects.get(pk = id)
     spin_history.delete()
     return HttpResponseRedirect(reverse('spinthewheel:spin_view'))
 
+@login_required(login_url='/login')
 def secret_view(request):
     context = {
         'user': request.user,
@@ -66,27 +69,28 @@ def secret_view(request):
     
     return render(request, 'spin-secret.html', context)
 
+@login_required(login_url='/login')
 def secret_json(request):
     data = SecretHistory.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-@csrf_exempt
 @require_POST
+@csrf_exempt
+@login_required(login_url='/login')
 def add_secret_history(request):
-    user = request.user
-    winner = request.POST.get("winner")
+    form = SecretHistoryForm(request.POST or None)
 
-    if winner:
-        secret_history = SecretHistory(
-            user=user,
-            winner=winner,
-        )
+    # Create new SpinHistory entry
+    if form.is_valid() and request.method == "POST":
+        secret_history = form.save(commit=False)
+        secret_history.user = request.user
         secret_history.save()
 
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponse(b"BAD REQUEST", status=400)
 
+@login_required(login_url='/login')
 def delete_secret_history(request, id):
     secret_history = SecretHistory.objects.get(pk = id)
     secret_history.delete()
