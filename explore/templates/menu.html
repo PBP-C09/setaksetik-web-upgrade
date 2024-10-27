@@ -14,6 +14,21 @@
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
         Makan apa <span class="italic">Hari ini?</span>
     </h1>
+
+    <style>
+        /* Warna placeholder untuk elemen select */
+        select {
+            color: #a5a4a0; /* Warna font utama untuk placeholder */
+        }
+        select option {
+            color: #a5a4a0; /* Warna font untuk pilihan dalam dropdown */
+        }
+    
+        /* Warna placeholder untuk input range dan input number */
+        input[type="number"], input[type="range"] {
+            color: #a5a4a0; /* Warna font untuk input number dan range */
+        }
+    </style>
   
     <div class="flex justify-center items-center bg-[#5B3E39] py-4">
         <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(ajax)">
