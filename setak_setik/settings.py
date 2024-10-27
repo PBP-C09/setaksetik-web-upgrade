@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fjfd0@nekq!wqb2y^d#oyqz%w1t93g_649_*sk!4@lkocre5^=
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
