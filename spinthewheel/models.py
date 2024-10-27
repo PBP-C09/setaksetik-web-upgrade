@@ -16,3 +16,4 @@ class SecretHistory(models.Model):
     winner = models.TextField()
     spin_time = models.DateField(auto_now_add=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    note = models.TextField(default="-")

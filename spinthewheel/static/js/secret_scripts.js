@@ -39,7 +39,7 @@ function clearAll() {
     items = [];
     createWheel(); 
 
-    document.getElementById("winner").innerHTML = "YTTA :P";
+    document.getElementById("winner").innerHTML = ":D";
     
 }
 
@@ -139,7 +139,6 @@ function draw() {
             globalWinner = items[i];
             document.getElementById("winner").innerHTML = globalWinner;
         }
-
     }
 }
 
@@ -167,7 +166,7 @@ function animate() {
 
 // Function to spin the wheel
 function spin() {
-    if (items.length != 0) {
+    if (items.length > 1) {
         if(speed != 0){
             return
         }
@@ -198,7 +197,10 @@ function hideWinnerModal() {
 // Function to hide winner modal
 function addSecretHistory() {
     const formData = new FormData();
+    const note = document.getElementById("note").value || "-"
+
     formData.append("winner", globalWinner);
+    formData.append("note", note)
 
     fetch(addSecretHistoryUrl, {
         method: "POST",
@@ -209,6 +211,7 @@ function addSecretHistory() {
     })
     .then(response => refreshSecretHistory())
 
+    document.getElementById("note").value = ""
     return false;
 }
 
@@ -236,6 +239,7 @@ async function refreshSecretHistory() {
                     <div class="bg-[#F5F5DC] text-[#3E2723] p-4 rounded-t-lg border-b-2 border-[#3E2723] text-center">
                         <h3 class="font-bold text-x1 mb-1" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 26px">${history.fields.winner}</h3>
                         <p class="text-[#3E2723]">Di-<span style="font-style: italic">spin</span> pada: ${history.fields.spin_time}</p>
+                        <p class="text-[#3E2723]"><span style="font-style: italic">Note</span>: ${history.fields.note}</p>
                     </div>
                     <div class="p-3 flex justify-center items-center gap-1">
                         <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="deletesecretHistory('${history.pk}')">

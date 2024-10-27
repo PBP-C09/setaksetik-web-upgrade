@@ -301,6 +301,7 @@ function addSpinHistory() {
     })
     .then(response => refreshSpinHistory())
 
+    document.getElementById("note").value = ""
     return false;
 }
 
