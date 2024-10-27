@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     ROLES = [
-        ('customer', 'Customer'),
-        ('admin', 'Admin'),
+        ('steak lover', 'Steak Lover'),
         ('steakhouse owner', 'Steakhouse Owner'),
+        ('admin', 'Admin')
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
