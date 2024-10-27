@@ -25,26 +25,28 @@ def show_menu(request):
     if form.is_valid():
         menu_name = form.cleaned_data.get("menu")
         kategori = form.cleaned_data.get("category")
-        harga = form.cleaned_data.get("price")
+        min_harga = form.cleaned_data.get("min_price")
+        max_harga = form.cleaned_data.get("max_price")
         restaurant = form.cleaned_data.get("restaurant")
         kota = form.cleaned_data.get("city")
         specialization = form.cleaned_data.get("specialize")
-        rate = form.cleaned_data.get("rating")
+        min_rate = form.cleaned_data.get("min_rating")
+        max_rate = form.cleaned_data.get("max_rating")
 
         if menu_name:
             menus = menus.filter(menu__icontains=menu_name)
         if kategori:
             menus = menus.filter(category__icontains=kategori)
-        if harga:
-            menus = menus.filter(price=harga)
+        if min_harga is not None and max_harga is not None:
+            menus = menus.filter(price__gte=min_harga, price__lte=max_harga)
         if restaurant:
             menus = menus.filter(restaurant_name__icontains=restaurant)
         if kota:
             menus = menus.filter(city__icontains=kota)
         if specialization:
             menus = menus.filter(specialized__icontains=specialization)
-        if rate:
-            menus = menus.filter(rating=rate)
+        if min_rate is not None and max_rate is not None:
+            menus = menus.filter(rating__gte=min_rate, rating__lte=max_rate)
 
         context['explore'] = menus  
 
@@ -159,3 +161,19 @@ def filter_menu(request):
         menus = menus.filter(rating=rate)
     menu_json = serializers.serialize('json', menus)
     return JsonResponse(menu_json, safe=False)
+
+def show_xml(request):
+    data = Menu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json(request):
+    data = Menu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Menu.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Menu.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")

@@ -1,10 +1,10 @@
 async function showAddMenuModal() {
-    document.querySelector("#modal").classList.remove("hidden");
-    document.getElementById("confirm-modal").onclick = async function () { 
-      await addMenu(); 
-      closeModal();
-    };
-  }
+  document.querySelector("#modal").classList.remove("hidden");
+  document.getElementById("confirm-modal").onclick = async function () { 
+    await addMenu(); 
+    closeModal();
+  };
+}
   
   function closeModal() {
     document.querySelector("#form").reset();
@@ -25,11 +25,33 @@ async function showAddMenuModal() {
     return false;
   }
 
-  function submitFilterForm() {
-    var form = document.getElementById('filterForm');
-    form.reset();
- 
-    form.submit();
+  function submitFilterForm(event) {
+    event.preventDefault(); // Mencegah form dari submit default
+
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+
+    // Mengirim data form menggunakan Fetch API
+    fetch(form.action, {
+        method: 'GET',
+        body: formData
+    })
+    then(response => {
+      if (response.ok) {
+          return response.text(); // Atau response.json() tergantung pada respons yang dikirim
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Di sini, Anda dapat memproses data yang diterima dari server.
+        // Misalnya, jika Anda ingin menampilkan data ke dalam elemen tertentu, lakukan di sini.
+
+        // Reset form setelah data berhasil dikirim
+        form.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
   }
   
   function returnToList(){
@@ -104,7 +126,5 @@ function updateMenu() {
       }
   });
 }
-
   
-  document.getElementById("cancel-modal").addEventListener("click", closeModal);
-  
+document.getElementById("cancel-modal").addEventListener("click", closeModal);
