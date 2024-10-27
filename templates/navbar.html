@@ -23,7 +23,7 @@
             <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/explore/' %}font-bold{% else %}font-normal{% endif %}">Manage Menus</a>
             <a href="/spinthewheel/secret/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/spinthewheel/secret/' %}font-bold{% else %}font-normal{% endif %}">Spin</a>
             <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/review/' %}font-bold{% else %}font-normal{% endif %}">Manage Review</a>
-            <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/booking/' %}font-bold{% else %}font-normal{% endif %}">Manage Ownership</a>
+            <a href="{% url 'claim:manage_ownership' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if request.path == '/claim/' %}font-bold{% else %}font-normal{% endif %}">Manage Ownership</a>
           {% endif %}
         {% endif %}
       </div>
