@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,24 +8,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meatup Wishlist</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
+
         body {
             font-family: 'Raleway', sans-serif;
             background-color: #3e2c2c;
             color: #ffffff;
         }
+
         h1, h2 {
             font-family: 'Playfair Display', serif;
         }
+
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 50px auto;
             padding: 20px;
             background-color: #2b1f1f;
             border-radius: 10px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
         }
+
+        .wishlist-card, .meatup-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #4a3737;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .wishlist-card span, .meatup-card span {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ffcc00;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .icon-btn:hover {
+            color: #e6b800;
+        }
+
         input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -30,6 +67,7 @@
             border: none;
             border-radius: 5px;
         }
+
         button {
             background-color: #ffcc00;
             border: none;
@@ -40,62 +78,22 @@
             cursor: pointer;
             width: 100%;
         }
+
         button:hover {
             background-color: #e6b800;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul li {
-            padding: 10px;
-            background-color: #4a3737;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed; 
-            z-index: 1; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.4); 
-        }
-        .modal-content {
-            background-color: #2b1f1f;
-            margin: 15% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; 
-            color: white;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Public Wishlist</h1>
 
-        <form id="wishlist-form" method="POST">
+        <form id="wishlist-form">
             {% csrf_token %}
             <input type="text" name="wishlist_item" id="wishlist-item" placeholder="Enter your wishlist item..." required>
             <button type="submit">Add Wishlist</button>
-        </form>             
+        </form>
 
         <ul id="wishlist-items">
             {% for wishlist in wishlist_items %}
@@ -104,140 +102,167 @@
         </ul>
 
         <h2>Meat Up Requests</h2>
-
         <button onclick="window.location.href='{% url 'meatup:received_requests' %}'">View Meat Up Requests</button>
 
-        {% for request in requests %}
-            <div class="request-container">
-                <div class="user-info">
-                    <span>Username: {{ request.user.username }}</span>
-                    <span>Request Date: {{ request.date }}</span>
-                </div>
-                <p>Request Message: {{ request.message }}</p>
-                <div class="request-actions">
-                    <button id="agree-btn-{{ request.id }}">Agree</button>
-                    <button id="decline-btn-{{ request.id }}">Decline</button>
-                </div>
-            </div>
-        {% endfor %}
-
-        <!-- Modal for Visibility Selection -->
-        <div id="visibility-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="modal-close">&times;</span>
-                <h2>Visibility Options</h2>
-                <p>Do you want to keep your identity private? Your username and name will be kept private.</p>
-                <button id="private-btn">Yes</button>
-                <button id="public-btn">No</button>
-            </div>
-        </div>
-
-        <script>
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
-            const csrfToken = getCookie('csrftoken');
-            let isPublic = false;
-
-            document.getElementById('wishlist-form').addEventListener('submit', function (e) {
-                e.preventDefault();
-                document.getElementById('visibility-modal').style.display = 'block'; 
-            });
-
-            document.getElementById('private-btn').addEventListener('click', async function () {
-                isPublic = false;
-                await submitWishlist();
-            });
-
-            document.getElementById('public-btn').addEventListener('click', async function () {
-                isPublic = true;
-                await submitWishlist();
-            });
-
-            document.getElementById('modal-close').addEventListener('click', function () {
-                document.getElementById('visibility-modal').style.display = 'none'; 
-            });
-
-            async function submitWishlist() {
-                const item = document.getElementById('wishlist-item').value;
-
-                const data = {
-                    item_name: item,
-                    description: 'Deskripsi Item',
-                    is_public: isPublic
-                };
-
-                const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {  
-                    method: 'POST',
-                    headers: { 
-                        'X-CSRFToken': csrfToken, 
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify(data) 
-                });
-        
-                if (response.ok) {
-                    const data = await response.json();
-                    const newItem = document.createElement('li'); 
-                    newItem.id = `wishlist-${data.id}`; 
-                    newItem.textContent = data.item_name; 
-                    document.getElementById('wishlist-items').appendChild(newItem); 
-                    document.getElementById('wishlist-item').value = ''; 
-                    document.getElementById('visibility-modal').style.display = 'none'; 
-                } else {
-                    const errorData = await response.json();
-                    alert(errorData.error || 'Failed to add the wishlist item.');
-                    document.getElementById('visibility-modal').style.display = 'none'; 
-                }
-            }
-
+        <div id="meatup-requests">
             {% for request in requests %}
-            document.getElementById(`agree-btn-${request.id}`).addEventListener('click', async function() {
-                const response = await fetch("{% url 'meatup:agree_request' request.id %}", {  
-                    method: 'POST',
-                    headers: { 
-                        'X-CSRFToken': csrfToken, 
-                        'Content-Type': 'application/json' 
-                    }
-                });
-                if (response.ok) {
-                    alert(`You agreed to the request from ${request.user.username}`);
-                    window.location.href = "{% url 'meatup:received_requests' %}"; // Redirect to received_requests page
-                } else {
-                    const errorData = await response.json();
-                    alert(errorData.error || 'Failed to agree to the request.');
+            <div class="meatup-card" id="request-{{ request.id }}">
+                <span>User {{ request.user.username }} has requested to meat up with you!</span>
+                <p>{{ request.message }}</p>
+                <div>
+                    <button class="icon-btn edit-btn" data-id="{{ request.id }}">✏️</button>
+                    <button class="icon-btn delete-btn" data-id="{{ request.id }}">🗑️</button>
+                </div>
+            </div>
+            {% empty %}
+            <p>No meat-up requests available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // Delete Meat Up Request with AJAX
+        $('.delete-btn').on('click', function () {
+            const requestId = $(this).data('id');
+            $.ajax({
+                url: `/delete-request/${requestId}/`,
+                type: 'DELETE',
+                headers: { 'X-CSRFToken': csrfToken },
+                success: function () {
+                    $(`#request-${requestId}`).remove();
+                },
+                error: function () {
+                    alert('Failed to delete the request.');
                 }
             });
-        
-            document.getElementById(`decline-btn-${request.id}`).addEventListener('click', async function() {
-                const response = await fetch("{% url 'meatup:decline_request' request.id %}", {  
-                    method: 'POST',
-                    headers: { 
-                        'X-CSRFToken': csrfToken, 
-                        'Content-Type': 'application/json' 
+        });
+
+        // Edit Meat Up Request Placeholder
+        $('.edit-btn').on('click', function () {
+            const requestId = $(this).data('id');
+            const newMessage = prompt('Enter the updated message:');
+            if (newMessage) {
+                $.ajax({
+                    url: `/edit-request/${requestId}/`,
+                    type: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    data: { message: newMessage },
+                    success: function () {
+                        location.reload();  // Reload to show updated message
+                    },
+                    error: function () {
+                        alert('Failed to edit the request.');
                     }
                 });
-                if (response.ok) {
-                    alert(`You declined the request from ${request.user.username}`);
-                    window.location.href = "{% url 'meatup:received_requests' %}"; // Redirect to received_requests page
-                } else {
-                    const errorData = await response.json();
-                    alert(errorData.error || 'Failed to decline the request.');
-                }
-            });
-        {% endfor %}        
-        </script>    
-    </body>
+            }
+        });
+// Load wishlist items from local storage
+function loadWishlist() {
+    const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const wishlistContainer = document.getElementById('wishlist-items');
+    wishlistContainer.innerHTML = ''; // Clear existing items
+
+    storedItems.forEach(item => {
+        const listItem = createWishlistCard(item);
+        wishlistContainer.appendChild(listItem);
+    });
+
+    attachEventHandlers();  // Attach handlers to buttons after loading
+}
+
+// Create a wishlist card
+function createWishlistCard(item) {
+    const listItem = document.createElement('li');
+    listItem.className = 'wishlist-card';
+    listItem.id = `wishlist-${item.id}`;
+
+    listItem.innerHTML = `
+        <span>${item.text} - Added by {{request.user.userprofile.full_name}}</span>
+        <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button>
+        <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button>
+    `;
+    return listItem;
+}
+
+function attachEventHandlers() {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const id = parseInt(this.getAttribute('data-id'));
+            editItem(id);
+        });
+    });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const id = parseInt(this.getAttribute('data-id'));
+            deleteItem(id);
+        });
+    });
+}
+
+async function saveWishlistItem(itemText) {
+    const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ item_name: itemText }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        const newItem = {
+            id: data.id,
+            text: data.item_name,
+            user: data.user,
+        };
+
+        const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+        storedItems.push(newItem);
+        localStorage.setItem('wishlist', JSON.stringify(storedItems));
+
+        document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
+        attachEventHandlers();  // Re-attach event handlers after adding a new item
+        document.getElementById('wishlist-item').value = '';
+    } else {
+        alert('Failed to save wishlist item');
+    }
+}
+
+function editItem(id) {
+    const newItemText = prompt('Enter the updated wishlist item:');
+    if (newItemText) {
+        const storedItems = JSON.parse(localStorage.getItem('wishlist'));
+        const itemIndex = storedItems.findIndex(item => item.id === id);
+        if (itemIndex > -1) {
+            storedItems[itemIndex].text = newItemText;
+            localStorage.setItem('wishlist', JSON.stringify(storedItems));
+            loadWishlist(); // Reload the wishlist to reflect changes
+        }
+    }
+}
+
+function deleteItem(id) {
+    const storedItems = JSON.parse(localStorage.getItem('wishlist'));
+    const updatedItems = storedItems.filter(item => item.id !== id);
+    localStorage.setItem('wishlist', JSON.stringify(updatedItems));
+    loadWishlist(); // Reload the wishlist to reflect deletion
+}
+
+document.getElementById('wishlist-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const itemText = document.getElementById('wishlist-item').value;
+    saveWishlistItem(itemText);
+});
+
+loadWishlist();
+    </script>
+</body>
 </html>
+{% endblock %}

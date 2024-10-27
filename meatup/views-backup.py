@@ -25,19 +25,12 @@ def request_list(request):
     context = {
         'requests': requests,
     }
-    return render(request, 'request_list.html', context)
+    return render(request, 'meatup/request_list.html', context)
 
 @login_required
 def received_requests(request):
-    wishlist_items = Wishlist.objects.filter(owner=request.user)  # Fetch user's wishlist
     requests = MeatupRequest.objects.filter(receiver=request.user)
-    
-    context = {
-        'requests': requests,
-        'wishlist_items': wishlist_items,  
-    }
-    
-    return render(request, 'received_requests.html', context)
+    return render(request, 'received_requests.html', {'requests': requests})
 
 @login_required
 def create_request(request, wishlist_id):
@@ -61,11 +54,11 @@ def create_request(request, wishlist_id):
         })
 
     users = User.objects.exclude(id=request.user.id)  
-    return render(request, 'create_request.html', {'wishlist': wishlist, 'users': users})
+    return render(request, 'meatup/create_request.html', {'wishlist': wishlist, 'users': users})
 
 @login_required(login_url='/login')
 def wishlist_list(request):
-    wishlist_items = Wishlist.objects.all()  # Fetch user's wishlist items
+    wishlist_items = Wishlist.objects.filter(owner=request.user)  # Fetch user's wishlist items
     
     context = {
         'wishlist_items': wishlist_items,
