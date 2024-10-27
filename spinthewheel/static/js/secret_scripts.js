@@ -1,4 +1,4 @@
-// Helper functions of wheel
+// Script of helper wheel functions 
 function toRad(deg){
     return deg * (Math.PI / 180.0);
 }
@@ -14,7 +14,7 @@ function getPercent(input,min,max){
 }
 
 
-// Script to handle spinning the wheel, updating items, and clearing all items
+// Script to handle spinning the wheel, adding items, and clearing all items 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const width = document.getElementById("canvas").width;
@@ -24,115 +24,31 @@ const centerX = width / 2;
 const centerY = height / 2;
 const radius = width / 2;
 
-let items = [];
-let itemsDict = {};
+let items = document.getElementsByTagName("textarea")[0].value.split("\n");
 
 let currentDeg = 0;
-let colors = [];
+let colors = [{r: 245, g: 245, b: 220}];
 let step = 360 / items.length;
 let itemDegs = {};
 
 var globalWinner = "";
 
-document.addEventListener('DOMContentLoaded', function() {
-    const categoryFilter = document.getElementById('categoryFilter');
-    const defaultCategory = "All Categories";
-    categoryFilter.value = defaultCategory;
-    refreshOptions(defaultCategory);
-
-    categoryFilter.addEventListener('change', function() {
-        const selectedCategory = this.value;
-        refreshOptions(selectedCategory);
-    });
-});
-
-// Asynchronous function to refresh options based on selected category
-async function refreshOptions(selectedCategory){
-    document.getElementById("menuList").innerHTML = "";
-    options = await getOptions(selectedCategory);
-
-    let htmlString = "";
-    options.forEach((option) => {
-        const isAdded = option.fields.menu in itemsDict;
-        if (selectedCategory == "All Categories" || selectedCategory == option.fields.category) {
-            htmlString += `
-            <div class="flex justify-between items-center p-2 pl-4 pr-4 mt-2 rounded" style="background-color: #F5F5DC">
-                <span style="color: #3E2723; font-weight: bold">${option.fields.menu}</span>
-                <button id="optionButton-${option.pk}" type="button" 
-                        onclick="updateWheel('${option.fields.menu}', '${option.pk}', '${option.fields.restaurant_name}', '${option.fields.city}')" 
-                        class="${isAdded ? 'remove-button' : 'add-button'}" 
-                        style="margin-left: 0.75rem;">
-                    ${isAdded ? 'Remove' : 'Add'}
-                </button>
-            </div>`;
-        }
-    });
-    document.getElementById("menuList").innerHTML = htmlString;
-
-}
-
-// Asynchronous function to get options in json format
-async function getOptions(selectedCategory){
-    return fetch(`/spinthewheel/option-json/${selectedCategory}/`).then((res) => res.json())
-}
-
-// Function to add menu item to the wheel
-function updateWheel(menuName, menuId, menuRestaurant, menuCity) {
-    let optionButton = document.getElementById(`optionButton-${menuId}`);
-    if (!(menuName in itemsDict)) {
-        itemsDict[menuName] = {
-            id: menuId,
-            restaurant: menuRestaurant,
-            city: menuCity
-        }
-        optionButton.innerHTML = "Remove"
-        optionButton.classList.remove('add-button');
-        optionButton.classList.add('remove-button');
-    }
-    else {
-        delete itemsDict[menuName];
-        optionButton.innerHTML = "Add";
-        optionButton.classList.remove('remove-button');
-        optionButton.classList.add('add-button');
-    }
-
-    items = Object.keys(itemsDict);
-    createWheel();
-}
-
 // Function to clear all items from the wheel
 function clearAll() {
+    document.getElementById("options").value = ""
     items = [];
-    itemsDict = {};
     createWheel(); 
 
-    let optionButtons = document.querySelectorAll('button[id^="optionButton-"]');
-    optionButtons.forEach(optionButton => {
-        optionButton.innerHTML = "Add";
-        optionButton.innerHTML = "Add";
-        optionButton.classList.add('option-button');
-    });
-
-    var texts = [
-        "Spin aja!", 
-        "Spin sekarang B)", 
-        "Gachain aja gaksih :3", 
-        "Putar rodanya banh~", 
-        "Gausah bingung bingung laah", 
-        "Sepinsetik to the rescue :D", 
-        "Makan semuanya :V"
-    ];
-
-    var randomText = texts[Math.floor(Math.random() * texts.length)];
-    document.getElementById("winner").innerHTML = randomText;
+    document.getElementById("winner").innerHTML = "YTTA :P";
+    
 }
 
 
-// Wheel creation script
-// The source of wheel creation and spinning animation are credited to: https://youtu.be/-FNm58Z9GHM?si=F4i5fjn3LcXIv1QZ
-
-// Function to create and update wheel settings
+// Wheel creation script 
+// The source of wheel creation and spinning animation are credited to: https://youtu.be/-FNm58Z9GHM?si=F4i5fjn3LcXIv1QZ  
+// Function to create and redraw the wheel
 function createWheel() {
+    items = document.getElementById("options").value.split("\n");
     const baseColors = [
     {r: 132, g: 35, b: 35},                         // 842323 (Red)
     {r: 255, g: 213, b: 79},                        // FFD54F (Yellow)
@@ -158,6 +74,7 @@ function createWheel() {
             colorIndex = (colorIndex + 1) % baseColors.length;
         }
     }
+
     draw();
 }
 draw()
@@ -241,7 +158,6 @@ function animate() {
         pause = true;
         
         showWinnerModal(globalWinner);
-
     }
     currentDeg += speed;
     draw();
@@ -265,51 +181,42 @@ function spin() {
 }
 
 
-// Script to show winner and add to history with AJAX
-const addSpinHistoryBtn = document.getElementById("addSpinHistoryBtn");
+// Script to show winner and add to history with AJAX 
+const addSecretHistoryBtn = document.getElementById("addSecretHistoryBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 
 // Function to show winner modal
 function showWinnerModal(winnerName) {
     document.getElementById("winnerName").innerText = winnerName;
-    document.getElementById("winnerRestaurant").innerText = itemsDict[winnerName]["restaurant"];
-    document.getElementById("winnerCity").innerText = itemsDict[winnerName]["city"];
     document.getElementById("winnerModal").classList.remove("hidden");
 }
 
-// Function to hide winner modal
 function hideWinnerModal() {
     document.getElementById("winnerModal").classList.add("hidden");
 }
 
-// Function to add spin history
-function addSpinHistory() {
+// Function to hide winner modal
+function addSecretHistory() {
     const formData = new FormData();
-    const winnerId = itemsDict[globalWinner]['id'];
-    const note = document.getElementById("note").value || "-"
-
     formData.append("winner", globalWinner);
-    formData.append("winnerId", winnerId);
-    formData.append("note", note)
 
-    fetch(addSpinHistoryUrl, {
+    fetch(addSecretHistoryUrl, {
         method: "POST",
         body: formData,
         headers: {
             'X-CSRFToken': csrfToken,
         }        
     })
-    .then(response => refreshSpinHistory())
+    .then(response => refreshSecretHistory())
 
     return false;
 }
 
-var ngitung = 0
-// Asynchronous function to refresh spin history
-async function refreshSpinHistory() {
-    document.getElementById("spin-history-container").innerHTML = "";
-    document.getElementById("spin-history-container").className = "";
-    const spinHistory = await getSpinHistory();
+// Asynchronous function to refresh secret history
+async function refreshSecretHistory() {
+    document.getElementById("secret-history-container").innerHTML = "";
+    document.getElementById("secret-history-container").className = "";
+    const secretHistory = await getSecretHistory();
     let htmlString = `
     <h1 class="text-4xl text-center">
         Yang <span class="italic">pernah</span> kamu spin
@@ -317,29 +224,22 @@ async function refreshSpinHistory() {
     <div class="border-t-2 border-[beige] mt-3 mx-auto w-2/3"></div>`;
     let classNameString = "";
 
-    if (spinHistory.length === 0) {
+    if (secretHistory.length === 0) {
         htmlString = ""
     }
     else {
         classNameString = "mt-24 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
-        spinHistory.forEach((history) => {
+        secretHistory.forEach((history) => {
             htmlString += `
             <div class="relative break-inside-avoid">
                 <div class="relative top-5 bg-[#FFD54F] shadow-md rounded-lg mb-6 break-inside-avoid flex flex-col border-2 border-[#3E2723] transform rotate-1 hover:rotate-0 transition-transform duration-300">
                     <div class="bg-[#F5F5DC] text-[#3E2723] p-4 rounded-t-lg border-b-2 border-[#3E2723] text-center">
                         <h3 class="font-bold text-x1 mb-1" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 26px">${history.fields.winner}</h3>
                         <p class="text-[#3E2723]">Di-<span style="font-style: italic">spin</span> pada: ${history.fields.spin_time}</p>
-                        <p class="text-[#3E2723]"><span style="font-style: italic">Note</span>: ${history.fields.note}</p>
                     </div>
-                    <div class="p-3 flex justify-between items-center gap-1">
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="window.location.href='/booking/form/${history.fields.winnerId}'">
-                        Booking
-                        </button>
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="window.location.href='/explore/menu_detail/${history.fields.winnerId}'">
-                        Detail
-                        </button>
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="deleteSpinHistory('${history.pk}')">
-                        Hapus
+                    <div class="p-3 flex justify-center items-center gap-1">
+                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="deletesecretHistory('${history.pk}')">
+                            Hapus
                         </button>
                     </div>
                 </div>
@@ -347,19 +247,19 @@ async function refreshSpinHistory() {
             `;
         });
     }
-    document.getElementById("spin-history-container").className = classNameString;
-    document.getElementById("spin-history-container").innerHTML = htmlString;
+    document.getElementById("secret-history-container").className = classNameString;
+    document.getElementById("secret-history-container").innerHTML = htmlString;
 }
-refreshSpinHistory();
+refreshSecretHistory();
 
-// Asynchronous function to get spin history in json format
-async function getSpinHistory(){
-    return fetch(historyJsonUrl).then((res) => res.json())
+// Asynchronous function to get secret history in json format
+async function getSecretHistory(){
+    return fetch(secretJsonUrl).then((res) => res.json())
 }
 
-// Asynchronous function to delete spin history based on primary key
-async function deleteSpinHistory(pk) {
-    const response = await fetch(`/spinthewheel/delete/${pk}`, {
+// Asynchronous function to delete secret history based on primary key
+async function deletesecretHistory(pk) {
+    const response = await fetch(`/spinthewheel/delete-secret/${pk}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -368,15 +268,15 @@ async function deleteSpinHistory(pk) {
     });
 
     if (response.ok) {
-        refreshSpinHistory();
+        refreshSecretHistory();
     } else {
-        console.error("Error deleting spin history:", response.statusText);
+        console.error("Error deleting secret history:", response.statusText);
     }
 }
 
-// Event listener for the click of addSpinHistoryBtn
-document.getElementById("addSpinHistoryBtn").addEventListener("click", () => {
-    addSpinHistory();
+// Event listener for the click of addSecretHistoryBtn
+document.getElementById("addSecretHistoryBtn").addEventListener("click", () => {
+    addSecretHistory();
     hideWinnerModal();
 });
 

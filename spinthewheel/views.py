@@ -21,6 +21,9 @@ def spin_view(request):
         'options': options, 
     }
 
+    if request.user.userprofile.role == "admin":
+        return render(request, 'spin-secret.html', context)
+
     return render(request, 'spin.html', context)
 
 def history_json(request):
