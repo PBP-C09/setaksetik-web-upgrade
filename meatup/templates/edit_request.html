@@ -1,41 +1,51 @@
-<!-- Trigger Modal -->
-<button id="edit-request-btn" class="text-blue-500" data-request-id="{{ request_obj.id }}">Edit Request</button>
+{% extends 'base.html' %}
+{% load static %}
 
-<!-- Edit Request Modal -->
-<div id="edit-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Edit Meatup Request</h2>
-        <form id="edit-request-form" method="POST">
-            {% csrf_token %}
-            <textarea id="note" name="note" rows="4" class="w-full border p-2 rounded" placeholder="Edit your note here...">{{ request_obj.note }}</textarea>
-            
-            <select id="status" name="status" class="mt-4 w-full border p-2 rounded">
-                {% for value, label in request_obj.STATUS_CHOICES %}
-                    <option value="{{ value }}" {% if request_obj.status == value %}selected{% endif %}>{{ label }}</option>
-                {% endfor %}
-            </select>
+{% block meta %}
+<title>Edit Meatup Request</title>
+{% endblock meta %}
 
-            <div class="mt-4 flex justify-end space-x-2">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                <button type="button" id="close-edit-modal" class="text-gray-500">Cancel</button>
-            </div>
-        </form>
+{% block content %}
+{% include 'navbar.html' %}
+<div class="flex flex-col min-h-screen bg-gray-100">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+        <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Meatup Request</h1>
+  
+        <div class="bg-white rounded-lg p-6 form-style">
+            <form id="edit-request-form" method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div class="flex flex-col">
+                    <label for="note" class="mb-2 font-semibold text-gray-700">Note</label>
+                    <textarea id="note" name="note" rows="4" class="w-full border p-2 rounded" placeholder="Edit your note here...">{{ request_obj.note }}</textarea>
+                </div>
+                
+                <div class="flex flex-col">
+                    <label for="status" class="mb-2 font-semibold text-gray-700">Status</label>
+                    <select id="status" name="status" class="mt-2 w-full border p-2 rounded">
+                        {% for value, label in request_obj.STATUS_CHOICES %}
+                            <option value="{{ value }}" {% if request_obj.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="flex justify-center mt-6 space-x-4">
+                    <button type="submit" class="bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out w-full">
+                        Save
+                    </button>
+                    <button type="button" id="close-edit-modal" class="text-gray-500 px-6 py-3 rounded-lg hover:text-black transition duration-300 ease-in-out">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('edit-request-btn').addEventListener('click', () => {
-        document.getElementById('edit-modal').classList.remove('hidden');
-    });
-
-    document.getElementById('close-edit-modal').addEventListener('click', () => {
-        document.getElementById('edit-modal').classList.add('hidden');
-    });
-
     document.getElementById('edit-request-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const requestId = e.target.closest('#edit-request-btn').getAttribute('data-request-id');
+        const requestId = {{ request_obj.id }};
         
         const response = await fetch(`/meatup/edit/${requestId}/`, {
             method: 'POST',
@@ -45,9 +55,11 @@
 
         if (response.ok) {
             alert('Request updated successfully!');
-            location.reload();
+            window.location.href = '{% url "meatup:meatup" %}'; // Redirect after successful update
         } else {
             alert('Failed to update request.');
         }
     });
 </script>
+
+{% endblock %}
