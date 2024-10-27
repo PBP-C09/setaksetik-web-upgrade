@@ -1,4 +1,4 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -22,7 +22,8 @@ def spin_view(request):
 
     if request.user.userprofile.role == "admin":
         return render(request, 'spin-secret.html', context)
-
+    elif request.user.userprofile.role == "steakhouse owner":
+        return redirect('main:forbidden')
     return render(request, 'spin.html', context)
 
 @login_required(login_url='/login')

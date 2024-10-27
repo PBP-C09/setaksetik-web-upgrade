@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>SetakSetik</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
@@ -28,6 +28,7 @@
         </div>
 
         <!-- Button Section -->
+        {% if user.is_authenticated %}
         <div class="flex flex-col justify-center space-y-4 w-[360px]">
             {% if request.user.userprofile.role == 'steak lover' %}
                 <!-- First Row (Solid Left, Hollow Right) -->
@@ -83,7 +84,7 @@
             {% elif request.user.userprofile.role == 'steakhouse owner' %}
                 <!-- First Row (Solid Left, Hollow Right) -->
                 <div class="flex items-center justify-start ml-5">
-                    <a href="/claim" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    <a href="/explore" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
                         Claim Resto
                     </a>
                     <span class="ml-4 border-2 border-[#3E2723] text-[#3E2723] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300">
@@ -147,7 +148,7 @@
                     <span class="mr-4 border-2 border-[#3E2723] text-[#3E2723] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300">
                         atur kepemilikan resto
                     </span>
-                    <a href="/claim" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center; ">
+                    <a href="{% url 'claim:manage_ownership' %}" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center; ">
                         Manage Ownership
                     </a>
                 </div>
@@ -158,7 +159,59 @@
                 </div>
             </div>
         </div>
-    </div>
+        {% else %}
+        <div class="flex flex-col justify-center space-y-4 w-[360px]">
+            <!-- First Row (Solid Left, Hollow Right) -->
+            <div class="flex items-center">
+                <a href="/explore" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    Explore
+                </a>
+                <span class="ml-4 border-2 border-[#3E2723] text-[#3E2723] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300">
+                    telusuri deretan menu!
+                </span>
+            </div>
+
+            <!-- Second Row (Hollow Left, Solid Right) -->
+            <div class="flex items-center justify-end mr-2">
+                <span class="mr-4 border-2 border-[#6D4C41] text-[#6D4C41] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#6D4C41] transition-all duration-300">
+                    bingung mau makan apa?
+                </span>
+                <a href="/spinthewheel" class="bg-[#6D4C41] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#6D4C41] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    Spin
+                </a>
+            </div>
+
+            <!-- Third Row (Solid Left, Hollow Right) -->
+            <div class="flex items-center ml-4">
+                <a href="/review" class="bg-[#800020] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#800020] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    Review
+                </a>
+                <span class="ml-4 border-2 border-[#800020] text-[#800020] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#800020] transition-all duration-300">
+                    berikan penilaianmu
+                </span>
+            </div>
+
+            <!-- Fourth Row (Hollow Left, Solid Right) -->
+            <div class="flex items-center justify-end">
+                <span class="mr-4 border-2 border-[#3E2723] text-[#3E2723] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300">
+                    butuh teman makan?
+                </span>
+                <a href="/meatup" class="bg-[#3E2723] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    Meat Up
+                </a>
+            </div>
+
+            <!-- Fifth Row (Solid Left, Hollow Right) -->
+            <div class="flex items-center ml-2">
+                <a href="/booking" class="bg-[#6D4C41] text-[#F5F5DC] font-medium italic py-2 px-6 border-none w-auto hover:bg-[#F5F5DC] hover:text-[#6D4C41] transition-all duration-300" style="font-family:'Playfair Display'; letter-spacing: 1px; text-align: center;">
+                    Booking
+                </a>
+                <span class="ml-4 border-2 border-[#6D4C41] text-[#6D4C41] font-bold py-2 px-4 w-auto hover:bg-[#F5F5DC] hover:text-[#6D4C41] transition-all duration-300">
+                    di restoran favoritmu!
+                </span>
+            </div>
+        </div>
+        {% endif %}
 
     <script>
         const images = [

@@ -1,5 +1,5 @@
 from django.urls import path
-from main.views import show_main, register, login_user, logout_user
+from main.views import show_main, register, login_user, logout_user, forbidden
 
 app_name = 'main'
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path('register-admin/', register, name='register-admin'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
+    path('forbidden/', forbidden, name='forbidden')
 ]

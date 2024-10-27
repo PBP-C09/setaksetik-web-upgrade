@@ -36,7 +36,7 @@ def delete_ownership(request, restaurant_id):
         menu.claimed_by = None  # Menghapus kepemilikan
         menu.save()
     
-    return redirect('claim:available_restaurants')
+    return redirect('/explore')
 
 @login_required
 def claim_restaurant(request, restaurant_id):

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from main.models import UserProfile
 
 class UserProfileForm(UserCreationForm):
-    role = forms.ChoiceField(choices = (("steak lover", "Steak Lover"), ("steakhouse owner", "Steakhouse Owner")),label="Choose your role!", required=True)
+    role = forms.ChoiceField(choices = (("steak lover", "Steak Lover"), ("steakhouse owner", "Steakhouse Owner"), ('admin', 'Admin')),label="Choose your role!", required=True)
     full_name = forms.CharField(label = "What's your name?", required=True)
 
     class Meta:
