@@ -1,5 +1,5 @@
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import MeatupRequest, Wishlist
 from django.contrib.auth.models import User
@@ -15,21 +15,13 @@ def show_requests(request):
         'nama': 'steak',
         'lokasi': 'jaksel',
         'rating': '5',
-        'requests': requests,  # Include requests in context
+        'requests': requests, 
     }
     return render(request, 'meatup.html', context)
 
 @login_required
-def request_list(request):
-    requests = MeatupRequest.objects.filter(receiver=request.user)
-    context = {
-        'requests': requests,
-    }
-    return render(request, 'request_list.html', context)
-
-@login_required
 def received_requests(request):
-    wishlist_items = Wishlist.objects.filter(owner=request.user)  # Fetch user's wishlist
+    wishlist_items = Wishlist.objects.filter(owner=request.user)
     requests = MeatupRequest.objects.filter(receiver=request.user)
     
     context = {
@@ -56,20 +48,81 @@ def create_request(request, wishlist_id):
         return JsonResponse({
             'id': new_request.id,
             'sender': new_request.sender.username,
-            'wishlist': wishlist.item_name,  # Adjusted based on Wishlist field
+            'wishlist': wishlist.item_name, 
             'status': new_request.status
         })
 
     users = User.objects.exclude(id=request.user.id)  
     return render(request, 'create_request.html', {'wishlist': wishlist, 'users': users})
 
-@login_required(login_url='/login')
+@login_required
+def update_request_status(request, pk):
+    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
+
+    if request.method == 'POST':
+        data = json.loads(request.body) 
+        new_status = data.get('status')
+
+        if new_status in dict(MeatupRequest.STATUS_CHOICES):
+            meatup_request.status = new_status
+            meatup_request.save()
+
+            return JsonResponse({'message': 'Status updated successfully!', 'status': new_status})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def delete_request(request, pk):
+    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
+
+    if request.method == 'POST':
+        meatup_request.delete()
+
+        return JsonResponse({'message': 'Request deleted successfully!', 'id': pk})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def request_list(request):
+    requests = MeatupRequest.objects.filter(receiver=request.user)
+    context = {
+        'requests': requests,
+    }
+    return render(request, 'request_list.html', context)
+
+@login_required
+def agree_request(request, request_id):
+    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
+    
+    if meatup_request.status == 'pending': 
+        meatup_request.status = 'accepted'
+        meatup_request.save()
+        messages.success(request, 'You have accepted the meetup request.')
+    else:
+        messages.error(request, 'This request has already been processed.')
+    
+    return redirect('main:request_list')  
+
+@login_required
+def decline_request(request, request_id):
+    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
+    
+    if meatup_request.status == 'pending': 
+        meatup_request.status = 'declined'
+        meatup_request.save()
+        messages.success(request, 'You have declined the meetup request.')
+    else:
+        messages.error(request, 'This request has already been processed.')
+    
+    return redirect('main:request_list')  
+
+@login_required
 def wishlist_list(request):
-    wishlist_items = Wishlist.objects.all()  # Fetch user's wishlist items
+    wishlist_items = Wishlist.objects.all() 
     
     context = {
         'wishlist_items': wishlist_items,
-        'last_login': request.COOKIES.get('last_login', 'Unknown'),  # Ensure 'last_login' cookie is handled
+        'last_login': request.COOKIES.get('last_login', 'Unknown'),  
     }
 
     return render(request, 'wishlist_list.html', context)
@@ -105,54 +158,14 @@ def add_to_wishlist(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @login_required
-def agree_request(request, request_id):
-    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
-    
-    if meatup_request.status == 'pending':  # Only allow if the request is still pending
-        meatup_request.status = 'accepted'
-        meatup_request.save()
-        messages.success(request, 'You have accepted the meetup request.')
-    else:
-        messages.error(request, 'This request has already been processed.')
-    
-    return redirect('main:request_list')  # Redirect to the request list after action
+def delete_wishlist_item(request, wishlist_id):
+    wishlist_item = get_object_or_404(Wishlist, id=wishlist_id)
 
-@login_required
-def decline_request(request, request_id):
-    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
-    
-    if meatup_request.status == 'pending':  # Only allow if the request is still pending
-        meatup_request.status = 'declined'
-        meatup_request.save()
-        messages.success(request, 'You have declined the meetup request.')
-    else:
-        messages.error(request, 'This request has already been processed.')
-    
-    return redirect('main:request_list')  # Redirect to the request list after action
-
-@login_required
-def update_request_status(request, pk):
-    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
+    if wishlist_item.owner != request.user:
+        return HttpResponseForbidden("You do not have permission to delete this item.")
 
     if request.method == 'POST':
-        data = json.loads(request.body) 
-        new_status = data.get('status')
-
-        if new_status in dict(MeatupRequest.STATUS_CHOICES):
-            meatup_request.status = new_status
-            meatup_request.save()
-
-            return JsonResponse({'message': 'Status updated successfully!', 'status': new_status})
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-@login_required
-def delete_request(request, pk):
-    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
-
-    if request.method == 'POST':
-        meatup_request.delete()
-
-        return JsonResponse({'message': 'Request deleted successfully!', 'id': pk})
+        wishlist_item.delete()
+        return JsonResponse({'message': 'Wishlist item deleted successfully!', 'id': wishlist_id})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
