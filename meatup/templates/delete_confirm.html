@@ -15,25 +15,34 @@
 </div>
 
 <script>
-    document.getElementById('delete-request-btn').addEventListener('click', () => {
-        document.getElementById('delete-modal').classList.remove('hidden');
+    const deleteRequestButton = document.getElementById('delete-request-btn');
+    const deleteModal = document.getElementById('delete-modal');
+    const closeModalButton = document.getElementById('close-delete-modal');
+    const confirmDeleteButton = document.getElementById('confirm-delete-btn');
+
+    deleteRequestButton.addEventListener('click', () => {
+        deleteModal.classList.remove('hidden');
     });
 
-    document.getElementById('close-delete-modal').addEventListener('click', () => {
-        document.getElementById('delete-modal').classList.add('hidden');
+    closeModalButton.addEventListener('click', () => {
+        deleteModal.classList.add('hidden');
     });
 
-    document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-        const response = await fetch("{% url 'meatup:delete_request' request_obj.id %}", {
+    confirmDeleteButton.addEventListener('click', async () => {
+        const requestId = deleteRequestButton.getAttribute('data-request-id'); // Get the request ID from a data attribute
+        
+        const response = await fetch(`/meatup/delete/${requestId}/`, {  // Ensure the URL matches your Django URL pattern
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
             },
+            body: JSON.stringify({}) // Send an empty body for deletion
         });
 
         if (response.ok) {
             alert('Request deleted successfully!');
-            location.reload(); // Optionally reload to reflect changes
+            location.reload(); // Reload to reflect changes
         } else {
             alert('Failed to delete request.');
         }

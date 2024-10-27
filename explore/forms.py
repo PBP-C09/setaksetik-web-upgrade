@@ -100,3 +100,10 @@ class AddMenuForm(forms.ModelForm):
    class Meta:
        model = Menu
        fields = ['menu', 'restaurant_name', 'price', 'rating', 'city', 'category', 'specialized', 'takeaway', 'delivery', 'outdoor', 'smoking_area', 'wifi', 'image']
+       
+       def clean_menu(self):
+            menu = self.cleaned_data["menu"]
+            return strip_tags(menu)
+       def clean_restaurant(self):
+            restaurant = self.cleaned_data["restaurant"]
+            return strip_tags(restaurant)

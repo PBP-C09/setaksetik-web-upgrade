@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% include 'navbar.html' %}
 
 {% block meta %}
@@ -14,6 +15,19 @@
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
         Claim apa <span class="italic">Hari ini?</span>
     </h1>
+
+    <style>
+        /* Warna placeholder untuk elemen select */
+        select {
+            color: #3c200c; /* Warna font utama untuk placeholder */
+        }
+        select option {
+            color: #a5a4a0; /* Warna font untuk pilihan dalam dropdown */
+        }
+        input[type="text"], input[type="number"], input[type="range"] {
+            color: #3c200c; /* Warna font untuk input number dan range */
+        }
+    </style>
   
     <div class="flex justify-center items-center bg-[#5B3E39] py-4">
         <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(ajax)">
@@ -190,9 +204,10 @@
             </div>
         {% endfor %}
     {% else %}
-        <div class="text-center col-span-4 text-[#3E2723] mt-6">
-            <h2 class="text-lg font-bold">Menu tidak ada</h2>
-        </div>
+    <div class="flex flex-col items-center justify-center min-h-screen text-center col-span-5 text-[#F5F5DC] mt-[-10rem] pb-16">        
+        <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+        <h2 class="text-lg font-bold">Menu yang kamu cari tidak ada.</h2>
+    </div>
     {% endif %}
     
     </div>

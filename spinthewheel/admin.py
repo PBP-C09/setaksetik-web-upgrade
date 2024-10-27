@@ -1,3 +1,5 @@
 from django.contrib import admin
+from spinthewheel.models import SpinHistory, SecretHistory
 
-# Register your models here.
+admin.site.register(SpinHistory)
+admin.site.register(SecretHistory)

@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
 from explore.models import Menu
+from django.contrib.auth.models import User
 
 @login_required
 def available_restaurants(request):
@@ -49,3 +50,22 @@ def claim_restaurant(request, restaurant_id):
         return redirect('claim:owned_restaurant')  # Redirect ke halaman restoran yang dimiliki
     else:
         return render(request, 'claim/error.html', {'message': 'You cannot claim more than one restaurant or you are not a steakhouse owner.'})
+
+def is_admin(user):
+    return user.is_staff  # Mengecek apakah user memiliki role admin
+
+@login_required
+def manage_ownership(request):
+    claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)  # Menampilkan semua restoran yang sudah di-claim
+
+    if request.method == 'POST':
+        menu_id = request.POST.get('menu_id')
+        menu = get_object_or_404(Menu, id=menu_id)
+        menu.claimed_by = None  # Menghapus ownership
+        menu.save()
+        return redirect('claim:manage_ownership')
+
+    context = {
+        'claimed_restaurants': claimed_restaurants,
+    }
+    return render(request, 'manage_ownership.html', context)
