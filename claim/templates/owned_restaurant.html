@@ -1,8 +1,46 @@
 {% extends "base.html" %}
-{% block content %}
-<h1>Your Owned Restaurant</h1>
 
-<p>{{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
-<a href="{% url 'claim:delete_ownership' restaurant.id %}" class="btn btn-danger">Delete Ownership</a>
+{% block content %}
+<title>Resto Ownership</title>
+
+<div class="flex items-center justify-center mt-32">
+    <div class="px-7 py-5 bg-[#f5f5dc] rounded-[20px] flex-col justify-start items-start gap-5 inline-flex transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out">
+        <div class="h-[181px] flex-col justify-start items-start gap-2 flex">
+            <div class="self-stretch justify-between items-center inline-flex">
+                <div class="w-full text-[#5b3e39] text-[40px] font-bold" style="font-family: 'Playfair Display'; font-style: italic">Card of Ownership</div>
+            </div>
+            <div class="self-stretch h-[120px] flex-col justify-start items-start gap-1 flex mt-6 mb-6">
+                <div class="self-stretch flex items-center gap-1">
+                    <div class="text-[#5b3e39] text-base font-normal font-['Raleway']">This is to verify that</div>
+                    <div class="flex-grow h-[1px] bg-[#5b3e39]"></div>
+                </div>
+                <div class="self-stretch justify-start items-end gap-1 inline-flex">
+                    <div class="text-[#5b3e39] text-2xl font-normal" style="font-family: 'Playfair Display'; font-style: italic">{{ request.user.userprofile.full_name }}</div>
+                </div>
+                <div class="self-stretch justify-end items-end gap-1 inline-flex"></div>
+                <div class="self-stretch flex items-center gap-1 mt-3">
+                    <div class="flex-grow h-[1px] bg-[#5b3e39]"></div>
+                    <div class="text-[#5b3e39] text-base font-normal font-['Raleway']">is the One True Owner of</div>
+                </div>
+                <div class="self-stretch flex justify-end items-end gap-1">
+                    <div class="text-[#5b3e39] text-2xl font-normal" style="font-family: 'Playfair Display'; font-style: italic">{{ restaurant.restaurant_name }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="h-[19px] flex-col justify-start items-start gap-1 flex">
+            <div class="self-stretch"></div>
+        </div>
+        
+        <div class="flex justify-between gap-4 mt-4 w-full">
+            <a href="{% url 'claim:delete_ownership' restaurant.id %}" class="bg-[#842323] text-[#F5F5DC] font-medium italic py-2 px-4 rounded hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display';">
+                Disown Restaurant
+            </a>
+            <a href="{% url 'booking:pantau_booking_owner' %}" class="bg-[#C08C25] text-[#F5F5DC] font-medium italic py-2 px-4 rounded hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display';">
+                See Bookings
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 {% endblock %}

@@ -242,7 +242,7 @@ async function refreshSecretHistory() {
                         <p class="text-[#3E2723]"><span style="font-style: italic">Note</span>: ${history.fields.note}</p>
                     </div>
                     <div class="p-3 flex justify-center items-center gap-1">
-                        <button class="bg-[#842323] hover:bg-[#FF5733] text-white rounded-lg px-4 py-2 transition duration-300 shadow-md" onclick="deletesecretHistory('${history.pk}')">
+                        <button class="hover:text-[#F5F5DC] text-[#842323] rounded-lg px-4 py-2 transition duration-300" style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: bold;" onclick="deletesecretHistory('${history.pk}')">
                             Hapus
                         </button>
                     </div>

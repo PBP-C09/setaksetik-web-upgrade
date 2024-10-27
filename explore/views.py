@@ -15,7 +15,7 @@ from django.utils.html import strip_tags
 @login_required(login_url='/login')
 def show_menu(request):
     user_profile = UserProfile.objects.get(user=request.user)
-    menus = Menu.objects.all()
+    menus = Menu.objects.filter(claimed_by=None)
     form = MenuFilterForm(request.GET)
    
     context = {
@@ -55,8 +55,11 @@ def show_menu(request):
     if user_profile.role.casefold() == "admin":
         return render(request, 'menu_admin.html', context)
     
-    if user_profile.role.casefold() == "steakhouse owner":
-        return render(request, 'menu_owner.html', context)
+    if (user_profile.role.casefold() == "steakhouse owner"):
+        if (Menu.objects.filter(claimed_by=request.user).count() == 0):
+            return render(request, 'menu_owner.html', context)
+        else:
+            return redirect('claim:owned_restaurant')
     
     return render(request, 'menu.html', context)
 
