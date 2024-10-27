@@ -123,7 +123,6 @@
     <script>
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        // Delete Meat Up Request with AJAX
         $('.delete-btn').on('click', function () {
             const requestId = $(this).data('id');
             $.ajax({
@@ -132,14 +131,10 @@
                 headers: { 'X-CSRFToken': csrfToken },
                 success: function () {
                     $(`#request-${requestId}`).remove();
-                },
-                error: function () {
-                    alert('Failed to delete the request.');
                 }
             });
         });
 
-        // Edit Meat Up Request Placeholder
         $('.edit-btn').on('click', function () {
             const requestId = $(this).data('id');
             const newMessage = prompt('Enter the updated message:');
@@ -150,118 +145,120 @@
                     headers: { 'X-CSRFToken': csrfToken },
                     data: { message: newMessage },
                     success: function () {
-                        location.reload();  // Reload to show updated message
-                    },
-                    error: function () {
-                        alert('Failed to edit the request.');
+                        location.reload();  
                     }
                 });
             }
         });
-// Load wishlist items from local storage
-function loadWishlist() {
-    const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-    const wishlistContainer = document.getElementById('wishlist-items');
-    wishlistContainer.innerHTML = ''; // Clear existing items
 
-    storedItems.forEach(item => {
-        const listItem = createWishlistCard(item);
-        wishlistContainer.appendChild(listItem);
-    });
+        function loadWishlist() {
+            const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlistContainer = document.getElementById('wishlist-items');
+            wishlistContainer.innerHTML = ''; 
 
-    attachEventHandlers();  // Attach handlers to buttons after loading
-}
+            storedItems.forEach(item => {
+                const listItem = createWishlistCard(item);
+                wishlistContainer.appendChild(listItem);
+            });
 
-// Create a wishlist card
-function createWishlistCard(item) {
-    const listItem = document.createElement('li');
-    listItem.className = 'wishlist-card';
-    listItem.id = `wishlist-${item.id}`;
-
-    listItem.innerHTML = `
-        <span>${item.text} - Added by {{request.user.userprofile.full_name}}</span>
-        <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button>
-        <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button>
-    `;
-    return listItem;
-}
-
-function attachEventHandlers() {
-    const editButtons = document.querySelectorAll('.edit-btn');
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-
-    editButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = parseInt(this.getAttribute('data-id'));
-            editItem(id);
-        });
-    });
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = parseInt(this.getAttribute('data-id'));
-            deleteItem(id);
-        });
-    });
-}
-
-async function saveWishlistItem(itemText) {
-    const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ item_name: itemText }),
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        const newItem = {
-            id: data.id,
-            text: data.item_name,
-            user: data.user,
-        };
-
-        const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-        storedItems.push(newItem);
-        localStorage.setItem('wishlist', JSON.stringify(storedItems));
-
-        document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
-        attachEventHandlers();  // Re-attach event handlers after adding a new item
-        document.getElementById('wishlist-item').value = '';
-    } else {
-        alert('Failed to save wishlist item');
-    }
-}
-
-function editItem(id) {
-    const newItemText = prompt('Enter the updated wishlist item:');
-    if (newItemText) {
-        const storedItems = JSON.parse(localStorage.getItem('wishlist'));
-        const itemIndex = storedItems.findIndex(item => item.id === id);
-        if (itemIndex > -1) {
-            storedItems[itemIndex].text = newItemText;
-            localStorage.setItem('wishlist', JSON.stringify(storedItems));
-            loadWishlist(); // Reload the wishlist to reflect changes
+            attachEventHandlers();  
         }
-    }
-}
 
-function deleteItem(id) {
-    const storedItems = JSON.parse(localStorage.getItem('wishlist'));
-    const updatedItems = storedItems.filter(item => item.id !== id);
-    localStorage.setItem('wishlist', JSON.stringify(updatedItems));
-    loadWishlist(); // Reload the wishlist to reflect deletion
-}
+        function createWishlistCard(item) {
+            const listItem = document.createElement('li');
+            listItem.className = 'wishlist-card';
+            listItem.id = `wishlist-${item.id}`;
 
-document.getElementById('wishlist-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const itemText = document.getElementById('wishlist-item').value;
-    saveWishlistItem(itemText);
-});
+            listItem.innerHTML = `
+                <span>${item.text} - Added by {{ request.user.userprofile.full_name }}</span>
+                <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button>
+                <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button>
+            `;
+            return listItem;
+        }
 
-loadWishlist();
+        function attachEventHandlers() {
+            const editButtons = document.querySelectorAll('.edit-btn');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editItem(id);
+                });
+            });
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteItem(id);
+                });
+            });
+        }
+
+        async function saveWishlistItem(itemText) {
+            const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item_name: itemText }),
+            });
+
+            // Log the response for debugging
+            console.log('Response from add_to_wishlist:', response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Data from response:', data); // Log the response data for further debugging
+
+                const newItem = {
+                    id: data.id,
+                    text: data.item_name,
+                    user: data.user,
+                };
+
+                const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+                storedItems.push(newItem);
+                localStorage.setItem('wishlist', JSON.stringify(storedItems));
+
+                document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
+                attachEventHandlers();  
+                document.getElementById('wishlist-item').value = '';
+            } else {
+                const errorData = await response.json();
+                console.error('Error adding item:', errorData); // Log any error messages
+            }
+        }
+
+        function editItem(id) {
+            const newItemText = prompt('Enter the updated wishlist item:');
+            if (newItemText) {
+                const storedItems = JSON.parse(localStorage.getItem('wishlist'));
+                const itemIndex = storedItems.findIndex(item => item.id === id);
+                if (itemIndex > -1) {
+                    storedItems[itemIndex].text = newItemText;
+                    localStorage.setItem('wishlist', JSON.stringify(storedItems));
+                    loadWishlist(); 
+                }
+            }
+        }
+
+        function deleteItem(id) {
+            const storedItems = JSON.parse(localStorage.getItem('wishlist'));
+            const updatedItems = storedItems.filter(item => item.id !== id);
+            localStorage.setItem('wishlist', JSON.stringify(updatedItems));
+            loadWishlist(); 
+        }
+
+        document.getElementById('wishlist-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const itemText = document.getElementById('wishlist-item').value;
+            saveWishlistItem(itemText);
+        });
+
+        loadWishlist();
     </script>
 </body>
 </html>
