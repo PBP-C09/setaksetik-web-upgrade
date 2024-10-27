@@ -2,6 +2,7 @@ from django.urls import path
 from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu, show_xml, show_json, show_xml_by_id, show_json_by_id
 from booking.views import booking_form, lihat_booking
 from review.views import show_review
+from claim.views import claim_restaurant
 
 app_name = "explore"
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path('lihat/', lihat_booking, name='lihat_booking'),
     path('edit-menu/<int:menu_id>/', edit_menu, name='edit_menu'),
     path('delete/<int:menu_id>', delete_menu, name='delete_menu'),
+    path('claim_restaurant/<int:restaurant_id>/', claim_restaurant, name='claim_restaurant'),
 ]
