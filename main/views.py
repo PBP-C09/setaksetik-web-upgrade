@@ -11,13 +11,17 @@ from django.shortcuts import render, redirect
 from main.models import UserProfile
 from main.forms import UserProfileForm
 
-@login_required(login_url='/login')
 def show_main(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    context = {
-        'role': user_profile.role,
-        'last_login': request.COOKIES['last_login'],
-    }
+    print(request.user.is_authenticated)
+    print(request.user.username)
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        context = {
+            'role': user_profile.role,
+            'last_login': request.COOKIES['last_login'],
+        }
+    else:
+        context = None
 
     return render(request, "main.html", context)
 
@@ -64,7 +68,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    response = HttpResponseRedirect(reverse('main:login'))
+    response = HttpResponseRedirect(reverse('main:show_main'))
     response.delete_cookie('last_login')
     return response
 
