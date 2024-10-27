@@ -1,5 +1,5 @@
 from django.urls import path
-from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu
+from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu, show_xml, show_json, show_xml_by_id, show_json_by_id
 from booking.views import booking_form, lihat_booking
 from review.views import show_review
 
@@ -12,6 +12,10 @@ urlpatterns = [
     path('admin_detail/<int:menu_id>/', admin_detail, name='admin_detail'),
     path('owner_detail/<int:menu_id>/', owner_detail, name='owner_detail'),
     path('add_menu/<int:menu_id>/<int:user_id>/', add_menu, name='add_menu'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
     path('get_menu/', get_menu, name='get_menu'),
     path('get_menu/<int:id>/', get_menu_by_id, name="get_menu_by_id"),
     path('add_menu/', add_menu, name='add_menu'),
