@@ -1,4 +1,4 @@
-<!-- {% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 <h1 class="text-2xl mb-4">Meatup Requests</h1>
@@ -25,29 +25,40 @@
 async function handleRequest(requestId, action) {
     const response = await fetch(`/meatup/handle/${requestId}/${action}/`, {
         method: 'POST',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({ action: action }), // Sending the action as a JSON payload
     });
 
     if (response.ok) {
-        document.getElementById(`req-${requestId}`).remove();
-        alert('Request handled successfully!');
+        const data = await response.json();
+        alert(data.message); // Display success message from the server
+        document.getElementById(`req-${requestId}`).remove(); // Remove the request from the DOM
     } else {
-        alert('Failed to handle the request.');
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to handle the request.'); // Display error message if available
     }
 }
 
 async function deleteRequest(requestId) {
     const response = await fetch(`/meatup/delete/${requestId}/`, {
         method: 'POST',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({}), // Sending an empty JSON payload for delete
     });
 
     if (response.ok) {
-        document.getElementById(`req-${requestId}`).remove();
+        document.getElementById(`req-${requestId}`).remove(); // Remove the request from the DOM
         alert('Request deleted successfully!');
     } else {
-        alert('Failed to delete the request.');
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to delete the request.'); // Display error message if available
     }
 }
 </script>
-{% endblock content %} -->
+{% endblock content %}

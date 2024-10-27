@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meatup Wishlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #3e2c2c;
+            color: #ffffff;
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2b1f1f;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            color: #3e2c2c;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #e6b800;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 10px;
+            background-color: #4a3737;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+        .modal-content {
+            background-color: #2b1f1f;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            color: white;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Public Wishlist</h1>
+
+        <form id="wishlist-form" method="POST">
+            {% csrf_token %}
+            <input type="text" name="wishlist_item" id="wishlist-item" placeholder="Enter your wishlist item..." required>
+            <button type="submit">Add Wishlist</button>
+        </form>             
+
+        <ul id="wishlist-items">
+            {% for wishlist in wishlist_items %}
+                <li id="wishlist-{{ wishlist.id }}">{{ wishlist.item }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Meat Up Requests</h2>
+
+        <button onclick="window.location.href='{% url 'meatup:received_requests' %}'">View Meat Up Requests</button>
+
+        {% for request in requests %}
+            <div class="request-container">
+                <div class="user-info">
+                    <span>Username: {{ request.user.username }}</span>
+                    <span>Request Date: {{ request.date }}</span>
+                </div>
+                <p>Request Message: {{ request.message }}</p>
+                <div class="request-actions">
+                    <button id="agree-btn-{{ request.id }}">Agree</button>
+                    <button id="decline-btn-{{ request.id }}">Decline</button>
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Modal for Visibility Selection -->
+        <div id="visibility-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="modal-close">&times;</span>
+                <h2>Visibility Options</h2>
+                <p>Do you want to keep your identity private? Your username and name will be kept private.</p>
+                <button id="private-btn">Yes</button>
+                <button id="public-btn">No</button>
+            </div>
+        </div>
+
+        <script>
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrfToken = getCookie('csrftoken');
+            let isPublic = false;
+
+            document.getElementById('wishlist-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                document.getElementById('visibility-modal').style.display = 'block'; 
+            });
+
+            document.getElementById('private-btn').addEventListener('click', async function () {
+                isPublic = false;
+                await submitWishlist();
+            });
+
+            document.getElementById('public-btn').addEventListener('click', async function () {
+                isPublic = true;
+                await submitWishlist();
+            });
+
+            document.getElementById('modal-close').addEventListener('click', function () {
+                document.getElementById('visibility-modal').style.display = 'none'; 
+            });
+
+            async function submitWishlist() {
+                const item = document.getElementById('wishlist-item').value;
+
+                const data = {
+                    item_name: item,
+                    description: 'Deskripsi Item',
+                    is_public: isPublic
+                };
+
+                const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {  
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRFToken': csrfToken, 
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify(data) 
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    const newItem = document.createElement('li'); 
+                    newItem.id = `wishlist-${data.id}`; 
+                    newItem.textContent = data.item_name; 
+                    document.getElementById('wishlist-items').appendChild(newItem); 
+                    document.getElementById('wishlist-item').value = ''; 
+                    document.getElementById('visibility-modal').style.display = 'none'; 
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Failed to add the wishlist item.');
+                    document.getElementById('visibility-modal').style.display = 'none'; 
+                }
+            }
+
+            {% for request in requests %}
+            document.getElementById(`agree-btn-${request.id}`).addEventListener('click', async function() {
+                const response = await fetch("{% url 'meatup:agree_request' request.id %}", {  
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRFToken': csrfToken, 
+                        'Content-Type': 'application/json' 
+                    }
+                });
+                if (response.ok) {
+                    alert(`You agreed to the request from ${request.user.username}`);
+                    window.location.href = "{% url 'meatup:received_requests' %}"; // Redirect to received_requests page
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Failed to agree to the request.');
+                }
+            });
+        
+            document.getElementById(`decline-btn-${request.id}`).addEventListener('click', async function() {
+                const response = await fetch("{% url 'meatup:decline_request' request.id %}", {  
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRFToken': csrfToken, 
+                        'Content-Type': 'application/json' 
+                    }
+                });
+                if (response.ok) {
+                    alert(`You declined the request from ${request.user.username}`);
+                    window.location.href = "{% url 'meatup:received_requests' %}"; // Redirect to received_requests page
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Failed to decline the request.');
+                }
+            });
+        {% endfor %}        
+        </script>    
+    </body>
+</html>

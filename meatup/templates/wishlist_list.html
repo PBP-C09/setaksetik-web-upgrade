@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,21 +61,29 @@
 
     <script>
         document.getElementById('wishlist-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const item = document.getElementById('wishlist-item').value;
+            e.preventDefault(); // Prevent form submission
+
+            const item = document.getElementById('wishlist-item').value; // Get the item value
             
-            const response = await fetch("{% url 'meatup:received_requests' %}", {  
+            const response = await fetch("{% url 'meatup:add_wishlist_item' %}", {  // Adjust the URL as necessary
                 method: 'POST',
-                headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/json' },
-                body: JSON.stringify({ item })
+                headers: { 
+                    'X-CSRFToken': '{{ csrf_token }}', 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ item }) // Send item as JSON
             });
     
             if (response.ok) {
-                const data = await response.json();
-                const newItem = document.createElement('li');
-                newItem.id = `wishlist-${data.id}`;
-                newItem.textContent = data.item;
-                document.getElementById('wishlist').appendChild(newItem);
+                const data = await response.json(); // Parse the JSON response
+                const newItem = document.createElement('li'); // Create a new list item
+                newItem.id = `wishlist-${data.id}`; // Set the ID for the new item
+                newItem.textContent = data.item; // Set the text content to the item
+                document.getElementById('wishlist-items').appendChild(newItem); // Append the new item to the list
+                document.getElementById('wishlist-item').value = ''; // Clear the input field
+            } else {
+                const errorData = await response.json();
+                alert(errorData.error || 'Failed to add the wishlist item.'); // Show error message if available
             }
         });
     </script>    
