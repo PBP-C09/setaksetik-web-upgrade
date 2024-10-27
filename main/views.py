@@ -12,8 +12,6 @@ from main.models import UserProfile
 from main.forms import UserProfileForm
 
 def show_main(request):
-    print(request.user.is_authenticated)
-    print(request.user.username)
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
         context = {
