@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% include 'navbar.html' %}
 
-{% load static %} 
+{% load static %}
 
 {% block meta %}
-    <title>Book a Restaurant</title>
+    <title>Booking Restoran Anda</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock meta %}
@@ -12,57 +12,111 @@
 {% block content %}
 <div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8"> 
     <h1 class="text-4xl font-bold mb-6">Book a Restaurant</h1>
-    
+
+    <!-- Form untuk booking -->
     <div class="booking-box bg-brown-800 p-6 rounded-lg mb-6 w-full max-w-lg">
         <form id="bookingForm" method="POST">
             {% csrf_token %}
-            <div class="mb-4">
-                <label for="booking_date" class="block text-lg font-semibold">Tanggal Booking:</label>
-                <input id="booking_date" name="booking_date" type="date" class="form-input mt-1 block w-full" required>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="mb-4">
+                    <label for="booking_date" class="block text-lg font-semibold">Tanggal Booking:</label>
+                    <input id="booking_date" name="booking_date" type="date" class="form-input mt-1 block w-full bg-white text-black rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="number_of_people" class="block text-lg font-semibold">Jumlah orang:</label>
+                    <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input mt-1 block w-full bg-white text-black rounded" required>
+                </div>
             </div>
-            <div class="mb-4">
-                <label for="number_of_people" class="block text-lg font-semibold">Jumlah orang:</label>
-                <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input mt-1 block w-full" required>
-            </div>
-            <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Submit Booking</button>
+            <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 w-full">Submit Booking</button>
         </form>
 
+        <!-- Pesan berhasil/gagal -->
         <div id="successMessage" class="hidden mt-4 p-4 bg-green-500 text-white rounded">
             Booking berhasil disubmit!
         </div>
-
         <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500 text-white rounded">
             Terjadi kesalahan saat menyimpan booking.
         </div>
-    </div>
-</div>
-{% endblock content %}
 
-{% block script %}
-<script src="{% static 'js/ajax_booking.js' %}"></script>
+        <!-- Tombol kembali ke create_booking -->
+        <div class="mt-6">
+            <a href="{% url 'booking:create_booking' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full block text-center">Kembali ke Halaman Booking</a>
+        </div>
+    </div>
+
+    <!-- Daftar Booking -->
+    <h2 class="text-3xl font-bold mb-6">Daftar Booking Anda</h2>
+
+    {% if bookings %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% for booking in bookings %}
+                <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white text-black booking-card">
+                    <img class="w-full h-48 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl mb-2">{{ booking.menu.restaurant_name }}</div>
+                        <p class="text-gray-700 text-base">
+                            Booking di tanggal: {{ booking.booking_date | date:"F d, Y"}} <br>
+                            Jumlah orang: {{ booking.number_of_people }} <br>
+                            Menu: {{ booking.menu_items.menu }} <br>
+                            Lokasi: {{ booking.menu_items.city }} <br>
+                            Rating: {{ booking.menu_items.rating }}<br>
+                            Status: {{ booking.get_status_display }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-white">Anda belum memiliki booking.</p>
+    {% endif %}
+</div>
+
+<!-- AJAX script -->
 <script>
-    // AJAX submission for booking form
     const form = document.getElementById('bookingForm');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
+    const bookingContainer = document.querySelector('.grid');
 
     form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
+        event.preventDefault();  // Agar tidak tersubmit secara default
+
         const formData = new FormData(form);
+        const csrfToken = formData.get('csrfmiddlewaretoken');
 
         fetch("{% url 'booking:booking_form' menu.id %}", {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                'X-CSRFToken': csrfToken,
             }
         })
-        .then(response => {
-            if (response.ok) {
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
                 successMessage.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
-                form.reset();
+                form.reset();  // Reset form setelah submisi
+
+                // Tambahkan kartu booking baru ke daftar booking
+                const booking = data.booking;
+                const bookingCard = `
+                    <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white text-black booking-card">
+                        <img class="w-full h-48 object-cover" src="${booking.image}" alt="${booking.menu}">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2">${booking.restaurant_name}</div>
+                            <p class="text-gray-700 text-base">
+                                Booking di tanggal: ${booking.booking_date} <br>
+                                Jumlah orang: ${booking.number_of_people} <br>
+                                Menu: ${booking.menu} <br>
+                                Lokasi: ${booking.city} <br>
+                                Rating: ${booking.rating} <br>
+                                Status: ${booking.status}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                bookingContainer.insertAdjacentHTML('beforeend', bookingCard);
             } else {
                 errorMessage.classList.remove('hidden');
                 successMessage.classList.add('hidden');
@@ -74,4 +128,4 @@
         });
     });
 </script>
-{% endblock script %}
+{% endblock content %}
