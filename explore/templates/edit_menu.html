@@ -48,5 +48,33 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Warna input text, select, dan textarea */
+    input[type="text"], input[type="number"], input[type="url"],
+    select, textarea {
+        color: #3E2723; /* Warna teks */
+        border: 1px solid #c5c2c1; /* Border khusus */
+        padding: 8px;
+        border-radius: 4px;
+    }
+    
+    /* Placeholder input */
+    input::placeholder, textarea::placeholder {
+        color: #3E2723; /* Warna placeholder */
+        opacity: 1; 
+    }
+
+    /* Input saat fokus */
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+    }
+
+    /* Warna pada option di dropdown */
+    select option {
+        color: #3E2723; 
+    }
+    
+</style>
 <script src="/static/js/ajax_menu.js"></script>
 {% endblock %}

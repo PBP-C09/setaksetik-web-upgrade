@@ -13,9 +13,25 @@
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
         Menu <span class="italic">Admin</span>
     </h1>
+
+    <style>
+        /* Warna placeholder untuk elemen select */
+        select {
+            color: #a5a4a0; /* Warna font utama untuk placeholder */
+        }
+        select option {
+            color: #a5a4a0; /* Warna font untuk pilihan dalam dropdown */
+        }
+    
+        /* Warna placeholder untuk input range dan input number */
+        input[type="number"], input[type="range"] {
+            color: #a5a4a0; /* Warna font untuk input number dan range */
+        }
+    </style>
+    
   
     <div class="flex justify-center items-center bg-[#5B3E39] py-4">
-        <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(ajax)">
+        <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(event)">
             <!-- Search Bar -->
             <div class="relative w-full">
                 <input 
@@ -46,12 +62,12 @@
     
     <!-- Filter Form -->
 <div id="filter-options" class="hidden bg-[#F5F5DC] p-4 mt-4 rounded-lg shadow-lg max-w-2xl mx-auto">
-    <form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm()">
+    <form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm(event)">
         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
 
             <div>
                 <label for="restaurant" class="block text-sm font-medium text-[#5B3E39]">Restaurant</label>
-                <input type="text" name="restaurant" value="{{ request.GET.restaurant|default:'' }}" placeholder="Restaurant" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#FFC107] focus:border-[#FFC107] sm:text-sm"></div>
+                <input type="text" name="restaurant" value="{{ request.GET.restaurant|default:'' }}" placeholder="Restaurant" class="mt-1 block w-full py-2 px-3 border"></div>
             <div>
                 <label for="price" class="block text-sm font-medium text-[#5B3E39]">Price</label>
                 <label for="min_price">Min</label>
