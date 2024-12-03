@@ -1,13 +1,20 @@
 import datetime
+import json
+
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.urls import reverse
+
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
 from django.contrib import messages
-from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
 from main.models import UserProfile
 from main.forms import UserProfileForm
 
@@ -72,3 +79,93 @@ def logout_user(request):
 
 def forbidden(request):
     return render(request, 'forbidden.html')
+
+@csrf_exempt
+def login_mobile(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            user_profile = UserProfile.objects.get(user=user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "full_name": user_profile.full_name, # gada
+                "role": user_profile.role, # gada
+                "status": True,
+                "message": "Logged in!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Failed to log in."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Failed to log in!\nRecheck your username and password."
+        }, status=401)
+    
+@csrf_exempt
+def register_mobile(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data['username']
+        password1 = data['password1']
+        password2 = data['password2']
+        role = data['role']
+        full_name = data['full_name']
+
+        # Check if the passwords match
+        if password1 != password2:
+            return JsonResponse({
+                "status": False,
+                "message": "Passwords do not match."
+            }, status=400)
+        
+        # Check if the username is already taken
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({
+                "status": False,
+                "message": "Username already exists."
+            }, status=400)
+        
+        # Create the new user and user profile
+        user = User.objects.create_user(username=username, password=password1)
+        user.save()
+        UserProfile.objects.create(user=user, full_name=full_name, role=role)
+        
+        return JsonResponse({
+            "username": user.username,
+            "full_name": full_name,
+            "role": role,
+            "status": 'success',
+            "message": "User created successfully!"
+        }, status=200)
+    
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Invalid request method."
+        }, status=400)
+
+@csrf_exempt
+def logout_mobile(request):
+    username = request.user.username
+
+    try:
+        logout(request)
+        return JsonResponse({
+            "username": username,
+            "status": True,
+            "message": "Logout berhasil!"
+        }, status=200)
+    except:
+        return JsonResponse({
+        "status": False,
+        "message": "Logout gagal."
+        }, status=401)
