@@ -30,7 +30,7 @@
     </style>
   
   <div class="flex justify-center items-center bg-[#5B3E39] py-4">
-    <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(ajax)">
+    <form id="filterForm" class="flex w-full max-w-2xl" method="GET" onsubmit="submitFilterForm(event)">
         <!-- Search Bar -->
         <div class="relative w-full">
             <input 
@@ -61,7 +61,7 @@
 
 <!-- Filter Form -->
 <div id="filter-options" class="hidden bg-[#F5F5DC] p-4 mt-4 rounded-lg shadow-lg max-w-2xl mx-auto">
-<form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm()">
+<form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm(event)">
     <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
 
         <div>
