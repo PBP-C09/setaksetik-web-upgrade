@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+<h2>Edit Message</h2>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="content">Message</label>
+        <textarea id="content" name="content" class="form-control" rows="4" required>{{ message.content }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Message</button>
+</form>

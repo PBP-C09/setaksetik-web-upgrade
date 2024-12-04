@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+<div class="card">
+    <div class="card-header">
+        <h5>{{ message.sender.username }} - {{ message.created_at }}</h5>
+    </div>
+    <div class="card-body">
+        <p>{{ message.content }}</p>
+        {% if message.sender == request.user %}
+            <a href="{% url 'main:edit_message' message.id %}" class="btn btn-warning">Edit</a>
+        {% endif %}
+        <a href="{% url 'main:show_message_detail' message.id %}" class="btn btn-info">View Details</a>
+    </div>
+</div>
