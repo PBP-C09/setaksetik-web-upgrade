@@ -6,7 +6,6 @@ class Wishlist(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     item_name = models.CharField(max_length=255)
     description = models.TextField()
-    is_public = models.BooleanField(default=True)
 
     def __str__(self):
         return self.item_name

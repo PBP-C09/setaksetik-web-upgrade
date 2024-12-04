@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block meta %}
+    <title>SetakSetik | Manage Ownership</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+{% endblock meta %}
+
+{% block content %}
+
+<div class="container mx-auto py-8 min-h-screen bg-[#5B3E39] text-[#F5F5DC]">
+
+    <div class="header text-center mt-2 mb-2">
+        <h1 class="text-4xl">
+            Manage <span class="italic">claimed</span> restaurants
+        </h1>    
+        <div class="border-t-2 border-[beige] mt-3 mx-auto w-1/3"></div>
+        <div></div>
+    </div>
+
+    {% if claimed_restaurants %}
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full text-left border-collapse bg-[#4E342E] text-[#F5F5DC] rounded-lg shadow-lg">
+                <thead>
+                    <tr class="bg-[#ECE0D1] text-black">
+                        <th class="px-4 py-3 text-lg">Restaurant Name</th>
+                        <th class="px-4 py-3 text-lg">Owner</th>
+                        <th class="px-4 py-3 text-lg">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for menu in claimed_restaurants %}
+                        <tr class="border-b border-[#ECE0D1]">
+                            <td class="px-4 py-3">{{ menu.restaurant_name }}</td>
+                            <td class="px-4 py-3">{{ menu.claimed_by.username }}</td>
+                            <td class="px-4 py-3">
+                                <form method="POST" action="{% url 'claim:manage_ownership' %}" class="inline-block">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="menu_id" value="{{ menu.id }}">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300">Revoke Ownership</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="mt-8 text-lg">No claimed restaurants found.</p>
+    {% endif %}
+</div>
+{% endblock content %}

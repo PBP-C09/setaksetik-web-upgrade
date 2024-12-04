@@ -4,44 +4,51 @@
 {% load static %} 
 
 {% block meta %}
-    <title>Book a Restaurant</title>
+    <title>SetakSetik | Book a Restaurant</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8"> 
-    <div class="mt-8">
-        <a href="{% url 'booking:lihat_booking' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Lihat Booking</a>
+<div class="container mx-auto py-12 px-4 lg:px-8">
+    <!-- Title Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-5xl font-bold text-brown-900">Book a Restaurant</h1>
+        <p class="mt-4 text-lg text-brown-700">Choose your favorite restaurant and make your reservation now!</p>
+        <div class="mt-6">
+            <a href="{% url 'booking:lihat_booking' %}" class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
+                Atur Booking
+            </a>
+        </div>
     </div>
-    <h1 class="text-4xl font-bold mb-6">Book a Restaurant</h1>
     
     <!-- Filter Section -->
-    <div class="filter-box bg-brown-800 p-4 rounded-lg mb-6 w-full max-w-2xl">
-        <form id="filterForm" class="filter-form" method="GET">
-            <div class="grid grid-cols-2 gap-4">
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" name="takeaway" class="form-checkbox h-4 w-4 text-blue-600">
+    <div class="bg-brown-800 p-6 rounded-lg mb-12 w-full max-w-4xl mx-auto shadow-lg">
+        <h2 class="text-3xl font-bold text-white mb-6">Filter Restaurants</h2>
+        <form id="filterForm" class="space-y-6" method="GET">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="takeaway" class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Takeaway</span>
                 </label>
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" name="delivery" class="form-checkbox h-4 w-4 text-blue-600">
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="delivery" class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Delivery</span>
                 </label>
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" name="outdoor" class="form-checkbox h-4 w-4 text-blue-600">
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="outdoor" class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Outdoor</span>
                 </label>
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" name="wifi" class="form-checkbox h-4 w-4 text-blue-600">
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="wifi" class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Wi-Fi</span>
                 </label>
             </div>
 
             <!-- Filter by City -->
-            <div class="mt-4">
+            <div>
                 <label for="city" class="block text-lg font-semibold text-white">City:</label>
-                <select name="city" id="city" class="form-select mt-1 block w-full bg-white text-black">
+                <select name="city" id="city" class="form-select mt-2 block w-full bg-white text-gray-900 rounded border-gray-300">
                     <option value="">All Cities</option>
                     <option value="central jakarta">Central Jakarta</option>
                     <option value="east jakarta">East Jakarta</option>
@@ -51,26 +58,32 @@
                 </select>
             </div>
 
-            <button type="submit" class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Filter</button>
-        </form>            
+            <div class="text-center">
+                <button type="submit" class="mt-4 bg-yellow-500 text-white px-8 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
+                    Filter
+                </button>
+            </div>
+        </form>
     </div>
 
     <!-- Menu Grid Display -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {% for menu in menus %}
-        <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white text-black border border-gray-200">
-            <img class="w-full h-48 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
-            <div class="px-4 py-4">
-                <div class="font-bold text-xl mb-2 text-brown-900">{{ menu.menu }}</div>
-                <p class="text-gray-700 text-base">Category: {{ menu.category }}</p>
-                <p class="text-gray-700 text-base">Price: Rp.{{ menu.price }}</p>
-                <p class="text-gray-700 text-base">Restaurant: {{ menu.restaurant_name }}</p>
-                <p class="text-gray-700 text-base">City: {{ menu.city }}</p>
-                <p class="text-gray-700 text-base">Specialized: {{ menu.specialized }}</p>
-                <p class="text-gray-700 text-base">Rating: {{ menu.rating }}</p>
-                <a href="{% url 'booking:booking_form' menu.id %}" class="bg-yellow-500 text-white px-4 py-2 rounded mt-4 hover:bg-yellow-600">
-                    Select Restaurant
-                </a>
+        <div class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white transform hover:-translate-y-2 hover:shadow-xl transition duration-300">
+            <img class="w-full h-56 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
+            <div class="p-6">
+                <h3 class="text-amber-900 text-2xl font-semibold mb-2">{{ menu.menu }}</h3>
+                <p class="text-gray-600 mb-1"><strong>Category:</strong> {{ menu.category }}</p>
+                <p class="text-gray-600 mb-1"><strong>Price:</strong> Rp.{{ menu.price }}</p>
+                <p class="text-gray-600 mb-1"><strong>Restaurant:</strong> {{ menu.restaurant_name }}</p>
+                <p class="text-gray-600 mb-1"><strong>City:</strong> {{ menu.city }}</p>
+                <p class="text-gray-600 mb-1"><strong>Specialized:</strong> {{ menu.specialized }}</p>
+                <p class="text-gray-600 mb-1"><strong>Rating:</strong> {{ menu.rating }}</p>
+                <div class="text-center mt-4">
+                    <a href="{% url 'booking:booking_form' menu.id %}" class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
+                        Select Restaurant
+                    </a>
+                </div>
             </div>
         </div>
         {% endfor %}
@@ -79,5 +92,4 @@
 {% endblock content %}
 
 {% block script %}
-<script src="{% static 'js/ajax_menu.js' %}"></script>
 {% endblock script %}

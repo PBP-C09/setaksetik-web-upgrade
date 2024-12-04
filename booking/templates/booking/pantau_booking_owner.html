@@ -2,45 +2,45 @@
 {% include 'navbar.html' %}
 
 {% block meta %}
-    <title>Pantau Booking</title>
+    <title>SetakSetik | Pantau Booking</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col bg-brown-900 text-white py-8">
-    <h1 class="text-4xl font-bold mb-6">Pantau Booking</h1>
+<div class="flex container items-center align-center mx-auto flex-col bg-[#5B3E39] text-[#F5F5DC] py-8 min-h-screen">
+    <h1 class="text-5xl font-bold mb-8">Pantau Booking</h1>
     
     {% if restaurant %}
-        <div class="bg-brown-800 p-6 rounded-lg mb-6 w-full max-w-lg">
-            <h2 class="text-2xl font-semibold">Your Owned Restaurant</h2>
-            <p class="text-lg mt-2">{{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
+        <div class="bg-[#4E342E] p-8 rounded-xl shadow-lg mb-8 w-full max-w-lg">
+            <h2 class="text-3xl font-semibold text-[#F5C542]">Your Owned Restaurant</h2>
+            <p class="text-lg mt-4">{{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
 
-            <h3 class="text-xl font-semibold mt-4">Daftar Booking:</h3>
-            <ul class="list-disc pl-6 mt-2">
+            <h3 class="text-2xl font-semibold mt-6 text-[#F5C542]">Daftar Booking:</h3>
+            <ul class="list-disc pl-6 mt-4">
                 {% for booking in bookings %}
-                    <li class="mt-2">
-                        {{ booking.user.username }} booked {{ booking.menu.food_name }} on {{ booking.booking_date }} for {{ booking.number_of_people }} people.
+                    <li class="mt-4">
+                        <span class="font-medium">{{ booking.user.username }}</span> booked <span class="italic">{{ booking.menu.food_name }}</span> on <span class="font-medium">{{ booking.booking_date|date:"F d, Y" }}</span> for <span class="font-medium">{{ booking.number_of_people }}</span> people.
                         {% if booking.status == 'waiting' %}
-                            <form method="POST" action="{% url 'booking:approve_booking' booking.id %}">
+                            <form method="POST" action="{% url 'booking:approve_booking' booking.id %}" class="mt-2">
                                 {% csrf_token %}
-                                <button type="submit" class="bg-green-500 text-white p-2 rounded">Approve</button>
+                                <button type="submit" class="bg-[#4CAF50] text-white p-2 rounded-lg hover:bg-[#388E3C] transition-all duration-300 ease-in-out">Approve</button>
                             </form>
                         {% endif %}
                     </li>
                 {% empty %}
-                    <li class="mt-2">Belum ada booking yang dilakukan.</li>
+                    <li class="mt-4 text-gray-300">Belum ada booking yang dilakukan.</li>
                 {% endfor %}
             </ul>
 
-            <form method="POST" action="{% url 'claim:delete_ownership' restaurant.id %}" class="mt-6">
+            <form method="POST" action="{% url 'claim:delete_ownership' restaurant.id %}" class="mt-8">
                 {% csrf_token %}
-                <button type="submit" class="bg-red-500 text-white p-2 rounded hover:bg-red-600">Delete Ownership</button>
+                <button type="submit" class="bg-[#D32F2F] text-white py-2 px-4 rounded-lg hover:bg-[#C62828] transition-all duration-300 ease-in-out w-full">Delete Ownership</button>
             </form>
         </div>
     {% else %}
-        <div class="bg-brown-800 p-6 rounded-lg mb-6 w-full max-w-lg text-center">
-            <p class="text-lg">Anda belum memiliki restoran. Silakan <a href="{% url 'claim:available_restaurants' %}" class="text-yellow-500 hover:text-yellow-600">claim restoran</a> terlebih dahulu.</p>
+        <div class="bg-[#4E342E] p-8 rounded-xl shadow-lg mb-8 w-full max-w-lg text-center">
+            <p class="text-lg">Anda belum memiliki restoran. Silakan <a href="{% url 'claim:available_restaurants' %}" class="text-[#F5C542] hover:text-[#E0B93F] underline">claim restoran</a> terlebih dahulu.</p>
         </div>
     {% endif %}
 </div>

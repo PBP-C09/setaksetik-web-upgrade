@@ -8,7 +8,6 @@ async function showAddMenuModal() {
   
   function closeModal() {
     document.querySelector("#form").reset();
-    window.location.href="/explore";
     document.querySelector("#modal").classList.add("hidden");
   }
   
@@ -22,13 +21,12 @@ async function showAddMenuModal() {
     if (!response.ok) {
       throw new Error("Failed to add menu");
     }
-    return false;
+    document.querySelector("#form").reset();
   }
 
   function submitFilterForm() {
     var form = document.getElementById('filterForm');
     form.reset();
- 
     form.submit();
   }
   
@@ -104,7 +102,5 @@ function updateMenu() {
       }
   });
 }
-
   
-  document.getElementById("cancel-modal").addEventListener("click", closeModal);
-  
+document.getElementById("cancel-modal").addEventListener("click", closeModal);

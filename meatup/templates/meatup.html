@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meatup Wishlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #3e2c2c;
+            color: #ffffff;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2b1f1f;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .wishlist-card, .meatup-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #4a3737;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .wishlist-card span, .meatup-card span {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ffcc00;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .icon-btn:hover {
+            color: #e6b800;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            color: #3e2c2c;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #e6b800;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Public Wishlist</h1>
+
+        <form id="wishlist-form">
+            {% csrf_token %}
+            <input type="text" name="wishlist_item" id="wishlist-item" placeholder="Enter your wishlist item..." required>
+            <button type="submit">Add Wishlist</button>
+        </form>
+
+        <ul id="wishlist-items">
+            {% for wishlist in wishlist_items %}
+                <li id="wishlist-{{ wishlist.id }}">{{ wishlist.item }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Meat Up Requests</h2>
+        <button onclick="window.location.href='{% url 'meatup:received_requests' %}'">View Meat Up Requests</button>
+
+        <div id="meatup-requests">
+            {% for request in requests %}
+            <div class="meatup-card" id="request-{{ request.id }}">
+                <span>User {{ request.user.username }} has requested to meat up with you!</span>
+                <p>{{ request.message }}</p>
+                <div>
+                    <!-- Menonaktifkan tombol edit dan delete untuk sementara -->
+                    <!-- <button class="icon-btn edit-btn" data-id="{{ request.id }}">✏️</button> -->
+                    <!-- <button class="icon-btn delete-btn" data-id="{{ request.id }}">🗑️</button> -->
+                </div>
+            </div>
+            {% empty %}
+            <p>No meat-up requests available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        function loadWishlist() {
+            const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlistContainer = document.getElementById('wishlist-items');
+            wishlist Container.innerHTML = ''; 
+
+            storedItems.forEach(item => {
+                const listItem = createWishlistCard(item);
+                wishlistContainer.appendChild(listItem);
+            });
+        }
+
+        function createWishlistCard(item) {
+            const listItem = document.createElement('li');
+            listItem.className = 'wishlist-card';
+            listItem.id = `wishlist-${item.id}`;
+
+            listItem.innerHTML = `
+                <span>${item.text} - Added by {{ request.user.userprofile.full_name }}</span>
+                <!-- Menonaktifkan tombol edit dan delete untuk sementara -->
+                <!-- <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button> -->
+                <!-- <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button> -->
+            `;
+            return listItem;
+        }
+
+        async function saveWishlistItem(itemText) {
+            const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item_name: itemText }),
+            });
+
+            // Log the response for debugging
+            console.log('Response from add_to_wishlist:', response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Data from response:', data); // Log the response data for further debugging
+
+                const newItem = {
+                    id: data.id,
+                    text: data.item_name,
+                    user: data.user,
+                };
+
+                const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+                storedItems.push(newItem);
+                localStorage.setItem('wishlist', JSON.stringify(storedItems));
+
+                document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
+                document.getElementById('wishlist-item').value = '';
+            } else {
+                const errorData = await response.json();
+                console.error('Error adding item:', errorData); // Log any error messages
+            }
+        }
+
+        document.getElementById('wishlist-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const itemText = document.getElementById('wishlist-item').value;
+            saveWishlistItem(itemText);
+        });
+
+        loadWishlist();
+    </script>
+</body>
+</html>
+{% endblock %}
