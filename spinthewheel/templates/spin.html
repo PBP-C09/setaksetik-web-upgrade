@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block content %}
-<title>Spin the Wheel</title>
+<title>SetakSetik | Spin the Wheel</title>
 
 <!-- CSS Styles File -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/spin_styles.css' %}">
 
 <div class="header text-center mt-2 mb-2">
     <h1 class="text-4xl">
-        <span class="italic">Bingung</span> makan apa?
+        <a href="{% url 'spinthewheel:secret_view' %}"><span class="italic">Bingung</span> makan apa?</a>
     </h1>    
     <div class="border-t-2 border-[beige] mt-3 mx-auto w-1/3"></div>
     <p id="winner" class="text-2xl text-[beige] mt-2">Spin aja!</p>

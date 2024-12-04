@@ -1,0 +1,63 @@
+<div class="bg-indigo-700 rounded-xl overflow-hidden border-2 border-indigo-800 mb-4">
+    <div class="p-4">
+        <h5 class="text-lg font-semibold text-gray-200">Request from {{ request.sender.username }}</h5>
+        <p class="text-white">Wishlist Item: {{ request.wishlist.item_name }}</p>
+        <p class="text-white">Status: {{ request.status }}</p>
+
+        <div class="flex mt-2 space-x-4">
+            <button onclick="openEditModal({{ request.id }})" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Edit</button>
+            <button onclick="handleRequest({{ request.id }}, 'decline')" 
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Decline</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Form -->
+<div id="editModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg">
+        <h2 class="text-xl font-bold mb-4">Edit Request</h2>
+        <form id="editForm">
+            {% csrf_token %}
+            <input type="hidden" name="request_id" id="request-id">
+            <textarea name="message" id="message" class="w-full p-2 border rounded" rows="4" required></textarea>
+            <div class="flex justify-end mt-4 space-x-2">
+                <button type="button" onclick="closeEditModal()" 
+                    class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal(requestId) {
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('request-id').value = requestId;
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+document.getElementById('editForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const requestId = document.getElementById('request-id').value;
+    const message = document.getElementById('message').value;
+
+    const response = await fetch(`/edit-request/${requestId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({ message }),
+    });
+
+    if (response.ok) {
+        location.reload(); 
+    } else {
+        alert('Failed to edit the request.');
+    }
+});
+</script>

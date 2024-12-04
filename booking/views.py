@@ -11,7 +11,7 @@ from django.core import serializers
 
 # Create your views here.
 # Steak Lover (Customer)
-@login_required
+@login_required(login_url='/login')
 def create_booking(request):
     form_filter = FilterForm(request.GET or None)
     menus = Menu.objects.all()
@@ -38,7 +38,7 @@ def create_booking(request):
     }
     return render(request, 'booking/create_booking.html', context)
 
-@login_required
+@login_required(login_url='/login')
 def lihat_booking(request):
     bookings = Booking.objects.filter(user=request.user)
     print(bookings)
@@ -47,7 +47,7 @@ def lihat_booking(request):
     }
     return render(request, 'booking/lihat_booking.html', context)
 
-@login_required
+@login_required(login_url='/login')
 def booking_form(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
     bookings = Booking.objects.filter(user=request.user)
@@ -90,7 +90,7 @@ def booking_form(request, menu_id):
     return render(request, 'booking/booking_form.html', context)
 
 
-@login_required
+@login_required(login_url='/login')
 def delete_booking(request, booking_id):
     if request.method == 'DELETE':  # Hanya bisa method DELETE
         try:
@@ -101,7 +101,7 @@ def delete_booking(request, booking_id):
             return JsonResponse({'error': 'Booking not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
     
-@login_required
+@login_required(login_url='/login')
 def edit_booking(request, booking_id):
     try:
         booking = Booking.objects.get(id=booking_id, user=request.user)
@@ -136,7 +136,7 @@ def edit_booking(request, booking_id):
 
 
 # Steak House Owner (Resto Owner)
-@login_required
+@login_required(login_url='/login')
 def pantau_booking_owner(request):
     # Cek apakah user memiliki restoran yang sudah di-claim
     user = request.user
@@ -153,7 +153,7 @@ def pantau_booking_owner(request):
 
     return render(request, 'booking/pantau_booking_owner.html', context)
 
-@login_required
+@login_required(login_url='/login')
 def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     
@@ -164,23 +164,23 @@ def approve_booking(request, booking_id):
     return redirect('booking:pantau_booking_owner')  # Redirect kembali ke pantau booking owner
 
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_xml(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_json(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_xml_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_json_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
