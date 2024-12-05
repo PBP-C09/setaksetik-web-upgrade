@@ -1,4 +1,4 @@
-{% comment %} {% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -87,111 +87,23 @@
 
 <body>
     <div class="container">
-        <h1>Public Wishlist</h1>
-
-        <form id="wishlist-form">
-            {% csrf_token %}
-            <input type="text" name="wishlist_item" id="wishlist-item" placeholder="Enter your wishlist item..." required>
-            <button type="submit">Add Wishlist</button>
-        </form>
-
-        <ul id="wishlist-items">
-            {% for wishlist in wishlist_items %}
-                <li id="wishlist-{{ wishlist.id }}">{{ wishlist.item }}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Meat Up Requests</h2>
-        <button onclick="window.location.href='{% url 'meatup:received_requests' %}'">View Meat Up Requests</button>
-
-        <div id="meatup-requests">
-            {% for request in requests %}
-            <div class="meatup-card" id="request-{{ request.id }}">
-                <span>User {{ request.user.username }} has requested to meat up with you!</span>
-                <p>{{ request.message }}</p>
-                <div>
-                    <!-- Menonaktifkan tombol edit dan delete untuk sementara -->
-                    <!-- <button class="icon-btn edit-btn" data-id="{{ request.id }}">✏️</button> -->
-                    <!-- <button class="icon-btn delete-btn" data-id="{{ request.id }}">🗑️</button> -->
+        <h1>All Messages</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-card">
+                    <h3>{{ message.content }}</h3>
+                    <p>By: {{ message.sender.username }} | {{ message.created_at }}</p>
+                    <a href="{% url 'meatup:edit_message' message.id %}" class="btn">Edit</a>
+                    <form method="POST" action="{% url 'meatup:delete_message' message.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">Delete</button>
+                    </form>
                 </div>
-            </div>
-            {% empty %}
-            <p>No meat-up requests available.</p>
             {% endfor %}
-        </div>
+        {% else %}
+            <p>No messages yet.</p>
+        {% endif %}
     </div>
-
-    <script>
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-        function loadWishlist() {
-            const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-            const wishlistContainer = document.getElementById('wishlist-items');
-            wishlist Container.innerHTML = ''; 
-
-            storedItems.forEach(item => {
-                const listItem = createWishlistCard(item);
-                wishlistContainer.appendChild(listItem);
-            });
-        }
-
-        function createWishlistCard(item) {
-            const listItem = document.createElement('li');
-            listItem.className = 'wishlist-card';
-            listItem.id = `wishlist-${item.id}`;
-
-            listItem.innerHTML = `
-                <span>${item.text} - Added by {{ request.user.userprofile.full_name }}</span>
-                <!-- Menonaktifkan tombol edit dan delete untuk sementara -->
-                <!-- <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button> -->
-                <!-- <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button> -->
-            `;
-            return listItem;
-        }
-
-        async function saveWishlistItem(itemText) {
-            const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ item_name: itemText }),
-            });
-
-            // Log the response for debugging
-            console.log('Response from add_to_wishlist:', response);
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Data from response:', data); // Log the response data for further debugging
-
-                const newItem = {
-                    id: data.id,
-                    text: data.item_name,
-                    user: data.user,
-                };
-
-                const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-                storedItems.push(newItem);
-                localStorage.setItem('wishlist', JSON.stringify(storedItems));
-
-                document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
-                document.getElementById('wishlist-item').value = '';
-            } else {
-                const errorData = await response.json();
-                console.error('Error adding item:', errorData); // Log any error messages
-            }
-        }
-
-        document.getElementById('wishlist-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const itemText = document.getElementById('wishlist-item').value;
-            saveWishlistItem(itemText);
-        });
-
-        loadWishlist();
-    </script>
 </body>
 </html>
-{% endblock %} {% endcomment %}
+{% endblock %}
