@@ -1,171 +1,64 @@
-import json
-from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import MeatupRequest, Wishlist
-from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-from django.contrib import messages
+from .models import MeatupMessage
 
+# Halaman utama yang menampilkan semua pesan
 @login_required(login_url='/login')
-def show_requests(request):
-    requests = MeatupRequest.objects.filter(receiver=request.user)
+def show_main(request):
+    messages = MeatupMessage.objects.all()
+    return render(request, 'meatup/show_main.html', {'messages': messages})
 
-    context = {
-        'nama': 'steak',
-        'lokasi': 'jaksel',
-        'rating': '5',
-        'requests': requests, 
-    }
-    return render(request, 'meatup.html', context)
-
+# Menampilkan daftar pesan
 @login_required
-def received_requests(request):
-    wishlist_items = Wishlist.objects.filter(owner=request.user)
-    requests = MeatupRequest.objects.filter(receiver=request.user)
-    
-    context = {
-        'requests': requests,
-        'wishlist_items': wishlist_items,  
-    }
-    
-    return render(request, 'received_requests.html', context)
+def show_message_list(request):
+    messages = MeatupMessage.objects.filter(receiver=request.user)
+    return render(request, 'meatup/show_message_list.html', {'messages': messages})
 
+# Membuat pesan baru
 @login_required
-def create_request(request, wishlist_id):
-    wishlist = get_object_or_404(Wishlist, id=wishlist_id)
-
+def create_meatup_message(request):
     if request.method == 'POST':
-        receiver_id = request.POST.get('receiver')
-        receiver = get_object_or_404(User, id=receiver_id)
+        content = request.POST.get('content')
+        MeatupMessage.objects.create(sender=request.user, content=content)
+        return redirect('meatup:show_main')
+    return render(request, 'meatup/create_message.html')
 
-        new_request = MeatupRequest.objects.create(
-            sender=request.user,
-            receiver=receiver,
-            wishlist=wishlist
-        )
-
-        return JsonResponse({
-            'id': new_request.id,
-            'sender': new_request.sender.username,
-            'wishlist': wishlist.item_name, 
-            'status': new_request.status
-        })
-
-    users = User.objects.exclude(id=request.user.id)  
-    return render(request, 'create_request.html', {'wishlist': wishlist, 'users': users})
-
+# Mengedit pesan
 @login_required
-def update_request_status(request, pk):
-    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
-
+def edit_message(request, id):
+    message = get_object_or_404(MeatupMessage, id=id)
+    if message.sender != request.user:
+        return redirect('meatup:show_main')
     if request.method == 'POST':
-        data = json.loads(request.body) 
-        new_status = data.get('status')
+        message.content = request.POST.get('content')
+        message.save()
+        return redirect('meatup:show_main')
+    return render(request, 'meatup/edit_message.html', {'message': message})
 
-        if new_status in dict(MeatupRequest.STATUS_CHOICES):
-            meatup_request.status = new_status
-            meatup_request.save()
-
-            return JsonResponse({'message': 'Status updated successfully!', 'status': new_status})
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
+# Menghapus pesan
 @login_required
-def delete_request(request, pk):
-    meatup_request = get_object_or_404(MeatupRequest, pk=pk)
-
+def delete_message(request, id):
+    message = get_object_or_404(MeatupMessage, id=id)
+    if message.sender != request.user:
+        return redirect('meatup:show_main')
     if request.method == 'POST':
-        meatup_request.delete()
+        message.delete()
+        return redirect('meatup:show_main')
+    return render(request, 'meatup/delete_message.html', {'message': message})
 
-        return JsonResponse({'message': 'Request deleted successfully!', 'id': pk})
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
+# Menampilkan detail pesan
 @login_required
-def request_list(request):
-    requests = MeatupRequest.objects.filter(receiver=request.user)
-    context = {
-        'requests': requests,
-    }
-    return render(request, 'request_list.html', context)
+def show_message_detail(request, id):
+    message = get_object_or_404(MeatupMessage, id=id)
+    return render(request, 'meatup/show_message_detail.html', {'message': message})
 
+# Menampilkan kartu informasi
 @login_required
-def agree_request(request, request_id):
-    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
-    
-    if meatup_request.status == 'pending': 
-        meatup_request.status = 'accepted'
-        meatup_request.save()
-        messages.success(request, 'You have accepted the meetup request.')
-    else:
-        messages.error(request, 'This request has already been processed.')
-    
-    return redirect('main:request_list')  
+def card_info(request):
+    return render(request, 'meatup/card_info.html')
 
+# Menampilkan kartu pesan
 @login_required
-def decline_request(request, request_id):
-    meatup_request = get_object_or_404(MeatupRequest, id=request_id, receiver=request.user)
-    
-    if meatup_request.status == 'pending': 
-        meatup_request.status = 'declined'
-        meatup_request.save()
-        messages.success(request, 'You have declined the meetup request.')
-    else:
-        messages.error(request, 'This request has already been processed.')
-    
-    return redirect('main:request_list')  
-
-@login_required
-def wishlist_list(request):
-    wishlist_items = Wishlist.objects.all() 
-    
-    context = {
-        'wishlist_items': wishlist_items,
-        'last_login': request.COOKIES.get('last_login', 'Unknown'),  
-    }
-
-    return render(request, 'wishlist_list.html', context)
-
-@require_POST
-@login_required
-def add_to_wishlist(request):
-    try:
-        data = json.loads(request.body)
-        item_name = data.get('item_name')
-        description = data.get('description', '')
-        is_public = data.get('is_public', True)
-
-        if not item_name:
-            return JsonResponse({'error': 'Item name is required'}, status=400)
-
-        new_item = Wishlist.objects.create(
-            owner=request.user,
-            item_name=item_name,
-            description=description,
-            is_public=is_public
-        )
-        return JsonResponse({
-            'id': new_item.id,
-            'item_name': new_item.item_name,
-            'description': new_item.description,
-            'is_public': new_item.is_public,
-        })
-
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@login_required
-def delete_wishlist_item(request, wishlist_id):
-    wishlist_item = get_object_or_404(Wishlist, id=wishlist_id)
-
-    if wishlist_item.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to delete this item.")
-
-    if request.method == 'POST':
-        wishlist_item.delete()
-        return JsonResponse({'message': 'Wishlist item deleted successfully!', 'id': wishlist_id})
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+def card_message(request):
+    messages = MeatupMessage.objects.all()
+    return render(request, 'meatup/card_message.html', {'messages': messages})
