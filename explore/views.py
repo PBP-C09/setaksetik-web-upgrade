@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import strip_tags
+
 @login_required(login_url='/login')
 def show_menu(request):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -116,6 +117,7 @@ def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
 @login_required(login_url='/login')
 def edit_menu(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
