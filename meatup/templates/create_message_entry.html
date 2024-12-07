@@ -3,128 +3,63 @@
 {% load static %}
 
 {% block meta %}
-    <title>MeatUp | Create Message Entry</title>
+    <title>MeatUp | Create Message</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 {% endblock meta %}
 
 {% block content %}
 <div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
     <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-      Ingin<span class="italic"> kirim pesan</span> untuk siapa?
+      Ingin <span class="italic">kirim pesan</span> apa?
     </h1>    
 
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 px-4 md:px-0">
-    {% for user in users %}
-        <div class="max-w-md rounded overflow-hidden shadow-lg bg-[#F5F5DC] relative border">
-            <div class="relative">
-                <img class="w-full h-64 object-cover" src="{{ user.profile_image }}" alt="{{ user.username }}">
+    <div class="w-full max-w-xl bg-[#F5F5DC] rounded-lg shadow-lg p-6">
+        <form id="MessageForm">
+            <!-- Judul Pesan -->
+            <div class="mb-4">
+                <label for="messageTitle" class="block text-sm font-medium text-[#6D4C41] mb-2">Judul Pesan</label>
+                <input type="text" id="messageTitle" name="messageTitle" 
+                    class="block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
+                    placeholder="Masukkan judul pesan" required>
             </div>
-            <div class="px-4 md:px-6 py-4">
-                <div class="text-xl text-[#5B3E39] font-bold mb-2" style="font-family: 'Playfair Display', serif;">
-                    {{ user.username }}
-                </div>
-                <button 
-                    data-modal-target="crudModal" 
-                    data-modal-toggle="crudModal"
-                    class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-                    onclick="showModal(this)"
-                    data-username="{{ user.username }}"
-                    data-profile_image="{{ user.profile_image }}">
-                    Kirim Pesan
+
+            <!-- Isi Pesan -->
+            <div class="mb-4">
+                <label for="messageContent" class="block text-sm font-medium text-[#6D4C41] mb-2">Isi Pesan</label>
+                <textarea id="messageContent" name="messageContent" rows="6"
+                    class="block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
+                    placeholder="Tulis pesan Anda di sini..." required></textarea>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 justify-end">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                    Cancel
+                </button>
+                <button type="submit" 
+                    class="btn bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">
+                    Send
                 </button>
             </div>
-        </div>
-    {% endfor %}
+        </form>
     </div>
-
-    <div id="message_entry_cards">
-    </div>
-
-    <div id="crudModal" tabindex="-1" aria-hidden="true"
-        class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
-        <div id="crudModalContent"
-          class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
-          <!-- Modal header -->
-          <div class="flex items-center justify-between p-4 border-b rounded-t">
-            <h3 class="text-xl font-semibold text-gray-900">
-              Kirim Pesan Baru
-            </h3>
-            <button type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-              id="closeModalBtn">
-              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="sr-only">Close modal</span>
-            </button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="px-6 py-4 space-y-6 form-style">
-            <!-- Form Message Entry -->
-            <form method="POST" action="{% url 'meatup:create-message-entry' %}">
-              {% csrf_token %}
-              <input type="hidden" id="hiddenUsername" name="username">
-              <input type="hidden" id="hiddenProfileImage" name="profile_image">
-
-              <!-- Message Content -->
-              <div class="mb-4">
-                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-                <textarea id="message" name="message" rows="3"
-                    class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
-                    placeholder="Tulis pesan Anda" required></textarea>
-              </div>
-
-              <button type="submit" class="btn bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">
-                Kirim Pesan
-              </button>
-            </form>
-          </div>
-        </div>
-    </div>
+</div>
 
 <script>
-  const modal = document.getElementById('crudModal');
-  const modalContent = document.getElementById('crudModalContent');
+document.getElementById('MessageForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('messageTitle').value;
+    const content = document.getElementById('messageContent').value;
 
-  function showModal(button) {
-    const modal = document.getElementById('crudModal');
-    const modalContent = document.getElementById('crudModalContent');
+    // Di sini Anda bisa tambahkan logika untuk mengirim pesan
+    alert('Pesan terkirim:\nJudul: ' + title + '\nIsi: ' + content);
 
-    // Ambil data dari tombol yang diklik
-    const username = button.getAttribute('data-username');
-    const profile_image = button.getAttribute('data-profile_image');
-
-    // Perbarui konten modal dengan data yang sesuai
-    document.getElementById('hiddenUsername').value = username;
-    document.getElementById('hiddenProfileImage').value = profile_image;
-
-    // Tampilkan modal
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-        modalContent.classList.remove('opacity-0', 'scale-95');
-        modalContent.classList.add('opacity-100', 'scale-100');
-    }, 50);
-  }
-
-  function hideModal() {
-    const modal = document.getElementById('crudModal');
-    const modalContent = document.getElementById('crudModalContent');
-
-    modalContent.classList.remove('opacity-100', 'scale-100');
-    modalContent.classList.add('opacity-0', 'scale-95');
-
-    setTimeout(() => {
-      modal.classList.add('hidden');
-    }, 150);
-  }
-
-  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+    // Reset form setelah mengirim
+    this.reset();
+});
 </script>
-
 {% endblock content %}
