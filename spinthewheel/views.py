@@ -31,7 +31,7 @@ def history_json(request):
     data = SpinHistory.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def option_json(request, selected_category="All Categories"):
     if selected_category == "All Categories":
         data = Menu.objects.all()

@@ -5,15 +5,9 @@ from django.http import HttpResponseRedirect
 from .models import Message
 from .forms import MessageEntryForm
 from main.models import UserProfile
+from django.views.decorators.csrf import csrf_exempt
 
-# @login_required(login_url='/login')
-# def meatup_home(request):
-#     all_messages = Message.objects.all()  # Menampilkan semua pesan tanpa filter
-#     context = {
-#         'all_messages': all_messages,
-#     }
-#     return render(request, 'meatup.html', context)
-
+@csrf_exempt
 @login_required(login_url='/login')
 def meatup_home(request):
     user = request.user
@@ -28,6 +22,7 @@ def meatup_home(request):
     }
     return render(request, 'meatup.html', context)
 
+@csrf_exempt
 @login_required(login_url='/login')
 def create_message_entry(request):
     if request.method == "POST":
@@ -45,6 +40,7 @@ def create_message_entry(request):
     context = {'form': form}
     return render(request, 'create_message_entry.html', context)
 
+@csrf_exempt
 @login_required(login_url='/login')
 def delete_message(request, id):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -52,6 +48,7 @@ def delete_message(request, id):
     message.delete()
     return redirect('meatup:meatup_home')
 
+@csrf_exempt
 @login_required(login_url='/login')
 def edit_message(request, id):
     # Edit pesan tertentu

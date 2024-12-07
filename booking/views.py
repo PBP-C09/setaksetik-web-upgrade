@@ -11,6 +11,7 @@ from django.core import serializers
 
 # Create your views here.
 # Steak Lover (Customer)
+@csrf_exempt
 @login_required(login_url='/login')
 def create_booking(request):
     form_filter = FilterForm(request.GET or None)
@@ -47,6 +48,7 @@ def lihat_booking(request):
     }
     return render(request, 'booking/lihat_booking.html', context)
 
+@csrf_exempt
 @login_required(login_url='/login')
 def booking_form(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
@@ -89,7 +91,7 @@ def booking_form(request, menu_id):
 
     return render(request, 'booking/booking_form.html', context)
 
-
+@csrf_exempt
 @login_required(login_url='/login')
 def delete_booking(request, booking_id):
     if request.method == 'DELETE':  # Hanya bisa method DELETE
@@ -100,7 +102,8 @@ def delete_booking(request, booking_id):
         except Booking.DoesNotExist:
             return JsonResponse({'error': 'Booking not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
+
+@csrf_exempt    
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     try:
