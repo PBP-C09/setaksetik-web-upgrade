@@ -3,63 +3,54 @@
 {% load static %}
 
 {% block meta %}
-    <title>MeatUp | Create Message</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<title>MeatUp | Create Message</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+
+<style>
+    label {
+        font-size: 20px;
+        font-family: 'Playfair Display', serif;
+        color: #6D4C41;
+        font-weight: 600;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
-    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-      Ingin <span class="italic">kirim pesan</span> apa?
-    </h1>    
+<div class="container mx-auto py-8">
+    <h1 class="text-4xl font-medium text-center text-[#F5F5DC] mb-8">
+        Mau <span class="italic">meat up</span> sama siapa?
+    </h1>
 
-    <div class="w-full max-w-xl bg-[#F5F5DC] rounded-lg shadow-lg p-6">
-        <form id="MessageForm">
-            <!-- Judul Pesan -->
-            <div class="mb-4">
-                <label for="messageTitle" class="block text-sm font-medium text-[#6D4C41] mb-2">Judul Pesan</label>
-                <input type="text" id="messageTitle" name="messageTitle" 
-                    class="block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
-                    placeholder="Masukkan judul pesan" required>
+    <div class="max-w-lg mx-auto bg-[#F5F5DC] rounded-lg shadow-lg p-6">
+        <form method="POST" id="MessageForm">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-4 w-full">
+                <label for="{{ field.id_for_label }}" class="block mb-2 text-center">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-red-500 text-sm mt-1 text-center">
+                    {{ field.errors|join:", " }}
+                </div>
+                {% endif %}
             </div>
-
-            <!-- Isi Pesan -->
-            <div class="mb-4">
-                <label for="messageContent" class="block text-sm font-medium text-[#6D4C41] mb-2">Isi Pesan</label>
-                <textarea id="messageContent" name="messageContent" rows="6"
-                    class="block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
-                    placeholder="Tulis pesan Anda di sini..." required></textarea>
-            </div>
-
-            <!-- Footer Buttons -->
-            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 justify-end">
-                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
-                    Cancel
-                </button>
-                <button type="submit" 
-                    class="btn bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">
-                    Send
-                </button>
+            {% endfor %}
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4">
+              <button type="submit" class="bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">
+                  Send
+              </button>
+              <a href="{% url 'meatup:meatup_home' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                  Cancel
+              </a>
             </div>
         </form>
     </div>
 </div>
-
-<script>
-document.getElementById('MessageForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const title = document.getElementById('messageTitle').value;
-    const content = document.getElementById('messageContent').value;
-
-    // Di sini Anda bisa tambahkan logika untuk mengirim pesan
-    alert('Pesan terkirim:\nJudul: ' + title + '\nIsi: ' + content);
-
-    // Reset form setelah mengirim
-    this.reset();
-});
-</script>
 {% endblock content %}

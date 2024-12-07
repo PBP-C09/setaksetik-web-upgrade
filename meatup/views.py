@@ -4,12 +4,27 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .models import Message
 from .forms import MessageEntryForm
+from main.models import UserProfile
+
+# @login_required(login_url='/login')
+# def meatup_home(request):
+#     all_messages = Message.objects.all()  # Menampilkan semua pesan tanpa filter
+#     context = {
+#         'all_messages': all_messages,
+#     }
+#     return render(request, 'meatup.html', context)
 
 @login_required(login_url='/login')
 def meatup_home(request):
-    all_messages = Message.objects.all()  # Menampilkan semua pesan tanpa filter
+    user = request.user
+    sender_user_profile = UserProfile.objects.get(user=user)
+    sent_messages = Message.objects.filter(sender=sender_user_profile).order_by('-timestamp')
+    receiver_user_profile = UserProfile.objects.get(user=user)
+    received_messages = Message.objects.filter(receiver=receiver_user_profile).order_by('-timestamp')
+
     context = {
-        'all_messages': all_messages,
+        'sent_messages': sent_messages,
+        'received_messages': received_messages,
     }
     return render(request, 'meatup.html', context)
 
@@ -19,21 +34,23 @@ def create_message_entry(request):
         form = MessageEntryForm(request.POST)
         if form.is_valid():
             new_message = form.save(commit=False)
-            new_message.sender = request.user  # Menggunakan user yang sedang login sebagai pengirim
+            user_profile = UserProfile.objects.get(user=request.user)
+            new_message.sender = user_profile
             new_message.save()
-            return HttpResponseRedirect(reverse('meatup:meatup_home'))
+            return redirect(reverse('meatup:meatup_home'))
     else:
         form = MessageEntryForm()
 
+    # Pass the form to the template
     context = {'form': form}
     return render(request, 'create_message_entry.html', context)
 
 @login_required(login_url='/login')
 def delete_message(request, id):
-    # Hapus pesan tertentu
+    user_profile = UserProfile.objects.get(user=request.user)
     message = get_object_or_404(Message, id=id)
     message.delete()
-    return HttpResponseRedirect(reverse('meatup:meatup_home'))
+    return redirect('meatup:meatup_home')
 
 @login_required(login_url='/login')
 def edit_message(request, id):
