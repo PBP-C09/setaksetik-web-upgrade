@@ -5,19 +5,18 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.urls import reverse
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from django.contrib import messages
-from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from main.models import UserProfile
 from main.forms import UserProfileForm
 
+@csrf_exempt
 def show_main(request):
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
@@ -30,6 +29,7 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
+@csrf_exempt
 def register(request):
     form = UserProfileForm()
 
@@ -52,6 +52,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
+@csrf_exempt
 def login_user(request):
    if request.method == 'POST':
       form = AuthenticationForm(data=request.POST)
@@ -71,12 +72,14 @@ def login_user(request):
    context = {'form': form}
    return render(request, 'login.html', context)
 
+@csrf_exempt
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:show_main'))
     response.delete_cookie('last_login')
     return response
 
+@csrf_exempt
 def forbidden(request):
     return render(request, 'forbidden.html')
 
