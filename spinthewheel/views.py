@@ -9,6 +9,9 @@ from explore.models import Menu
 from spinthewheel.models import SpinHistory, SecretHistory
 from spinthewheel.forms import SpinHistoryForm, SecretHistoryForm
 
+import json
+from django.http import JsonResponse
+
 @login_required(login_url='/login')
 def spin_view(request):
     categories = ['All Categories', 'Beef', 'Chicken', 'Fish', 'Lamb', 'Pork', 'Rib Eye', 'Sirloin', 'Tenderloin', 'T-Bone', 'Wagyu', 'Other']
@@ -97,3 +100,22 @@ def delete_secret_history(request, id):
     secret_history.delete()
     return HttpResponseRedirect(reverse('spinthewheel:secret_view'))
 
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def add_spin_history_mobile(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_history = SpinHistory.objects.create(
+            user=request.user,
+            winner=data["winner"],
+            winnerId=int(data["winnerId"]),
+            note=data["note"]
+        )
+
+        new_history.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
