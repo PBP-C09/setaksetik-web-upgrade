@@ -141,6 +141,9 @@ def register_mobile(request):
         user = User.objects.create_user(username=username, password=password1)
         user.save()
         UserProfile.objects.create(user=user, full_name=full_name, role=role)
+
+        print(user.username)
+        print(lmao)
         
         return JsonResponse({
             "username": user.username,
