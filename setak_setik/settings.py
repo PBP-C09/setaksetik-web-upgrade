@@ -28,7 +28,8 @@ PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 # DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id", "10.0.2.2"]
+ALLOWED_HOSTS = ["lozzst", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/", "https://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -133,39 +134,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# STATIC_URL = '/static/'
-# if DEBUG:
-#     STATICFILES_DIRS = [
-#         *[Path(app_path) / 'static' for app_path in BASE_DIR.glob('*/')]
-#     ]
-# else:
-#     STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# STATIC_URL = '/static/'
-# if DEBUG:
-#     STATICFILES_DIRS = [
-#         BASE_DIR / 'static'
-#     ]
-# else:
-#     STATIC_ROOT = BASE_DIR / 'static'
-
-from pathlib import Path
-
-# Assuming BASE_DIR is defined as the root of your Django project
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 
 if DEBUG:
-    # Only include directories that are recognized as Django apps
     STATICFILES_DIRS = [
-        app_path / 'static' for app_path in BASE_DIR.glob('*/') if (app_path / 'static').is_dir()
+        os.path.join(BASE_DIR, 'static')
     ]
-else:
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
   
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+<div class="card">
+    <div class="card-header">
+        <h5>{{ wishlist.item_name }}</h5>
+    </div>
+    <div class="card-body">
+        <p>{{ wishlist.description }}</p>
+        <p>Owner: {{ wishlist.owner.username }}</p>
+        <p>Status: {% if wishlist.is_public %} Public {% else %} Private {% endif %}</p>
+    </div>
+</div>

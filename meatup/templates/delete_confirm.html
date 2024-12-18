@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% comment %} {% extends 'base.html' %}
 
 <!-- Trigger Modal -->
 <button id="delete-request-btn" class="text-gray-500">Delete Request</button>
@@ -31,22 +31,22 @@
     });
 
     confirmDeleteButton.addEventListener('click', async () => {
-        const requestId = deleteRequestButton.getAttribute('data-request-id'); // Get the request ID from a data attribute
+        const requestId = deleteRequestButton.getAttribute('data-request-id'); 
         
-        const response = await fetch(/meatup/delete/${requestId}/, {  // Ensure the URL matches your Django URL pattern
+        const response = await fetch(/meatup/delete/${requestId}/, {  
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({}) // Send an empty body for deletion
+            body: JSON.stringify({}) 
         });
 
         if (response.ok) {
             alert('Request deleted successfully!');
-            location.reload(); // Reload to reflect changes
+            location.reload(); 
         } else {
             alert('Failed to delete request.');
         }
     });
-</script>
+</script> {% endcomment %}

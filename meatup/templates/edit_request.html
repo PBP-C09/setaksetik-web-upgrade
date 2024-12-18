@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% comment %} {% extends 'base.html' %}
 {% load static %}
 
 {% block meta %}
@@ -55,11 +55,11 @@
 
         if (response.ok) {
             alert('Request updated successfully!');
-            window.location.href = '{% url "meatup:meatup" %}'; // Redirect after successful update
+            window.location.href = '{% url "meatup:meatup" %}'; 
         } else {
             alert('Failed to update request.');
         }
     });
 </script>
 
-{% endblock %}
+{% endblock %} {% endcomment %}

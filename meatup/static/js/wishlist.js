@@ -1,5 +1,5 @@
 async function addToWishlist(itemName, description, isPublic) {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;  // Ensure this token is fetched correctly
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;  
 
     const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
         method: 'POST',

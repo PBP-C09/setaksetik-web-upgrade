@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Message List</h1>
+
+  <div class="message-list">
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li class="message-item">
+            <div class="message-card">
+              <p><strong>Sender:</strong> {{ message.sender.username }}</p>
+              <p><strong>Receiver:</strong> {{ message.receiver.username }}</p>
+              <p><strong>Content:</strong> {{ message.content }}</p>
+              <p><strong>Status:</strong> {{ message.status }}</p>
+
+              <a href="{% url 'meatup:show_message_detail' message.id %}">View Details</a>
+              {% if message.sender == user %}
+                <a href="{% url 'meatup:edit_message' message.id %}">Edit</a>
+                <a href="{% url 'meatup:delete_message' message.id %}">Delete</a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No messages available.</p>
+    {% endif %}
+  </div>
+
+  <a href="{% url 'meatup:create_message' %}">Create New Message</a>
+{% endblock %}
