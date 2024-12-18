@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% include 'navbar.html' %}
+{% load static %}
+
+{% block meta %}
+<title>MeatUp | Create Message</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+
+<style>
+    label {
+        font-size: 20px;
+        font-family: 'Playfair Display', serif;
+        color: #6D4C41;
+        font-weight: 600;
+    }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-4xl font-medium text-center text-[#F5F5DC] mb-8">
+        Mau <span class="italic">meat up</span> sama siapa?
+    </h1>
+
+    <div class="max-w-lg mx-auto bg-[#F5F5DC] rounded-lg shadow-lg p-6">
+        <form method="POST" id="MessageForm">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-4 w-full">
+                <label for="{{ field.id_for_label }}" class="block mb-2 text-center">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-red-500 text-sm mt-1 text-center">
+                    {{ field.errors|join:", " }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4">
+              <button type="submit" class="bg-[#6D4C41] hover:bg-[#A36F5E] text-white font-bold py-2 px-4 rounded-lg">
+                  Send
+              </button>
+              <a href="{% url 'meatup:meatup_home' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                  Cancel
+              </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

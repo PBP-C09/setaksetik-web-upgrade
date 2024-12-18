@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from explore.models import Menu
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def available_restaurants(request):
@@ -54,6 +55,7 @@ def claim_restaurant(request, restaurant_id):
 def is_admin(user):
     return user.is_staff  # Mengecek apakah user memiliki role admin
 
+@csrf_exempt
 @login_required
 def manage_ownership(request):
     claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)  # Menampilkan semua restoran yang sudah di-claim
