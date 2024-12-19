@@ -1,5 +1,5 @@
 from django.urls import path
-from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu, show_xml, show_json, show_xml_by_id, show_json_by_id, create_flutter
+from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu, show_xml, show_json, show_xml_by_id, show_json_by_id, create_flutter, edit_flutter
 from booking.views import booking_form, lihat_booking
 from review.views import show_review
 from claim.views import claim_restaurant
@@ -26,4 +26,5 @@ urlpatterns = [
     path('delete/<int:menu_id>', delete_menu, name='delete_menu'),
     path('claim_restaurant/<int:restaurant_id>/', claim_restaurant, name='claim_restaurant'),
     path('create-flutter/', create_flutter, name='create_flutter'),
+    path('edit-flutter/<int:menu_id>/', edit_flutter, name='edit_flutter'),
 ]

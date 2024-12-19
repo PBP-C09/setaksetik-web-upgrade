@@ -203,7 +203,7 @@ def create_flutter(request):
     if request.method == 'POST':
         try:         
             data = json.loads(request.body)
-            print(data)
+            # print(data)
             # Create new menu
             new_menu = Menu.objects.create(
                 menu=data["menu"],
@@ -230,9 +230,50 @@ def create_flutter(request):
     
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
-    
-def string_to_bool(value):
-   
+
+@csrf_exempt
+def edit_flutter(request, menu_id):
+    if request.method == 'POST':
+        try:
+            menu = Menu.objects.get(pk=menu_id) 
+            data = json.loads(request.body)
+           
+            # Update fields
+            menu.menu = data.get('menu', menu.menu)
+            menu.category = data.get('category', menu.category)
+            menu.restaurant_name = data.get('restaurant_name', menu.restaurant_name)
+            menu.city = data.get('city', menu.city)
+            menu.price = int(data.get('price', menu.price))
+            menu.rating = float(data.get('rating', menu.rating))
+            menu.specialized = data.get('specialized', menu.specialized)
+            menu.image = data.get('image', menu.image)
+            menu.takeaway = string_to_bool(data.get('takeaway', menu.takeaway))
+            menu.delivery = string_to_bool(data.get('delivery', menu.delivery))
+            menu.outdoor = string_to_bool(data.get('outdoor', menu.outdoor))
+            menu.smoking_area = string_to_bool(data.get('smoking_area', menu.smoking_area))
+            menu.wifi = string_to_bool(data.get('wifi', menu.wifi))
+            
+            menu.save()
+            return JsonResponse({
+                "status": "success",
+                "message": "Menu updated successfully!"
+            }, status=200)
+        except Menu.DoesNotExist:
+            return JsonResponse({
+                "status": "error",
+                "message": "Menu not found!"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=400)
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid method"
+    }, status=405)
+
+def string_to_bool(value): 
     if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
         return value
 
