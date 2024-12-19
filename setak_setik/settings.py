@@ -28,7 +28,7 @@ PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 # DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["lozzst", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/", "https://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/"]
 
 INSTALLED_APPS = [
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'meatup',
     'booking',
     'claim',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+
 
 ROOT_URLCONF = 'setak_setik.urls'
 
