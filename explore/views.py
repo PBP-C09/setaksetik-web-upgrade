@@ -11,6 +11,9 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
 
 @login_required(login_url='/login')
 def show_menu(request):
@@ -194,3 +197,29 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def add_menu_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_menu = Menu.objects.create(
+            user=request.user,
+            menu=data["menu"],
+            category=data["category"],
+            restaurant_name=data["restaurant_name"],
+            city=data["city"],
+            price=int(data["price"]),
+            rating=float(data["rating"]),
+            specialized=data["specialized"],
+            image="default_image_url",
+            takeaway=False,
+            delivery=False,
+            outdoor=False,
+            smoking_area=False,
+            wifi=False
+        )
+        new_menu.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
