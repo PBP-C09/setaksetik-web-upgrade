@@ -199,27 +199,64 @@ def show_json_by_id(request, id):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @csrf_exempt
-def add_menu_flutter(request):
+def create_flutter(request):
+    print(f"Received request method: {request.method}")  # Debug print
+    
     if request.method == 'POST':
-        data = json.loads(request.body)
-        new_menu = Menu.objects.create(
-            user=request.user,
-            menu=data["menu"],
-            category=data["category"],
-            restaurant_name=data["restaurant_name"],
-            city=data["city"],
-            price=int(data["price"]),
-            rating=float(data["rating"]),
-            specialized=data["specialized"],
-            image="default_image_url",
-            takeaway=False,
-            delivery=False,
-            outdoor=False,
-            smoking_area=False,
-            wifi=False
-        )
-        new_menu.save()
-
-        return JsonResponse({"status": "success"}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
+        try:
+            # Debug prints
+            print(f"Request headers: {request.headers}")
+            print(f"Request body: {request.body.decode()}")
+            
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            required_fields = ['menu', 'category', 'restaurant_name', 'city', 'price', 'rating', 'specialized']
+            for field in required_fields:
+                if not data.get(field):
+                    return JsonResponse({
+                        "status": "error",
+                        "message": f"Field {field} is required"
+                    }, status=400)
+            
+            # Create new menu
+            new_menu = Menu.objects.create(
+                menu=data["menu"],
+                category=data["category"],
+                restaurant_name=data["restaurant_name"],
+                city=data["city"],
+                price=int(float(data["price"])),  # Handle string input
+                rating=float(data["rating"]),
+                specialized=data["specialized"],
+                image=data.get("image", "default_image_url"),
+                takeaway=data.get("takeaway", False),
+                delivery=data.get("delivery", False),
+                outdoor=data.get("outdoor", False),
+                smoking_area=data.get("smoking_area", False),
+                wifi=data.get("wifi", False)
+            )
+            new_menu.save()
+            
+            return JsonResponse({
+                "status": "success",
+                "message": "Menu berhasil ditambahkan!"
+            }, status=201)
+            
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")  # Debug print
+            return JsonResponse({
+                "status": "error",
+                "message": f"Invalid JSON format: {str(e)}"
+            }, status=400)
+            
+        except Exception as e:
+            print(f"Error creating menu: {e}")  # Debug print
+            return JsonResponse({
+                "status": "error",
+                "message": f"Error creating menu: {str(e)}"
+            }, status=500)
+    
+    return JsonResponse({
+        "status": "error",
+        "message": "Method not allowed"
+    }, status=405)
