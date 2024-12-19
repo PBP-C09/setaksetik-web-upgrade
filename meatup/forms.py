@@ -1,44 +1,31 @@
 from django import forms
-from .models import Wishlist, MeatupRequest
+from .models import Message
+from main.models import UserProfile
 
-class MeatupRequestForm(forms.ModelForm):
+class MessageEntryForm(forms.ModelForm):
     class Meta:
-        model = MeatupRequest
-        fields = ['receiver', 'wishlist', 'status']
+        model = Message
+        fields = ['receiver', 'title', 'content']
+        widgets = {
+            'receiver': forms.Select(attrs={
+                'class': 'block w-full p-2 rounded-md text-white bg-[#3E2723] border border-[#6D4C41] text-center'
+            }),
+            'title': forms.TextInput(attrs={
+                'class': 'block w-full p-2 rounded-md text-white bg-[#3E2723] border border-[#6D4C41] text-center'
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'block w-full p-2 rounded-md text-white bg-[#3E2723] border border-[#6D4C41] text-center',
+                'rows': 5
+            }),
+        }
+        labels = {
+            'content': 'Message',
+        }
 
-class WishlistForm(forms.ModelForm):
-    class Meta:
-        model = Wishlist
-        fields = ['item_name', 'description', 'is_public']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['item_name'].widget.attrs.update({
-            'placeholder': 'Enter the item name...',
-            'class': 'form-input',
-        })
-        self.fields['description'].widget.attrs.update({
-            'placeholder': 'Describe what you want to do...',
-            'class': 'form-input',
-        })
-        self.fields['is_public'].label = "Make Wishlist Public"
-
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        if len(description) < 10:
-            raise forms.ValidationError("Description must be at least 10 characters long.")
-        return description
-
-class MeatupRequestForm(forms.ModelForm):
-    note = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'placeholder': 'Add a note for the receiver...',
-            'class': 'form-input',
-        }),
-        label='Request Note',
-        required=False
-    )
-
-    class Meta:
-        model = MeatupRequest
-        fields = ['note'] 
+        # Filter UserProfile with role 'steak lover' and use their user.full_name for display
+        steak_lovers = UserProfile.objects.filter(role="steak lover")
+        self.fields['receiver'].queryset = steak_lovers
+        self.fields['receiver'].label_from_instance = lambda obj: obj.full_name

@@ -57,6 +57,7 @@ def claim_restaurant(request, restaurant_id):
 def is_admin(user):
     return user.is_staff  # Mengecek apakah user memiliki role admin
 
+@csrf_exempt
 @login_required
 def manage_ownership(request):
     claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)  # Menampilkan semua restoran yang sudah di-claim

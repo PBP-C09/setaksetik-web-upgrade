@@ -1,16 +1,7 @@
 from django.contrib import admin
-from .models import MeatupRequest, Wishlist
+from .models import Message
 
-if not admin.site.is_registered(MeatupRequest):
-    class MeatupRequestAdmin(admin.ModelAdmin):
-        list_display = ['sender', 'receiver', 'requested_at']
-        list_filter = ['sender', 'requested_at']
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'content', 'timestamp')
 
-    admin.site.register(MeatupRequest, MeatupRequestAdmin)
-
-if not admin.site.is_registered(Wishlist):
-    class WishlistAdmin(admin.ModelAdmin):
-        list_display = ['owner', 'created_at']
-        list_filter = ['owner', 'created_at']
-
-    admin.site.register(Wishlist, WishlistAdmin)
+admin.site.register(Message, MessageAdmin)

@@ -8,10 +8,12 @@ from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+import json
 
 # Create your views here.
 # Steak Lover (Customer)
-@login_required
+@csrf_exempt
+@login_required(login_url='/login')
 def create_booking(request):
     form_filter = FilterForm(request.GET or None)
     menus = Menu.objects.all()
@@ -38,7 +40,7 @@ def create_booking(request):
     }
     return render(request, 'booking/create_booking.html', context)
 
-@login_required
+@login_required(login_url='/login')
 def lihat_booking(request):
     bookings = Booking.objects.filter(user=request.user)
     print(bookings)
@@ -47,7 +49,8 @@ def lihat_booking(request):
     }
     return render(request, 'booking/lihat_booking.html', context)
 
-@login_required
+@csrf_exempt
+@login_required(login_url='/login')
 def booking_form(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
     bookings = Booking.objects.filter(user=request.user)
@@ -89,8 +92,8 @@ def booking_form(request, menu_id):
 
     return render(request, 'booking/booking_form.html', context)
 
-
-@login_required
+@csrf_exempt
+@login_required(login_url='/login')
 def delete_booking(request, booking_id):
     if request.method == 'DELETE':  # Hanya bisa method DELETE
         try:
@@ -100,8 +103,9 @@ def delete_booking(request, booking_id):
         except Booking.DoesNotExist:
             return JsonResponse({'error': 'Booking not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
-@login_required
+
+@csrf_exempt    
+@login_required(login_url='/login')
 def edit_booking(request, booking_id):
     try:
         booking = Booking.objects.get(id=booking_id, user=request.user)
@@ -136,7 +140,7 @@ def edit_booking(request, booking_id):
 
 
 # Steak House Owner (Resto Owner)
-@login_required
+@login_required(login_url='/login')
 def pantau_booking_owner(request):
     # Cek apakah user memiliki restoran yang sudah di-claim
     user = request.user
@@ -153,7 +157,7 @@ def pantau_booking_owner(request):
 
     return render(request, 'booking/pantau_booking_owner.html', context)
 
-@login_required
+@login_required(login_url='/login')
 def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     
@@ -164,23 +168,153 @@ def approve_booking(request, booking_id):
     return redirect('booking:pantau_booking_owner')  # Redirect kembali ke pantau booking owner
 
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_xml(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_json(request):
     data = Booking.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_xml_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
-@login_required
+@login_required(login_url='/login')
 def show_booking_json_by_id(request, booking_id):
     data = Booking.objects.filter(pk=booking_id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required(login_url='/login')
+def get_bookings_json(request):
+    bookings = Booking.objects.all().filter(user=request.user)
+    
+    # Format data ke dalam struktur yang sesuai dengan model BookingEntry di Flutter
+    booking_list = []
+    for booking in bookings:
+        booking_entry = {
+            "model": "booking",  # Nama model Booking dalam format sederhana
+            "pk": booking.id,  # Primary key dari Booking (berbasis integer)
+            "fields": {
+                "user": booking.user.id,
+                "menu_items": booking.menu_items.id,
+                "booking_date": booking.booking_date.strftime("%Y-%m-%dT%H:%M:%S"),  # Format ISO 8601
+                "number_of_people": booking.number_of_people,
+                "status": booking.status,
+            }
+        }
+        booking_list.append(booking_entry)
+    
+    return JsonResponse(booking_list, safe=False)
+
+@csrf_exempt
+def delete_booking_flutter(request, booking_id):
+    if request.method == 'POST':  # Hanya izinkan metode DELETE
+        try:
+            booking = get_object_or_404(Booking, id=booking_id)
+            booking.delete()
+            return JsonResponse({'message': 'Booking deleted successfully'}, status=200)
+        except Booking.DoesNotExist:
+            return JsonResponse({'error': 'Booking not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def add_booking_flutter(request, menu_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  # Parsing JSON dari request body
+            booking_date = data.get('booking_date')
+            number_of_people = data.get('number_of_people')
+
+            if not all([booking_date, number_of_people]):
+                return JsonResponse({'error': 'Missing required fields (booking_date or number_of_people)'}, status=400)
+            
+            user = request.user  # Menggunakan user dari request
+            menu = get_object_or_404(Menu, id=menu_id)
+            
+            form = BookingForm({
+                'booking_date': booking_date,
+                'number_of_people': number_of_people
+            })
+
+            if form.is_valid():
+                booking = form.save(commit=False)
+                booking.user = user
+                booking.menu_items = menu
+                booking.status = 'waiting'  # Status default saat membuat booking
+                booking.save()
+                
+                booking_data = {
+                    'id': booking.id,
+                    'menu': booking.menu_items.menu,
+                    'booking_date': booking.booking_date.strftime("%B %d, %Y"),
+                    'number_of_people': booking.number_of_people,
+                    'restaurant_name': booking.menu_items.restaurant_name,
+                    'city': booking.menu_items.city,
+                    'rating': booking.menu_items.rating,
+                    'status': booking.get_status_display(),
+                    'image': booking.menu_items.image,
+                }
+                
+                return JsonResponse({
+                    'message': 'Booking added successfully', 
+                    'booking': booking_data
+                }, status=201)
+            else:
+                return JsonResponse({'error': 'Invalid form data', 'form_errors': form.errors}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def edit_booking_flutter(request, booking_id):
+    if request.method == 'POST':
+        try:
+            booking = get_object_or_404(Booking, id=booking_id)
+            data = json.loads(request.body)  # Parsing JSON dari request body
+            booking_date = data.get('booking_date')
+            number_of_people = data.get('number_of_people')
+
+            if not all([booking_date, number_of_people]):
+                return JsonResponse({'error': 'Missing required fields (booking_date or number_of_people)'}, status=400)
+            
+            form = BookingForm({
+                'booking_date': booking_date,
+                'number_of_people': number_of_people
+            }, instance=booking)
+            
+            if form.is_valid():
+                booking = form.save(commit=False)
+                booking.status = 'waiting'  # Status default saat mengedit booking
+                booking.save()
+                
+                booking_data = {
+                    'id': booking.id,
+                    'menu': booking.menu_items.menu,
+                    'booking_date': booking.booking_date.strftime("%B %d, %Y"),
+                    'number_of_people': booking.number_of_people,
+                    'restaurant_name': booking.menu_items.restaurant_name,
+                    'city': booking.menu_items.city,
+                    'rating': booking.menu_items.rating,
+                    'status': booking.get_status_display(),
+                    'image': booking.menu_items.image,
+                }
+                
+                return JsonResponse({
+                    'message': 'Booking edited successfully', 
+                    'booking': booking_data
+                }, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid form data', 'form_errors': form.errors}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+

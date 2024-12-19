@@ -20,6 +20,7 @@ from django.http import JsonResponse
 # batasan
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
+@csrf_exempt
 @login_required(login_url='/login')
 def show_review(request):
 
@@ -39,25 +40,32 @@ def show_review(request):
         return render(request, 'review_owner.html', context)
     return render(request, 'review.html', context)
 
-
-
+@csrf_exempt
+@login_required(login_url='/login')
 def show_xml(request):
     data = ReviewEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@csrf_exempt
+@login_required(login_url='/login')
 def show_json(request):
     data = ReviewEntry.objects.filter(user=request.user)
     data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
+@login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = ReviewEntry.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@csrf_exempt
+@login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = ReviewEntry.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login')
 @csrf_exempt
 @require_POST
 def add_review_entry_ajax(request):
@@ -76,7 +84,8 @@ def add_review_entry_ajax(request):
 
     return HttpResponse(b"CREATED", status=201)
 
-
+@csrf_exempt
+@login_required(login_url='/login')
 def create_review_entry(request):
     # Retrieve all menu entries without filtering
     menus = Menu.objects.all()
@@ -88,6 +97,8 @@ def create_review_entry(request):
 
     return render(request, 'create_review_entry.html', context)
 
+@csrf_exempt
+@login_required(login_url='/login')
 def edit_review(request, id):
     # Get the review entry based on id
     review = ReviewEntry.objects.get(pk=id)
@@ -108,6 +119,8 @@ def edit_review(request, id):
     context = {'form': form}
     return render(request, "edit_review.html", context)
 
+@csrf_exempt
+@login_required(login_url='/login')
 def delete_review(request, id):
     # Get the review based on id
     review = ReviewEntry.objects.get(pk=id)
@@ -118,6 +131,7 @@ def delete_review(request, id):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/login')
 def submit_reply(request):
     if request.user.userprofile.role != "steakhouse owner":
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
@@ -153,6 +167,7 @@ def submit_reply(request):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/login')
 def update_reply(request):
     if request.user.userprofile.role != "steakhouse owner":
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)

@@ -8,11 +8,9 @@ app_name = "explore"
 
 urlpatterns = [
     path("", show_menu, name='show_menu'),
-    path("detail/", menu_detail, name='menu_detail'),
     path('menu_detail/<int:menu_id>/', menu_detail, name='menu_detail'),
     path('admin_detail/<int:menu_id>/', admin_detail, name='admin_detail'),
     path('owner_detail/<int:menu_id>/', owner_detail, name='owner_detail'),
-    path('add_menu/<int:menu_id>/<int:user_id>/', add_menu, name='add_menu'),
     path('xml/', show_xml, name='show_xml'),
     path('json/', show_json, name='show_json'),
     path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),

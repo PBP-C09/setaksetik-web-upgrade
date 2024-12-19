@@ -1,268 +1,92 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<title>SetakSetik | Meat Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock meta %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meatup Wishlist</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-[42px] text-4xl font-reguler text-[#F5F5DC] text-center mb-8">
+        <span class="italic">Meat Up</span> dengan Steak Lover lainnya!
+    </h1>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;700&display=swap');
+    <div class="flex justify-center mt-0 mb-0">
+        <a href="{% url 'meatup:create_message_entry' %}">
+          <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-8">
+            Kirim Pesan Meat Up
+          </button>
+        </a>
+      </div>
 
-        body {
-            font-family: 'Raleway', sans-serif;
-            background-color: #3e2c2c;
-            color: #ffffff;
-        }
-
-        h1, h2 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #2b1f1f;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .wishlist-card, .meatup-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #4a3737;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .wishlist-card span, .meatup-card span {
-            flex-grow: 1;
-            margin-left: 10px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #ffcc00;
-            font-size: 18px;
-            margin-left: 10px;
-        }
-
-        .icon-btn:hover {
-            color: #e6b800;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #ffcc00;
-            border: none;
-            padding: 10px 20px;
-            color: #3e2c2c;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #e6b800;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>Public Wishlist</h1>
-
-        <form id="wishlist-form">
-            {% csrf_token %}
-            <input type="text" name="wishlist_item" id="wishlist-item" placeholder="Enter your wishlist item..." required>
-            <button type="submit">Add Wishlist</button>
-        </form>
-
-        <ul id="wishlist-items">
-            {% for wishlist in wishlist_items %}
-                <li id="wishlist-{{ wishlist.id }}">{{ wishlist.item }}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Meat Up Requests</h2>
-        <button onclick="window.location.href='{% url 'meatup:received_requests' %}'">View Meat Up Requests</button>
-
-        <div id="meatup-requests">
-            {% for request in requests %}
-            <div class="meatup-card" id="request-{{ request.id }}">
-                <span>User {{ request.user.username }} has requested to meat up with you!</span>
-                <p>{{ request.message }}</p>
-                <div>
-                    <button class="icon-btn edit-btn" data-id="{{ request.id }}">✏️</button>
-                    <button class="icon-btn delete-btn" data-id="{{ request.id }}">🗑️</button>
-                </div>
-            </div>
-            {% empty %}
-            <p>No meat-up requests available.</p>
-            {% endfor %}
+    <!-- Received Messages -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-[#FFD54F] mb-4">Received Meat Up Request</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if received_messages %}
+                {% for message in received_messages %}
+                    <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
+                        <div class="flex flex-col mb-4">
+                            <!-- Top Section with Sender and Date -->
+                            <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">From: {{ message.sender.full_name }}</p>
+                            <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
+                        </div>
+                        <hr class="border-[#3E2723] mb-4"> <!-- Divider Line -->
+                        <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
+                            <!-- Message Content -->
+                            <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
+                            <p class="font-raleway">{{ message.content }}</p>
+                        </div>
+                        <form method="POST" action="{% url 'meatup:delete_message' message.id %}" class="mt-4">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mx-auto block">
+                                Reject Meat Up
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-lg col-span-3">Kamu belum menerima pesan Meat Up :(</p>
+            {% endif %}
         </div>
     </div>
 
-    <script>
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        // Delete Meat Up Request with AJAX
-        $('.delete-btn').on('click', function () {
-            const requestId = $(this).data('id');
-            $.ajax({
-                url: `/delete-request/${requestId}/`,
-                type: 'DELETE',
-                headers: { 'X-CSRFToken': csrfToken },
-                success: function () {
-                    $(`#request-${requestId}`).remove();
-                },
-                error: function () {
-                    alert('Failed to delete the request.');
-                }
-            });
-        });
-
-        // Edit Meat Up Request Placeholder
-        $('.edit-btn').on('click', function () {
-            const requestId = $(this).data('id');
-            const newMessage = prompt('Enter the updated message:');
-            if (newMessage) {
-                $.ajax({
-                    url: `/edit-request/${requestId}/`,
-                    type: 'POST',
-                    headers: { 'X-CSRFToken': csrfToken },
-                    data: { message: newMessage },
-                    success: function () {
-                        location.reload();  // Reload to show updated message
-                    },
-                    error: function () {
-                        alert('Failed to edit the request.');
-                    }
-                });
-            }
-        });
-// Load wishlist items from local storage
-function loadWishlist() {
-    const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-    const wishlistContainer = document.getElementById('wishlist-items');
-    wishlistContainer.innerHTML = ''; // Clear existing items
-
-    storedItems.forEach(item => {
-        const listItem = createWishlistCard(item);
-        wishlistContainer.appendChild(listItem);
-    });
-
-    attachEventHandlers();  // Attach handlers to buttons after loading
-}
-
-// Create a wishlist card
-function createWishlistCard(item) {
-    const listItem = document.createElement('li');
-    listItem.className = 'wishlist-card';
-    listItem.id = `wishlist-${item.id}`;
-
-    listItem.innerHTML = `
-        <span>${item.text} - Added by {{request.user.userprofile.full_name}}</span>
-        <button class="icon-btn edit-btn" data-id="${item.id}">✏️</button>
-        <button class="icon-btn delete-btn" data-id="${item.id}">🗑️</button>
-    `;
-    return listItem;
-}
-
-function attachEventHandlers() {
-    const editButtons = document.querySelectorAll('.edit-btn');
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-
-    editButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = parseInt(this.getAttribute('data-id'));
-            editItem(id);
-        });
-    });
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = parseInt(this.getAttribute('data-id'));
-            deleteItem(id);
-        });
-    });
-}
-
-async function saveWishlistItem(itemText) {
-    const response = await fetch("{% url 'meatup:add_to_wishlist' %}", {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ item_name: itemText }),
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        const newItem = {
-            id: data.id,
-            text: data.item_name,
-            user: data.user,
-        };
-
-        const storedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-        storedItems.push(newItem);
-        localStorage.setItem('wishlist', JSON.stringify(storedItems));
-
-        document.getElementById('wishlist-items').appendChild(createWishlistCard(newItem));
-        attachEventHandlers();  // Re-attach event handlers after adding a new item
-        document.getElementById('wishlist-item').value = '';
-    } else {
-        alert('Failed to save wishlist item');
-    }
-}
-
-function editItem(id) {
-    const newItemText = prompt('Enter the updated wishlist item:');
-    if (newItemText) {
-        const storedItems = JSON.parse(localStorage.getItem('wishlist'));
-        const itemIndex = storedItems.findIndex(item => item.id === id);
-        if (itemIndex > -1) {
-            storedItems[itemIndex].text = newItemText;
-            localStorage.setItem('wishlist', JSON.stringify(storedItems));
-            loadWishlist(); // Reload the wishlist to reflect changes
-        }
-    }
-}
-
-function deleteItem(id) {
-    const storedItems = JSON.parse(localStorage.getItem('wishlist'));
-    const updatedItems = storedItems.filter(item => item.id !== id);
-    localStorage.setItem('wishlist', JSON.stringify(updatedItems));
-    loadWishlist(); // Reload the wishlist to reflect deletion
-}
-
-document.getElementById('wishlist-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const itemText = document.getElementById('wishlist-item').value;
-    saveWishlistItem(itemText);
-});
-
-loadWishlist();
-    </script>
-</body>
-</html>
-{% endblock %}
+    <!-- Sent Messages -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-[#FFD54F] mb-4">Sent Meat Up Request</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if sent_messages %}
+                {% for message in sent_messages %}
+                    <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
+                        <div class="flex flex-col mb-4">
+                            <!-- Top Section with Receiver and Date -->
+                            <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">To: {{ message.receiver.full_name }}</p>
+                            <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
+                        </div>
+                        <hr class="border-[#3E2723] mb-4"> <!-- Divider Line -->
+                        <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
+                            <!-- Message Content -->
+                            <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
+                            <p class="font-raleway">{{ message.content }}</p>
+                        </div>
+                        <form method="POST" action="{% url 'meatup:delete_message' message.id %}" class="mt-4">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mx-auto block">
+                                Cancel Meat Up
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-lg col-span-3">Kamu belum pernah mengirim pesan Meat Up. Kirim sekarang!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

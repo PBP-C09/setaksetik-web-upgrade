@@ -117,6 +117,7 @@ def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
 @login_required(login_url='/login')
 def edit_menu(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
