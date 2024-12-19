@@ -15,6 +15,7 @@ from explore.forms import MenuFilterForm
 from main.models import UserProfile
 import json
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 
 # batasan
@@ -50,6 +51,11 @@ def show_xml(request):
 @login_required(login_url='/login')
 def show_json(request):
     data = ReviewEntry.objects.filter(user=request.user)
+    data = ReviewEntry.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required(login_url='/login')
+def get_review(request):
     data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
@@ -129,6 +135,7 @@ def delete_review(request, id):
     return HttpResponseRedirect(reverse('review:show_review'))
 
 
+
 @csrf_exempt
 @require_POST
 @login_required(login_url='/login')
@@ -199,3 +206,33 @@ def update_reply(request):
             'status': 'error',
             'message': str(e)
         }, status=400)
+
+@login_required
+@csrf_exempt
+@require_POST
+def create_review_flutter(request):
+    # return JsonResponse("Method: " +request.method, "Headers" + request.headers + "body" + request.body)
+    print(f"Method: {request.method}")  # Log metode request
+    print(f"Headers: {request.headers}")
+    print(f"Body: {request.body}")
+    print("request method:  " + request.method)
+
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print(f"Data received: {data}")
+            new_review = ReviewEntry.objects.create(
+                user = request.user,
+                menu=data["menu"],
+                place=data["place"],
+                rating=int(data["rating"]),
+                description=data["description"],
+                owner_reply=data["owner_reply"],
+            )
+            new_review.save()
+            return JsonResponse({"status": "success"}, status=200)
+        except Exception as e:
+            print(e)
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
