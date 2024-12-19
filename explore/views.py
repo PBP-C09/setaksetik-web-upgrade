@@ -199,64 +199,47 @@ def show_json_by_id(request, id):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @csrf_exempt
-def create_flutter(request):
-    print(f"Received request method: {request.method}")  # Debug print
-    
+def create_flutter(request):    
     if request.method == 'POST':
-        try:
-            # Debug prints
-            print(f"Request headers: {request.headers}")
-            print(f"Request body: {request.body.decode()}")
-            
+        try:         
             data = json.loads(request.body)
-            
-            # Validate required fields
-            required_fields = ['menu', 'category', 'restaurant_name', 'city', 'price', 'rating', 'specialized']
-            for field in required_fields:
-                if not data.get(field):
-                    return JsonResponse({
-                        "status": "error",
-                        "message": f"Field {field} is required"
-                    }, status=400)
-            
+            print(data)
             # Create new menu
             new_menu = Menu.objects.create(
                 menu=data["menu"],
                 category=data["category"],
                 restaurant_name=data["restaurant_name"],
                 city=data["city"],
-                price=int(float(data["price"])),  # Handle string input
+                price=int(data["price"]),  
                 rating=float(data["rating"]),
                 specialized=data["specialized"],
                 image=data.get("image", "default_image_url"),
-                takeaway=data.get("takeaway", False),
-                delivery=data.get("delivery", False),
-                outdoor=data.get("outdoor", False),
-                smoking_area=data.get("smoking_area", False),
-                wifi=data.get("wifi", False)
+                takeaway=string_to_bool(data["takeaway"]),
+                delivery=string_to_bool(data["delivery"]),
+                outdoor=string_to_bool(data["outdoor"]),
+                smoking_area=string_to_bool(data["smoking_area"]),
+                wifi=string_to_bool(data["wifi"]),
             )
             new_menu.save()
             
-            return JsonResponse({
-                "status": "success",
-                "message": "Menu berhasil ditambahkan!"
-            }, status=201)
-            
-        except json.JSONDecodeError as e:
-            print(f"JSON decode error: {e}")  # Debug print
-            return JsonResponse({
-                "status": "error",
-                "message": f"Invalid JSON format: {str(e)}"
-            }, status=400)
+            return JsonResponse({"status": "success", "message": "Menu added successfully"}, status=200)
             
         except Exception as e:
-            print(f"Error creating menu: {e}")  # Debug print
-            return JsonResponse({
-                "status": "error",
-                "message": f"Error creating menu: {str(e)}"
-            }, status=500)
+            print("Error creating menu:", str(e))
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
     
-    return JsonResponse({
-        "status": "error",
-        "message": "Method not allowed"
-    }, status=405)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+    
+def string_to_bool(value):
+   
+    if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
+        return value
+
+    if isinstance(value, str):  # Pastikan nilai adalah string
+        value = value.strip().lower()  # Hapus spasi dan ubah ke huruf kecil
+        
+        if value in ('true'):
+            return True
+        elif value in ('false'):
+            return False
