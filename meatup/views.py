@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect
 from .models import Message
@@ -84,20 +85,49 @@ def meatup_home_flutter(request):
 @login_required(login_url='/login')
 def create_message_flutter(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        sender_user_profile = UserProfile.objects.get(user=request.user)
-
-        receiver_user_profile = get_object_or_404(UserProfile, id=data.get("receiver_id"))
-        new_message = Message.objects.create(
-            sender=sender_user_profile,
-            receiver=receiver_user_profile,
-            title=data.get("title"),
-            content=data.get("content"),
-        )
-        new_message.save()
-
-        return JsonResponse({"status": "success", "message": "Message created successfully."}, status=201)
-    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+        try:
+            data = json.loads(request.body)
+            
+            sender_user_profile = UserProfile.objects.get(user=request.user)
+            
+            try:
+                receiver_username = data.get("receiver")
+                receiver_user = User.objects.get(username=receiver_username)
+                receiver_user_profile = UserProfile.objects.get(user=receiver_user)
+            except User.DoesNotExist:
+                return JsonResponse({
+                    "status": "error",
+                    "message": "Receiver not found"
+                }, status=404)
+            
+            # Create new message
+            new_message = Message.objects.create(
+                sender=sender_user_profile,
+                receiver=receiver_user_profile,
+                title=data.get("title"),
+                content=data.get("content")
+            )
+            
+            return JsonResponse({
+                "status": "success",
+                "message": "Message sent successfully"
+            }, status=201)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid JSON format"
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid request method"
+    }, status=405)
 
 @csrf_exempt
 @login_required(login_url='/login')

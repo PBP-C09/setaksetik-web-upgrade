@@ -318,3 +318,57 @@ def edit_booking_flutter(request, booking_id):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt
+def pantau_booking_owner_flutter(request):
+    """Return JSON data of bookings for the owner's claimed restaurant."""
+    user = request.user
+    print(user)
+    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    print(claimed_restaurant)
+
+    if not claimed_restaurant:
+        print("ayam")
+        return JsonResponse({
+            'status': 'failed',
+            'message': 'You do not own any restaurant.'
+        })
+
+    bookings = Booking.objects.filter(menu_items=claimed_restaurant)
+    booking_list = []
+    for booking in bookings:
+        print("baba")
+        booking_data = {
+            "id": booking.id,
+            "user": booking.user.username,
+            "menu": booking.menu_items.restaurant_name,
+            "booking_date": booking.booking_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "number_of_people": booking.number_of_people,
+            "status": booking.status,
+        }
+        booking_list.append(booking_data)
+
+    print(booking_list)
+    
+    return JsonResponse({
+        'status': 'success',
+        'restaurant': {
+            "id": claimed_restaurant.id,
+            "restaurant_name": claimed_restaurant.restaurant_name,
+            "city": claimed_restaurant.city
+        },
+        'bookings': booking_list
+    })
+
+@login_required(login_url='/login')
+@csrf_exempt
+def approve_booking_flutter(request, booking_id):
+    """Approve booking from Flutter request."""
+    booking = get_object_or_404(Booking, id=booking_id)
+    
+    if request.user == booking.menu_items.claimed_by:
+        booking.status = 'approved'
+        booking.save()
+        return JsonResponse({'status': 'success'})
+    
+    return JsonResponse({'status': 'failed', 'message': 'You do not have permission to approve this booking.'})
+

@@ -11,6 +11,9 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
 
 @login_required(login_url='/login')
 def show_menu(request):
@@ -194,3 +197,90 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_flutter(request):    
+    if request.method == 'POST':
+        try:         
+            data = json.loads(request.body)
+            # print(data)
+            # Create new menu
+            new_menu = Menu.objects.create(
+                menu=data["menu"],
+                category=data["category"],
+                restaurant_name=data["restaurant_name"],
+                city=data["city"],
+                price=int(data["price"]),  
+                rating=float(data["rating"]),
+                specialized=data["specialized"],
+                image=data.get("image", "default_image_url"),
+                takeaway=string_to_bool(data["takeaway"]),
+                delivery=string_to_bool(data["delivery"]),
+                outdoor=string_to_bool(data["outdoor"]),
+                smoking_area=string_to_bool(data["smoking_area"]),
+                wifi=string_to_bool(data["wifi"]),
+            )
+            new_menu.save()
+            
+            return JsonResponse({"status": "success", "message": "Menu added successfully"}, status=200)
+            
+        except Exception as e:
+            print("Error creating menu:", str(e))
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+
+@csrf_exempt
+def edit_flutter(request, menu_id):
+    if request.method == 'POST':
+        try:
+            menu = Menu.objects.get(pk=menu_id) 
+            data = json.loads(request.body)
+           
+            # Update fields
+            menu.menu = data.get('menu', menu.menu)
+            menu.category = data.get('category', menu.category)
+            menu.restaurant_name = data.get('restaurant_name', menu.restaurant_name)
+            menu.city = data.get('city', menu.city)
+            menu.price = int(data.get('price', menu.price))
+            menu.rating = float(data.get('rating', menu.rating))
+            menu.specialized = data.get('specialized', menu.specialized)
+            menu.image = data.get('image', menu.image)
+            menu.takeaway = string_to_bool(data.get('takeaway', menu.takeaway))
+            menu.delivery = string_to_bool(data.get('delivery', menu.delivery))
+            menu.outdoor = string_to_bool(data.get('outdoor', menu.outdoor))
+            menu.smoking_area = string_to_bool(data.get('smoking_area', menu.smoking_area))
+            menu.wifi = string_to_bool(data.get('wifi', menu.wifi))
+            
+            menu.save()
+            return JsonResponse({
+                "status": "success",
+                "message": "Menu updated successfully!"
+            }, status=200)
+        except Menu.DoesNotExist:
+            return JsonResponse({
+                "status": "error",
+                "message": "Menu not found!"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=400)
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid method"
+    }, status=405)
+
+def string_to_bool(value): 
+    if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
+        return value
+
+    if isinstance(value, str):  # Pastikan nilai adalah string
+        value = value.strip().lower()  # Hapus spasi dan ubah ke huruf kecil
+        
+        if value in ('true'):
+            return True
+        elif value in ('false'):
+            return False

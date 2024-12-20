@@ -20,7 +20,51 @@
             Kirim Pesan Meat Up
           </button>
         </a>
-      </div>
+    </div>
+
+    {% if success %}
+        <div class="bg-green-500 text-white p-4 rounded-lg mb-6 text-center">
+            Pesan berhasil diperbarui!
+        </div>
+    {% elif error %}
+        <div class="bg-red-500 text-white p-4 rounded-lg mb-6 text-center">
+            Terjadi kesalahan saat memperbarui pesan.
+        </div>
+    {% endif %}
+
+    <!-- Edit Message Form (Hidden by default) -->
+    <div id="editForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-[#F5F5DC] p-8 rounded-lg w-full max-w-lg">
+            <h2 class="text-2xl font-bold text-[#3E2723] mb-4">Edit Message</h2>
+            <form method="POST" id="messageEditForm">
+                {% csrf_token %}
+                <input type="hidden" name="message_id" id="editMessageId">
+                <div class="mb-4">
+                    <label class="block text-[#3E2723] font-semibold mb-2">Title:</label>
+                    <input 
+                        type="text" 
+                        name="title" 
+                        id="editTitle" 
+                        class="w-full p-2 border rounded-lg"
+                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
+                    >
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#3E2723] font-semibold mb-2">Content:</label>
+                    <textarea 
+                        name="content" 
+                        id="editContent" 
+                        class="w-full p-2 border rounded-lg h-32"
+                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
+                    ></textarea>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="closeEditForm()" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Cancel</button>
+                    <button type="submit" class="bg-[#F7B32B] text-white px-4 py-2 rounded-lg">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Received Messages -->
     <div class="mb-8">
@@ -30,13 +74,11 @@
                 {% for message in received_messages %}
                     <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
                         <div class="flex flex-col mb-4">
-                            <!-- Top Section with Sender and Date -->
                             <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">From: {{ message.sender.full_name }}</p>
                             <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
                         </div>
-                        <hr class="border-[#3E2723] mb-4"> <!-- Divider Line -->
+                        <hr class="border-[#3E2723] mb-4">
                         <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
-                            <!-- Message Content -->
                             <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
                             <p class="font-raleway">{{ message.content }}</p>
                         </div>
@@ -55,7 +97,6 @@
         </div>
     </div>
 
-
     <!-- Sent Messages -->
     <div class="mb-8">
         <h2 class="text-2xl font-bold text-[#FFD54F] mb-4">Sent Meat Up Request</h2>
@@ -64,23 +105,27 @@
                 {% for message in sent_messages %}
                     <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
                         <div class="flex flex-col mb-4">
-                            <!-- Top Section with Receiver and Date -->
                             <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">To: {{ message.receiver.full_name }}</p>
                             <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
                         </div>
-                        <hr class="border-[#3E2723] mb-4"> <!-- Divider Line -->
+                        <hr class="border-[#3E2723] mb-4">
                         <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
-                            <!-- Message Content -->
                             <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
                             <p class="font-raleway">{{ message.content }}</p>
                         </div>
-                        <form method="POST" action="{% url 'meatup:delete_message' message.id %}" class="mt-4">
-                            {% csrf_token %}
-                            <button type="submit" 
-                                class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mx-auto block">
-                                Cancel Meat Up
+                        <div class="flex justify-between mt-4">
+                            <button onclick="openEditForm('{{ message.id }}', '{{ message.title|escapejs }}', '{{ message.content|escapejs }}')" 
+                                class="bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                                Edit
                             </button>
-                        </form>
+                            <form method="POST" action="{% url 'meatup:delete_message' message.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                    class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                                    Cancel Meat Up
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}
@@ -89,4 +134,24 @@
         </div>
     </div>
 </div>
+
+<script>
+function openEditForm(messageId, title, content) {
+    document.getElementById('editForm').classList.remove('hidden');
+    document.getElementById('editMessageId').value = messageId;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editContent').value = content;
+}
+
+function closeEditForm() {
+    document.getElementById('editForm').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('editForm').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEditForm();
+    }
+});
+</script>
 {% endblock content %}
