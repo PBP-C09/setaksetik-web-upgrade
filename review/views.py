@@ -268,3 +268,75 @@ def submit_reply_flutter(request):
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def delete_review_flutter(request):
+    print("masuk sini ga")
+    try:
+        # Parse request body
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        print(data)
+        print(review_id)
+
+        # Validasi input
+        if not review_id:
+            return JsonResponse({'status': 'error', 'message': 'Review ID is required'}, status=400)
+
+        # Cari review berdasarkan ID
+        review = ReviewEntry.objects.get(pk=review_id)
+
+        # Optional: Validasi role atau kepemilikan
+        if request.user.userprofile.role != "admin":
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+        # Hapus review
+        review.delete()
+        return JsonResponse({'status': 'success', 'message': 'Review deleted successfully'}, status=200)
+
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def update_reply_flutter(request):
+    # Pastikan hanya steakhouse owner yang bisa mengakses
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+    try:
+        # Parse data dari request body
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+
+        # Validasi input
+        if not review_id or not reply_text:
+            return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
+
+        # Cari review berdasarkan ID
+        review = ReviewEntry.objects.get(pk=review_id)
+
+        # Optional: Verifikasi bahwa review ini terkait dengan steakhouse owner (jika ada relasi)
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+        # Perbarui kolom owner_reply
+        review.owner_reply = reply_text
+        review.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply updated successfully'
+        }, status=200)
+
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
