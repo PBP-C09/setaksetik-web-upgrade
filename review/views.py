@@ -15,6 +15,7 @@ from explore.forms import MenuFilterForm
 from main.models import UserProfile
 import json
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 
 # batasan
@@ -50,6 +51,11 @@ def show_xml(request):
 @login_required(login_url='/login')
 def show_json(request):
     data = ReviewEntry.objects.filter(user=request.user)
+    data = ReviewEntry.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required(login_url='/login')
+def get_review(request):
     data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
@@ -129,6 +135,7 @@ def delete_review(request, id):
     return HttpResponseRedirect(reverse('review:show_review'))
 
 
+
 @csrf_exempt
 @require_POST
 @login_required(login_url='/login')
@@ -199,3 +206,76 @@ def update_reply(request):
             'status': 'error',
             'message': str(e)
         }, status=400)
+
+@login_required
+@csrf_exempt
+@require_POST
+def create_review_flutter(request):
+    # return JsonResponse("Method: " +request.method, "Headers" + request.headers + "body" + request.body)
+    print(f"Method: {request.method}")  # Log metode request
+    print(f"Headers: {request.headers}")
+    print(f"Body: {request.body}")
+    print("request method:  " + request.method)
+
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print(f"Data received: {data}")
+            new_review = ReviewEntry.objects.create(
+                user = request.user,
+                menu=data["menu"],
+                place=data["place"],
+                rating=int(data["rating"]),
+                description=data["description"],
+                owner_reply=data["owner_reply"],
+            )
+            new_review.save()
+            return JsonResponse({"status": "success"}, status=200)
+        except Exception as e:
+            print(e)
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def submit_reply_flutter(request):
+    # Pastikan hanya steakhouse owner yang bisa mengakses
+    if request.user.userprofile.role != "steakhouse owner":
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+    try:
+        # Parse data dari request body
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        reply_text = data.get('reply_text')
+
+        # Validasi data
+        if not review_id or not reply_text:
+            print("HEHEHEHEH")
+            return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
+
+        # Cari review berdasarkan ID
+        review = ReviewEntry.objects.get(pk=review_id)
+
+        # Optional: Verifikasi bahwa review ini terkait dengan steakhouse owner (jika ada relasi)
+        # if review.steakhouse != request.user.steakhouse:
+        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+        # Perbarui kolom owner_reply
+        review.owner_reply = reply_text
+        review.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Reply submitted successfully'
+        }, status=200)
+
+    except ReviewEntry.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+
+    except Exception as e:
+        print("HELLOO")
+        print(str(e))
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
