@@ -203,7 +203,6 @@ def create_flutter(request):
     if request.method == 'POST':
         try:         
             data = json.loads(request.body)
-            # print(data)
             # Create new menu
             new_menu = Menu.objects.create(
                 menu=data["menu"],
@@ -225,7 +224,6 @@ def create_flutter(request):
             return JsonResponse({"status": "success", "message": "Menu added successfully"}, status=200)
             
         except Exception as e:
-            print("Error creating menu:", str(e))
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
     
     else:

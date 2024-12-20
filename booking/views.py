@@ -43,7 +43,6 @@ def create_booking(request):
 @login_required(login_url='/login')
 def lihat_booking(request):
     bookings = Booking.objects.filter(user=request.user)
-    print(bookings)
     context = {
         'bookings': bookings
     }
@@ -322,12 +321,9 @@ def edit_booking_flutter(request, booking_id):
 def pantau_booking_owner_flutter(request):
     """Return JSON data of bookings for the owner's claimed restaurant."""
     user = request.user
-    print(user)
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
-    print(claimed_restaurant)
 
     if not claimed_restaurant:
-        print("ayam")
         return JsonResponse({
             'status': 'failed',
             'message': 'You do not own any restaurant.'
@@ -336,7 +332,6 @@ def pantau_booking_owner_flutter(request):
     bookings = Booking.objects.filter(menu_items=claimed_restaurant)
     booking_list = []
     for booking in bookings:
-        print("baba")
         booking_data = {
             "id": booking.id,
             "user": booking.user.username,
@@ -346,8 +341,6 @@ def pantau_booking_owner_flutter(request):
             "status": booking.status,
         }
         booking_list.append(booking_data)
-
-    print(booking_list)
     
     return JsonResponse({
         'status': 'success',

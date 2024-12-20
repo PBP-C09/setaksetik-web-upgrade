@@ -211,16 +211,9 @@ def update_reply(request):
 @csrf_exempt
 @require_POST
 def create_review_flutter(request):
-    # return JsonResponse("Method: " +request.method, "Headers" + request.headers + "body" + request.body)
-    print(f"Method: {request.method}")  # Log metode request
-    print(f"Headers: {request.headers}")
-    print(f"Body: {request.body}")
-    print("request method:  " + request.method)
-
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            print(f"Data received: {data}")
             new_review = ReviewEntry.objects.create(
                 user = request.user,
                 menu=data["menu"],
@@ -232,7 +225,6 @@ def create_review_flutter(request):
             new_review.save()
             return JsonResponse({"status": "success"}, status=200)
         except Exception as e:
-            print(e)
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
     return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
@@ -253,7 +245,6 @@ def submit_reply_flutter(request):
 
         # Validasi data
         if not review_id or not reply_text:
-            print("HEHEHEHEH")
             return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
 
         # Cari review berdasarkan ID
@@ -276,6 +267,4 @@ def submit_reply_flutter(request):
         return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
 
     except Exception as e:
-        print("HELLOO")
-        print(str(e))
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
