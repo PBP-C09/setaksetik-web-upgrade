@@ -12,4 +12,6 @@ urlpatterns = [
     path('create-flutter/', views.create_message_flutter, name='create_message_flutter'),
     path('flutter/edit/<int:id>/', views.edit_message_flutter, name='edit_message_flutter'),
     path('flutter/delete/<int:id>/', views.delete_message_flutter, name='delete_message_flutter'),
+    path('flutter/get-receivers/', views.get_receivers, name='get_receivers'),
+    path('flutter/get-messages-json/', views.get_messages_json, name='get_messages_json')
 ]
