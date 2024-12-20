@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
+from explore.models import Menu
 from main.models import UserProfile
 from main.forms import UserProfileForm
 
@@ -92,14 +93,15 @@ def login_mobile(request):
         if user.is_active:
             login(request, user)
             user_profile = UserProfile.objects.get(user=user)
-            # Status login sukses.
+            claim = Menu.objects.filter(claimed_by=user).count()
+
             return JsonResponse({
                 "username": user.username,
-                "full_name": user_profile.full_name, # gada
-                "role": user_profile.role, # gada
+                "full_name": user_profile.full_name,
+                "role": user_profile.role,
+                "claim" : claim,
                 "status": True,
                 "message": "Logged in!"
-                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
             }, status=200)
         else:
             return JsonResponse({
