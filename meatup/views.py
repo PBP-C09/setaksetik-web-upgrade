@@ -182,13 +182,10 @@ def edit_message_flutter(request, id):
 @login_required(login_url='/login')
 def get_receivers(request):
     steak_lovers = UserProfile.objects.filter(role="steak lover")
-    receivers = [
-        {
-            'username': profile.user.username,
-            'full_name': profile.full_name
-        }
-        for profile in steak_lovers
-    ]
+    receivers = [{
+        'username': profile.user.username,
+        'full_name': profile.full_name
+    } for profile in steak_lovers]
     return JsonResponse(receivers, safe=False)
 
 @csrf_exempt
