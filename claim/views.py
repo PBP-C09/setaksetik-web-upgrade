@@ -178,3 +178,31 @@ def delete_ownership_flutter(request, restaurant_id):
         return JsonResponse({'status': 'failed', 'message': 'Restaurant not found.'}, status=404)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+@csrf_exempt
+@login_required
+def manage_ownership_flutter(request):
+    """API untuk mendapatkan semua restoran yang telah di-claim."""
+    claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)
+    claimed_list = [
+        {
+            "id": menu.id,
+            "restaurant_name": menu.restaurant_name,
+            "claimed_by": menu.claimed_by.username,
+        }
+        for menu in claimed_restaurants
+    ]
+    return JsonResponse({"status": "success", "claimed_restaurants": claimed_list})
+
+@csrf_exempt
+@login_required
+def revoke_ownership_flutter(request):
+    """API untuk menghapus ownership restoran."""
+    if request.method == 'POST':
+        menu_id = request.POST.get('menu_id')
+        menu = get_object_or_404(Menu, id=menu_id)
+        menu.claimed_by = None  # Menghapus ownership
+        menu.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
+
