@@ -45,7 +45,6 @@ def create_message_entry(request):
 @csrf_exempt
 @login_required(login_url='/login')
 def delete_message(request, id):
-    user_profile = UserProfile.objects.get(user=request.user)
     message = get_object_or_404(Message, id=id)
     message.delete()
     return redirect('meatup:meatup_home')
@@ -151,14 +150,9 @@ def create_message_flutter(request):
 @csrf_exempt
 @login_required(login_url='/login')
 def delete_message_flutter(request, id):
-    user_profile = UserProfile.objects.get(user=request.user)
     message = get_object_or_404(Message, id=id)
-
-    if message.sender == user_profile:
-        message.delete()
-        return JsonResponse({"status": "success", "message": "Message deleted successfully."}, status=200)
-
-    return JsonResponse({"status": "error", "message": "Unauthorized action."}, status=403)
+    message.delete()
+    return JsonResponse({"status": "success", "message": "Message deleted successfully."}, status=200)
 
 @csrf_exempt
 @login_required(login_url='/login')
