@@ -111,9 +111,8 @@ def create_message_flutter(request):
             sender_user_profile = UserProfile.objects.get(user=request.user)
             
             try:
-                # Mengambil ID receiver yang dikirim dari Flutter
-                receiver_id = data.get("receiver")
-                receiver_user_profile = UserProfile.objects.get(id=receiver_id)
+                receiver_username = data.get("receiver")
+                receiver_user_profile = UserProfile.objects.get(user=User.objects.get(username=receiver_username))
             except UserProfile.DoesNotExist:
                 return JsonResponse({
                     "status": "error",
@@ -178,3 +177,49 @@ def edit_message_flutter(request, id):
         return JsonResponse({"status": "error", "message": "Unauthorized action."}, status=403)
 
     return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+
+@csrf_exempt
+@login_required(login_url='/login')
+def get_receivers(request):
+    steak_lovers = UserProfile.objects.filter(role="steak lover")
+    receivers = [
+        {
+            'username': profile.user.username,
+            'full_name': profile.full_name
+        }
+        for profile in steak_lovers
+    ]
+    return JsonResponse(receivers, safe=False)
+
+@csrf_exempt
+def get_messages_json(request):
+    user = request.user
+    sender_user_profile = UserProfile.objects.get(user=user)
+    receiver_user_profile = UserProfile.objects.get(user=user)
+
+    sent_messages = Message.objects.filter(sender=sender_user_profile).order_by('-timestamp')
+    received_messages = Message.objects.filter(receiver=receiver_user_profile).order_by('-timestamp')
+
+    sent_messages_data = [{
+        'id': message.id,
+        'sender': message.sender.full_name,
+        'receiver': message.receiver.full_name,
+        'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M'),
+        'title': message.title,
+        'content': message.content,
+    } for message in sent_messages]
+
+    received_messages_data = [{
+        'id': message.id,
+        'sender': message.sender.full_name,
+        'receiver': message.receiver.full_name,
+        'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M'),
+        'title': message.title,
+        'content': message.content,
+    } for message in received_messages]
+
+    return JsonResponse({
+        'status': 'success',
+        'sent_messages': sent_messages_data,
+        'received_messages': received_messages_data,
+    })
