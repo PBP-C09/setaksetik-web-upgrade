@@ -71,15 +71,35 @@ def edit_message(request, id):
 def meatup_home_flutter(request):
     user = request.user
     sender_user_profile = UserProfile.objects.get(user=user)
-    sent_messages = Message.objects.filter(sender=sender_user_profile).order_by('-timestamp').values()
-    receiver_user_profile = UserProfile.objects.get(user=user)
-    received_messages = Message.objects.filter(receiver=receiver_user_profile).order_by('-timestamp').values()
+    
+    sent_messages = Message.objects.filter(sender=sender_user_profile).select_related('receiver__user', 'sender__user').order_by('-timestamp')
+    received_messages = Message.objects.filter(receiver=sender_user_profile).select_related('receiver__user', 'sender__user').order_by('-timestamp')
+
+    sent_messages_data = [{
+        'id': msg.id,
+        'sender': msg.sender.user.username,
+        'receiver': msg.receiver.user.username,
+        'receiver_id': msg.receiver.id,
+        'title': msg.title,
+        'content': msg.content,
+        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    } for msg in sent_messages]
+
+    received_messages_data = [{
+        'id': msg.id,
+        'sender': msg.sender.user.username,
+        'sender_id': msg.sender.id,
+        'receiver': msg.receiver.user.username,
+        'title': msg.title,
+        'content': msg.content,
+        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    } for msg in received_messages]
 
     response_data = {
-        'sent_messages': list(sent_messages),
-        'received_messages': list(received_messages),
+        'sent_messages': sent_messages_data,
+        'received_messages': received_messages_data,
     }
-    return JsonResponse(response_data, safe=False)
+    return JsonResponse(response_data)
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -91,16 +111,16 @@ def create_message_flutter(request):
             sender_user_profile = UserProfile.objects.get(user=request.user)
             
             try:
-                receiver_username = data.get("receiver")
-                receiver_user = User.objects.get(username=receiver_username)
-                receiver_user_profile = UserProfile.objects.get(user=receiver_user)
-            except User.DoesNotExist:
+                # Mengambil ID receiver yang dikirim dari Flutter
+                receiver_id = data.get("receiver")
+                receiver_user_profile = UserProfile.objects.get(id=receiver_id)
+            except UserProfile.DoesNotExist:
                 return JsonResponse({
                     "status": "error",
                     "message": "Receiver not found"
                 }, status=404)
             
-            # Create new message
+            # Membuat pesan baru
             new_message = Message.objects.create(
                 sender=sender_user_profile,
                 receiver=receiver_user_profile,
