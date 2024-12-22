@@ -100,7 +100,14 @@ class AddMenuForm(forms.ModelForm):
    class Meta:
        model = Menu
        fields = ['menu', 'restaurant_name', 'price', 'rating', 'city', 'category', 'specialized', 'takeaway', 'delivery', 'outdoor', 'smoking_area', 'wifi', 'image']
-       
+       widgets = {
+            'takeaway': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
+            'delivery': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
+            'outdoor': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
+            'smoking_area': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
+            'wifi': forms.Select(choices=[(True, 'Yes'), (False, 'No')])
+        }
+
        def clean_menu(self):
             menu = self.cleaned_data["menu"]
             return strip_tags(menu)
