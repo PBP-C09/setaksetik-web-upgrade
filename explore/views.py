@@ -206,12 +206,12 @@ def create_flutter(request):
             # Create new menu
             new_menu = Menu.objects.create(
                 menu=data["menu"],
-                category=data["category"],
+                category=data["category"].title(),
                 restaurant_name=data["restaurant_name"],
-                city=data["city"],
+                city=data["city"].title(),
                 price=int(data["price"]),  
                 rating=float(data["rating"]),
-                specialized=data["specialized"],
+                specialized=data["specialized"].title(),
                 image=data.get("image", "default_image_url"),
                 takeaway=string_to_bool(data["takeaway"]),
                 delivery=string_to_bool(data["delivery"]),
