@@ -24,11 +24,15 @@ def available_restaurants(request):
 def owned_restaurant(request):
     user = request.user
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    restaurant_menus = Menu.objects.filter(claimed_by=user)
 
-    if not claimed_restaurant:
+    if not restaurant_menus:
         return redirect('claim:available_restaurants')
     
-    context = {'restaurant': claimed_restaurant}
+    context = {
+        'restaurant': claimed_restaurant,
+        'restaurant_menus': restaurant_menus,
+    }
     return render(request, 'owned_restaurant.html', context)
 
 @csrf_exempt
@@ -37,8 +41,7 @@ def delete_ownership(request, restaurant_id):
     menu = Menu.objects.get(id=restaurant_id)
 
     if menu.claimed_by == request.user:
-        menu.claimed_by = None  # Menghapus kepemilikan
-        menu.save()
+        Menu.objects.filter(restaurant_name=menu.restaurant_name).update(claimed_by=None)
     
     return redirect('/explore')
 
@@ -46,11 +49,11 @@ def delete_ownership(request, restaurant_id):
 def claim_restaurant(request, restaurant_id):
     user = request.user
     menu = Menu.objects.get(id=restaurant_id)
+    menus_in_restaurant = Menu.objects.filter(restaurant_name=menu.restaurant_name)
     
     # Cek apakah user adalah 'steakhouse owner' dan belum claim restoran lain
     if user.userprofile.role == "steakhouse owner" and Menu.objects.filter(claimed_by=user).count() == 0:
-        menu.claimed_by = user
-        menu.save()
+        menus_in_restaurant.update(claimed_by=user)
         return redirect('claim:owned_restaurant')  # Redirect ke halaman restoran yang dimiliki
     else:
         return render(request, 'claim/error.html', {'message': 'You cannot claim more than one restaurant or you are not a steakhouse owner.'})

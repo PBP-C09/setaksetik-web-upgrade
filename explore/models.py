@@ -70,5 +70,5 @@ class Menu(models.Model):
     outdoor = models.BooleanField(null = True, blank = True)
     smoking_area = models.BooleanField(null = True, blank = True)
     wifi = models.BooleanField(null = True, blank = True)
-    claimed_by = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL) # Nambah atribut models.py claimed_by (bismillah)
+    claimed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='claimed_menus')
     image = models.URLField(null = True, blank = True)
