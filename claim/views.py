@@ -31,6 +31,7 @@ def owned_restaurant(request):
     context = {'restaurant': claimed_restaurant}
     return render(request, 'owned_restaurant.html', context)
 
+@csrf_exempt
 @login_required
 def delete_ownership(request, restaurant_id):
     menu = Menu.objects.get(id=restaurant_id)
