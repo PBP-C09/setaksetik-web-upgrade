@@ -16,9 +16,9 @@
 
     <div class="flex justify-center mt-0 mb-0">
         <a href="{% url 'meatup:create_message_entry' %}">
-          <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-8">
-            Kirim Pesan Meat Up
-          </button>
+            <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-8">
+                Kirim Pesan Meat Up
+            </button>
         </a>
     </div>
 
@@ -31,40 +31,6 @@
             Terjadi kesalahan saat memperbarui pesan.
         </div>
     {% endif %}
-
-    <!-- Edit Message Form (Hidden by default) -->
-    <div id="editForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-[#F5F5DC] p-8 rounded-lg w-full max-w-lg">
-            <h2 class="text-2xl font-bold text-[#3E2723] mb-4">Edit Message</h2>
-            <form method="POST" id="messageEditForm">
-                {% csrf_token %}
-                <input type="hidden" name="message_id" id="editMessageId">
-                <div class="mb-4">
-                    <label class="block text-[#3E2723] font-semibold mb-2">Title:</label>
-                    <input 
-                        type="text" 
-                        name="title" 
-                        id="editTitle" 
-                        class="w-full p-2 border rounded-lg"
-                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
-                    >
-                </div>
-                <div class="mb-4">
-                    <label class="block text-[#3E2723] font-semibold mb-2">Content:</label>
-                    <textarea 
-                        name="content" 
-                        id="editContent" 
-                        class="w-full p-2 border rounded-lg h-32"
-                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
-                    ></textarea>
-                </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="closeEditForm()" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Cancel</button>
-                    <button type="submit" class="bg-[#F7B32B] text-white px-4 py-2 rounded-lg">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Received Messages -->
     <div class="mb-8">
@@ -82,13 +48,16 @@
                             <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
                             <p class="font-raleway">{{ message.content }}</p>
                         </div>
-                        <form method="POST" action="{% url 'meatup:delete_message' message.id %}" class="mt-4">
-                            {% csrf_token %}
-                            <button type="submit" 
-                                class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mx-auto block">
+                        <div class="flex justify-between mt-4">
+                            <button onclick="acceptMessage({{ message.id }})"
+                                class="bg-[#4CAF50] hover:bg-[#45a049] text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                                Accept Meat Up
+                            </button>
+                            <button onclick="rejectMessage({{ message.id }})"
+                                class="bg-[#842323] hover:bg-[#A13A3A] text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                                 Reject Meat Up
                             </button>
-                        </form>
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}
@@ -133,6 +102,96 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Accepted Messages -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-[#FFD54F] mb-4">Accepted Meat Up Request</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if accepted_messages %}
+                {% for message in accepted_messages %}
+                    <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
+                        <div class="flex flex-col mb-4">
+                            {% if message.sender == request.user.userprofile %}
+                                <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">To: {{ message.receiver.full_name }}</p>
+                            {% else %}
+                                <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">From: {{ message.sender.full_name }}</p>
+                            {% endif %}
+                            <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
+                        </div>
+                        <hr class="border-[#3E2723] mb-4">
+                        <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
+                            <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
+                            <p class="font-raleway">{{ message.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-lg col-span-3">Belum ada Meat Up yang diterima.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rejected Messages -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-[#FFD54F] mb-4">Rejected Meat Up Request</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if rejected_messages %}
+                {% for message in rejected_messages %}
+                    <div class="bg-[#F5F5DC] text-[#3E2723] rounded-lg shadow-lg p-4 flex flex-col justify-between">
+                        <div class="flex flex-col mb-4">
+                            {% if message.sender == request.user.userprofile %}
+                                <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">To: {{ message.receiver.full_name }}</p>
+                            {% else %}
+                                <p style="font-family: 'Playfair Display', serif; font-weight: 600;" class="text-xl italic mb-2">From: {{ message.sender.full_name }}</p>
+                            {% endif %}
+                            <p style="font-weight: 600;" class="text-sm text-[#3E2723]">{{ message.timestamp }}</p>
+                        </div>
+                        <hr class="border-[#3E2723] mb-4">
+                        <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-lg">
+                            <h3 class="font-raleway font-semibold text-lg mb-4">{{ message.title }}</h3>
+                            <p class="font-raleway">{{ message.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-lg col-span-3">Belum ada Meat Up yang ditolak.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Edit Message Form (Hidden by default) -->
+    <div id="editForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-[#F5F5DC] p-8 rounded-lg w-full max-w-lg">
+            <h2 class="text-2xl font-bold text-[#3E2723] mb-4">Edit Message</h2>
+            <form method="POST" id="messageEditForm">
+                {% csrf_token %}
+                <input type="hidden" name="message_id" id="editMessageId">
+                <div class="mb-4">
+                    <label class="block text-[#3E2723] font-semibold mb-2">Title:</label>
+                    <input 
+                        type="text" 
+                        name="title" 
+                        id="editTitle" 
+                        class="w-full p-2 border rounded-lg"
+                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
+                    >
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#3E2723] font-semibold mb-2">Content:</label>
+                    <textarea 
+                        name="content" 
+                        id="editContent" 
+                        class="w-full p-2 border rounded-lg h-32"
+                        style="background-color: #F5F5DC; color: #3E2723; border: 2px solid #3E2723; border-radius: 5px; padding: 8px; font-family: 'Inter', sans-serif;"
+                    ></textarea>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="closeEditForm()" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Cancel</button>
+                    <button type="submit" class="bg-[#F7B32B] text-white px-4 py-2 rounded-lg">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -147,11 +206,58 @@ function closeEditForm() {
     document.getElementById('editForm').classList.add('hidden');
 }
 
+function acceptMessage(messageId) {
+    fetch(`/meatup/accept/${messageId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function rejectMessage(messageId) {
+    fetch(`/meatup/reject/${messageId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 // Close modal when clicking outside
 document.getElementById('editForm').addEventListener('click', function(e) {
     if (e.target === this) {
         closeEditForm();
     }
 });
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
 {% endblock content %}
