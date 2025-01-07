@@ -28,8 +28,8 @@ PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 # DEBUG = True
 
-ALLOWED_HOSTS = ["lozzst", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/", "https://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-faizi-setaksetik.pbp.cs.ui.ac.id", "haliza-nafiah-setaksetik.pbp.cs.ui.ac.id"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://haliza-nafiah-setaksetik.pbp.cs.ui.ac.id/", "https://haliza-nafiah-setaksetik.pbp.cs.ui.ac.id/"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
