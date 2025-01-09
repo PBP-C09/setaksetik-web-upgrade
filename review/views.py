@@ -77,9 +77,19 @@ def show_json_by_id(request, id):
 def add_review_entry_ajax(request):
     menu = strip_tags(request.POST.get("menu"))
     place = strip_tags(request.POST.get("place"))
-    rating = strip_tags(request.POST.get("rating"))
+    rating = float(strip_tags(request.POST.get("rating")))
     description = request.POST.get("description")
     user = request.user
+
+    # Manage perubahan rating menu
+    themenu = Menu.objects.get(menu=menu)
+    if (themenu.total_rating == 0):
+        themenu.total_rating += themenu.rating
+
+    themenu.total_rating += rating
+    themenu.review_count += 1
+    themenu.rating = themenu.total_rating / (themenu.review_count + 1)
+    themenu.save()
 
     new_review = ReviewEntry(
         menu=menu, place=place,
@@ -128,8 +138,16 @@ def edit_review(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def delete_review(request, id):
-    # Get the review based on id
+    # Get review berdasarkan id
     review = ReviewEntry.objects.get(pk=id)
+
+    # Manage perubahan rating menu
+    themenu = Menu.objects.get(menu=review.menu)
+    themenu.total_rating -= review.rating
+    themenu.review_count -= 1
+    themenu.rating = themenu.total_rating / (themenu.review_count + 1)
+    themenu.save()
+
     review.delete()
 
     return HttpResponseRedirect(reverse('review:show_review'))
@@ -218,10 +236,20 @@ def create_review_flutter(request):
                 user = request.user,
                 menu=data["menu"],
                 place=data["place"],
-                rating=int(data["rating"]),
+                rating=float(data["rating"]),
                 description=data["description"],
                 owner_reply=data["owner_reply"],
             )
+
+            # Manage perubahan rating menu
+            themenu = Menu.objects.get(menu=data["menu"])
+            if (themenu.total_rating == 0):
+                themenu.total_rating += themenu.rating
+
+            themenu.total_rating += float(data["rating"])
+            themenu.review_count += 1
+            themenu.rating = themenu.total_rating / (themenu.review_count + 1)
+            themenu.save()
             new_review.save()
             return JsonResponse({"status": "success"}, status=200)
         except Exception as e:
@@ -273,13 +301,10 @@ def submit_reply_flutter(request):
 @require_POST
 @login_required(login_url='/login')
 def delete_review_flutter(request):
-    print("masuk sini ga")
     try:
         # Parse request body
         data = json.loads(request.body)
         review_id = data.get('review_id')
-        print(data)
-        print(review_id)
 
         # Validasi input
         if not review_id:
@@ -287,6 +312,13 @@ def delete_review_flutter(request):
 
         # Cari review berdasarkan ID
         review = ReviewEntry.objects.get(pk=review_id)
+
+        # Manage rating pada menu 
+        themenu = Menu.objects.get(menu=review.menu)
+        themenu.total_rating -= review.rating
+        themenu.review_count -= 1
+        themenu.rating = themenu.total_rating / (themenu.review_count + 1)
+        themenu.save()
 
         # Optional: Validasi role atau kepemilikan
         if request.user.userprofile.role != "admin":
