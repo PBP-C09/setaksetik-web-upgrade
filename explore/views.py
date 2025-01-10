@@ -18,7 +18,7 @@ from django.http import JsonResponse
 @login_required(login_url='/login')
 def show_menu(request):
     user_profile = UserProfile.objects.get(user=request.user)
-    menus = Menu.objects.filter(claimed_by=None)
+    menus = Menu.objects.filter()
     form = MenuFilterForm(request.GET)
    
     context = {

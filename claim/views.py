@@ -1,10 +1,12 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from explore.models import Menu
 from django.contrib.auth.models import User
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 @login_required
 def available_restaurants(request):
@@ -111,6 +113,34 @@ def get_claimable_json(request):
     
     # Return data dalam format JSON
     return JsonResponse(menu_list, safe=False)
+
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def add_menu(request):
+    user = request.user
+    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    if request.method == "POST":
+        menu = strip_tags(request.POST.get('menu_name'))
+        category = request.POST.get('category').title()
+        restaurant_name = claimed_restaurant.restaurant_name 
+        city = request.POST.get('city').title()
+        price = request.POST.get('price')
+        rating = request.POST.get('rating')
+        specialized = request.POST.get('specialized').title()
+        takeaway = request.POST.get('takeaway') == 'on'
+        delivery = request.POST.get('delivery') == 'on'
+        outdoor = request.POST.get('outdoor') == 'on'
+        smoking_area = request.POST.get('smoking_area') == 'on'
+        wifi = request.POST.get('wifi') == 'on'
+        image = request.POST.get('image_url')
+
+        new_menu = Menu(menu=menu, category=category, restaurant_name=restaurant_name, city=city, 
+                        price=price, rating=rating, specialized=specialized, takeaway=takeaway, delivery=delivery, 
+                        outdoor=outdoor, smoking_area=smoking_area, wifi=wifi, image=image)
+        new_menu.save()
+        return HttpResponse(b"CREATED", status=201)
+    return HttpResponseNotFound()
 
 @login_required(login_url='/login')
 @csrf_exempt
