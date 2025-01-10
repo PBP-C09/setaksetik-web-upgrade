@@ -49,6 +49,20 @@
         Restaurant Menu
     </h2>
 
+    <style>
+        /* Warna placeholder untuk elemen select */
+        select {
+            color: #3c200c; /* Warna font utama untuk placeholder */
+        }
+        select option {
+            color: #a5a4a0; /* Warna font untuk pilihan dalam dropdown */
+        }
+    
+        input[type="text"], input[type="number"], input[type="range"] {
+            color: #3c200c; /* Warna font untuk input number dan range */
+        }
+    </style>
+
     <!-- Add Menu Button -->
     <div class="flex justify-center mb-8">
         <button onclick="showAddMenuModal()" class="bg-[#C62828] flex items-center gap-2 text-white font-raleway font-medium pr-4 pl-3 py-2 rounded hover:bg-[#FF5252] transition duration-300">
@@ -58,6 +72,216 @@
             <p class="-mb-0.5">Add New Menu Item</p>
         </button>
     </div>
+
+<!-- Add Menu Modal -->
+<div id="addMenuModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-[#F5F5DC] rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl text-[#3E2723] font-bold" style="font-family: 'Playfair Display';">Add New Menu Item</h2>
+        </div>
+
+        <form id="addMenuForm" method="POST" action="{% url 'claim:add_menu' %}" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Menu Name -->
+            <div class="mb-4">
+                <label for="menu_name" class="block text-[#3E2723] text-sm font-bold mb-2">Menu Name*</label>
+                <input type="text" 
+                       id="menu_name" 
+                       name="menu_name" 
+                       placeholder="Menu name (max lenghth: 50)"
+                       required 
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+            </div>
+            
+            <!-- Restaurant Name (Hidden & Disabled) -->
+            <div class="mb-4">
+                <label class="block text-[#3E2723] text-sm font-bold mb-2">Restaurant</label>
+                <input type="text" 
+                       value="{{ restaurant.restaurant_name }}" 
+                       class="w-full px-3 py-2 border rounded bg-gray-100" 
+                       disabled>
+            </div>
+
+            <!-- City -->
+            <div class="mb-4">
+                <label for="city" class="block text-[#3E2723] text-sm font-bold mb-2">City*</label>
+                <select id="city" 
+                        name="city" 
+                        required 
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    <option value="">Select City</option>
+                    <option value="Central Jakarta">Central Jakarta</option>
+                    <option value="East Jakarta">East Jakarta</option>
+                    <option value="North Jakarta">North Jakarta</option>
+                    <option value="South Jakarta">South Jakarta</option>
+                    <option value="West Jakarta">West Jakarta</option>
+                </select>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-4">
+                <label for="category" class="block text-[#3E2723] text-sm font-bold mb-2">Category*</label>
+                <select id="category" 
+                        name="category" 
+                        required 
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    <option value="">Select Category</option>
+                    <option value="Beef">Beef</option>
+                    <option value="Chicken">Chicken</option>
+                    <option value="Fish">Fish</option>
+                    <option value="Lamb">Lamb</option>
+                    <option value="Pork">Pork</option>
+                    <option value="Rib Eye">Rib Eye</option>
+                    <option value="Sirloin">Sirloin</option>
+                    <option value="T-bone">T-bone</option>
+                    <option value="Tenderloin">Tenderloin</option>
+                    <option value="Wagyu">Wagyu</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Specialized -->
+            <div class="mb-4">
+                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized*</label>
+                <select id="specialized" 
+                        name="specialized" 
+                        required 
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    <option value="">Select Category</option>
+                    <option value="Argentinian">Argentinian</option>
+                    <option value="Brazilian">Brazilian</option>
+                    <option value="Breakfast Cafe">Breakfast Cafe</option>
+                    <option value="British">British</option>
+                    <option value="French">French</option>
+                    <option value="Fushioned">Fushioned</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Local">Local</option>
+                    <option value="Local Westerned">Local Westerned</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Western">Western</option>
+                    <option value="Singaporean">Singaporean</option>
+                </select>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-4">
+                <label for="price" class="block text-[#3E2723] text-sm font-bold mb-2">Price (Rp)*</label>
+                <input type="number" 
+                       id="price" 
+                       name="price"
+                       placeholder="Add price (1000 - 1800000)" 
+                       required 
+                       min="1000" 
+                       max="1800000"
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+            </div>
+
+            <!-- Rating -->
+            <div class="mb-4">
+                <label for="rating" class="block text-[#3E2723] text-sm font-bold mb-2">Rating*</label>
+                <input type="number" 
+                       id="rating" 
+                       name="rating" 
+                       placeholder="Add rating (0 - 5)"
+                       required 
+                       min="0" 
+                       max="5" 
+                       step="0.1" 
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+            </div>
+
+            <!-- Image URL -->
+            <div class="mb-4">
+                <label for="image_url" class="block text-[#3E2723] text-sm font-bold mb-2">Image URL*</label>
+                <input type="url" 
+                    id="image_url" 
+                    name="image_url" 
+                    placeholder="Add image URL"
+                    required 
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+            </div>
+
+            <!-- Checkboxes Group -->
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                    <input type="checkbox" id="takeaway" name="takeaway" class="mr-3">
+                    <label for="takeaway" class="text-[#3E2723] font-bold">Takeaway</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="delivery" name="delivery" class="mr-3">
+                    <label for="delivery" class="text-[#3E2723] font-bold">Delivery</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="outdoor" name="outdoor" class="mr-3">
+                    <label for="outdoor" class="text-[#3E2723] font-bold">Outdoor</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="smoking_area" name="smoking_area" class="mr-3">
+                    <label for="smoking_area" class="text-[#3E2723] font-bold">Smoking Area</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="wifi" name="wifi" class="mr-3">
+                    <label for="wifi" class="text-[#3E2723] font-bold">WiFi</label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="bg-[#5B3E39] px-4 py-4 mt-6 flex flex-row-reverse rounded-b-lg">
+                <button type="submit" 
+                        class="bg-[#FFD54F]  px-4 py-2 text-sm font-semibold text-[#3E2723] rounded-md shadow-sm">
+                    Add Menu Item
+                </button>
+                <button onclick="closeAddMenuModal()" class="mr-4 bg-white px-4 py-2 text-sm font-semibold text-[#5B3E39] rounded-md shadow-sm border border-[#5B3E39]">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript untuk Modal -->
+<script>
+function showAddMenuModal() {
+    document.getElementById('addMenuModal').classList.remove('hidden');
+    document.getElementById('addMenuModal').classList.add('flex');
+}
+
+function closeAddMenuModal() {
+    document.getElementById('addMenuModal').classList.remove('flex');
+    document.getElementById('addMenuModal').classList.add('hidden');
+}
+
+// Handle form submission
+document.getElementById('addMenuForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        const response = await fetch("{% url 'claim:add_menu' %}", {
+            method: 'POST',
+            body: new FormData(this)
+        });
+        
+        if (response.ok) {
+            alert('Menu added successfully!');
+            window.location.reload();
+        } else {
+            const data = await response.json();
+            alert(data.message || 'Failed to add menu');
+        }
+    } catch (error) {
+        alert('Error adding menu: ' + error.message);
+    }
+});
+
+// Close modal when clicking outside
+document.getElementById('addMenuModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeAddMenuModal();
+    }
+});
+</script>
 
     <!-- Menu Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
