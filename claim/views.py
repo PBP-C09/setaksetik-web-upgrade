@@ -137,7 +137,7 @@ def add_menu(request):
 
         new_menu = Menu(menu=menu, category=category, restaurant_name=restaurant_name, city=city, 
                         price=price, rating=rating, specialized=specialized, takeaway=takeaway, delivery=delivery, 
-                        outdoor=outdoor, smoking_area=smoking_area, wifi=wifi, image=image)
+                        outdoor=outdoor, smoking_area=smoking_area, wifi=wifi, image=image, claimed_by =user)
         new_menu.save()
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()

@@ -18,7 +18,10 @@ from django.http import JsonResponse
 @login_required(login_url='/login')
 def show_menu(request):
     user_profile = UserProfile.objects.get(user=request.user)
-    menus = Menu.objects.filter()
+    if user_profile.role.casefold() == "admin" or user_profile.role.casefold() == "steaklover":
+        menus = Menu.objects.all()
+    else:
+        menus = Menu.objects.filter(claimed_by=None)
     form = MenuFilterForm(request.GET)
    
     context = {
