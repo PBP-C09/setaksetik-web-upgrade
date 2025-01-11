@@ -270,7 +270,6 @@ document.getElementById('addMenuForm').addEventListener('submit', async function
         });
         
         if (response.ok) {
-            alert('Menu added successfully!');
             window.location.reload();
         } else {
             const data = await response.json();
