@@ -107,6 +107,8 @@ def get_claimable_json(request):
                 "smoking_area": menu.smoking_area,
                 "wifi": menu.wifi,
                 "claimed_by": None,  # Karena hanya restoran yang belum di-claim
+                "review_count" : menu.review_count,
+                "total_rating" : menu.total_rating
             }
         }
         menu_list.append(menu_entry)
@@ -124,10 +126,10 @@ def add_menu(request):
         menu = strip_tags(request.POST.get('menu_name'))
         category = request.POST.get('category').title()
         restaurant_name = claimed_restaurant.restaurant_name 
-        city = request.POST.get('city').title()
+        city = claimed_restaurant.city
         price = request.POST.get('price')
         rating = request.POST.get('rating')
-        specialized = request.POST.get('specialized').title()
+        specialized = claimed_restaurant.specialized
         takeaway = request.POST.get('takeaway') == 'on'
         delivery = request.POST.get('delivery') == 'on'
         outdoor = request.POST.get('outdoor') == 'on'
@@ -137,7 +139,7 @@ def add_menu(request):
 
         new_menu = Menu(menu=menu, category=category, restaurant_name=restaurant_name, city=city, 
                         price=price, rating=rating, specialized=specialized, takeaway=takeaway, delivery=delivery, 
-                        outdoor=outdoor, smoking_area=smoking_area, wifi=wifi, image=image)
+                        outdoor=outdoor, smoking_area=smoking_area, wifi=wifi, image=image, claimed_by=user)
         new_menu.save()
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
@@ -187,6 +189,8 @@ def get_owned_restaurant_flutter(request):
             "smoking_area": claimed_restaurant.smoking_area,
             "wifi": claimed_restaurant.wifi,
             "claimed_by": claimed_restaurant.claimed_by.id if claimed_restaurant.claimed_by else None,
+            "review_count" : claimed_restaurant.review_count,
+            "total_rating" : claimed_restaurant.total_rating
         }
     }
 

@@ -6,20 +6,11 @@ from review.forms import ReviewEntryForm
 from review.models import ReviewEntry
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
-from django.contrib import messages
 from explore.models import Menu
-from explore.forms import MenuFilterForm
-from main.models import UserProfile
 import json
 from django.http import JsonResponse
-from django.contrib.auth.models import User
-
-
-# batasan
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -29,7 +20,6 @@ def show_review(request):
         'nama' : 'steak',
         'lokasi' : 'jaksel',
         'rating' : '5',
-        # 'is_admin': request.is_admin,
     }
 
     if request.user.userprofile.role == "admin":
@@ -118,13 +108,6 @@ def create_review_entry(request):
 def edit_review(request, id):
     # Get the review entry based on id
     review = ReviewEntry.objects.get(pk=id)
-    # user_profile = UserProfile.objects.get(user=request.user)
-
-    # Allow only admins to edit
-    # if user_profile.role != "admin":
-    #     messages.error(request, "You do not have permission to edit this review.")
-    #     return redirect('review:show_review')
-
     # Set review entry as an instance of the form
     form = ReviewEntryForm(request.POST or None, instance=review)
 

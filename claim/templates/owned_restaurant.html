@@ -76,8 +76,11 @@
 <!-- Add Menu Modal -->
 <div id="addMenuModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-[#F5F5DC] rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl text-[#3E2723] font-bold" style="font-family: 'Playfair Display';">Add New Menu Item</h2>
+        <div class="flex justify-center items-center mb-3">
+            <h2 class="text-2xl text-[#6D4C41] font-bold" style="font-family: 'Playfair Display';">Add new menu at</h2>
+        </div>
+        <div class="flex justify-center items-center mb-6">
+            <h2 class="text-3xl text-[#3E2723] font-bold" style="font-family: 'Playfair Display'; font-style: italic;">{{ restaurant.restaurant_name }}</h2>
         </div>
 
         <form id="addMenuForm" method="POST" action="{% url 'claim:add_menu' %}" class="space-y-4">
@@ -105,17 +108,18 @@
 
             <!-- City -->
             <div class="mb-4">
-                <label for="city" class="block text-[#3E2723] text-sm font-bold mb-2">City*</label>
+                <label for="city" class="block text-[#3E2723] text-sm font-bold mb-2">City</label>
                 <select id="city" 
                         name="city" 
                         required 
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]" 
+                        disabled>
                     <option value="">Select City</option>
-                    <option value="Central Jakarta">Central Jakarta</option>
-                    <option value="East Jakarta">East Jakarta</option>
-                    <option value="North Jakarta">North Jakarta</option>
-                    <option value="South Jakarta">South Jakarta</option>
-                    <option value="West Jakarta">West Jakarta</option>
+                    <option value="Central Jakarta" {% if restaurant.city == "Central Jakarta" %}selected{% endif %}>Central Jakarta</option>
+                    <option value="East Jakarta" {% if restaurant.city == "East Jakarta" %}selected{% endif %}>East Jakarta</option>
+                    <option value="North Jakarta" {% if restaurant.city == "North Jakarta" %}selected{% endif %}>North Jakarta</option>
+                    <option value="South Jakarta" {% if restaurant.city == "South Jakarta" %}selected{% endif %}>South Jakarta</option>
+                    <option value="West Jakarta" {% if restaurant.city == "West Jakarta" %}selected{% endif %}>West Jakarta</option>
                 </select>
             </div>
 
@@ -143,27 +147,29 @@
 
             <!-- Specialized -->
             <div class="mb-4">
-                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized*</label>
+                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized</label>
                 <select id="specialized" 
                         name="specialized" 
                         required 
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]" 
+                        disabled>
                     <option value="">Select Category</option>
-                    <option value="Argentinian">Argentinian</option>
-                    <option value="Brazilian">Brazilian</option>
-                    <option value="Breakfast Cafe">Breakfast Cafe</option>
-                    <option value="British">British</option>
-                    <option value="French">French</option>
-                    <option value="Fushioned">Fushioned</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Local">Local</option>
-                    <option value="Local Westerned">Local Westerned</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Western">Western</option>
-                    <option value="Singaporean">Singaporean</option>
+                    <option value="Argentinian" {% if restaurant.specialized == "Argentinian" %}selected{% endif %}>Argentinian</option>
+                    <option value="Brazilian" {% if restaurant.specialized == "Brazilian" %}selected{% endif %}>Brazilian</option>
+                    <option value="Breakfast Cafe" {% if restaurant.specialized == "Breakfast Cafe" %}selected{% endif %}>Breakfast Cafe</option>
+                    <option value="British" {% if restaurant.specialized == "British" %}selected{% endif %}>British</option>
+                    <option value="French" {% if restaurant.specialized == "French" %}selected{% endif %}>French</option>
+                    <option value="Fushioned" {% if restaurant.specialized == "Fushioned" %}selected{% endif %}>Fushioned</option>
+                    <option value="Italian" {% if restaurant.specialized == "Italian" %}selected{% endif %}>Italian</option>
+                    <option value="Japanese" {% if restaurant.specialized == "Japanese" %}selected{% endif %}>Japanese</option>
+                    <option value="Local" {% if restaurant.specialized == "Local" %}selected{% endif %}>Local</option>
+                    <option value="Local Westerned" {% if restaurant.specialized == "Local Westerned" %}selected{% endif %}>Local Westerned</option>
+                    <option value="Mexican" {% if restaurant.specialized == "Mexican" %}selected{% endif %}>Mexican</option>
+                    <option value="Western" {% if restaurant.specialized == "Western" %}selected{% endif %}>Western</option>
+                    <option value="Singaporean" {% if restaurant.specialized == "Singaporean" %}selected{% endif %}>Singaporean</option>
                 </select>
             </div>
+
 
             <!-- Price -->
             <div class="mb-4">
@@ -206,23 +212,23 @@
             <!-- Checkboxes Group -->
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div>
-                    <input type="checkbox" id="takeaway" name="takeaway" class="mr-3">
+                    <input type="checkbox" id="takeaway" name="takeaway" class="mr-3" {% if restaurant.takeaway %}checked{% endif %} disabled>
                     <label for="takeaway" class="text-[#3E2723] font-bold">Takeaway</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="delivery" name="delivery" class="mr-3">
+                    <input type="checkbox" id="delivery" name="delivery" class="mr-3" {% if restaurant.delivery %}checked{% endif %} disabled>
                     <label for="delivery" class="text-[#3E2723] font-bold">Delivery</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="outdoor" name="outdoor" class="mr-3">
+                    <input type="checkbox" id="outdoor" name="outdoor" class="mr-3" {% if restaurant.outdoor %}checked{% endif %} disabled>
                     <label for="outdoor" class="text-[#3E2723] font-bold">Outdoor</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="smoking_area" name="smoking_area" class="mr-3">
+                    <input type="checkbox" id="smoking_area" name="smoking_area" class="mr-3" {% if restaurant.smoking_area %}checked{% endif %} disabled>
                     <label for="smoking_area" class="text-[#3E2723] font-bold">Smoking Area</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="wifi" name="wifi" class="mr-3">
+                    <input type="checkbox" id="wifi" name="wifi" class="mr-3" {% if restaurant.wifi %}checked{% endif %} disabled>
                     <label for="wifi" class="text-[#3E2723] font-bold">WiFi</label>
                 </div>
             </div>
