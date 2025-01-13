@@ -8,15 +8,21 @@ from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.db.models import Q
 import json
 
-# Create your views here.
 # Steak Lover (Customer)
 @csrf_exempt
 @login_required(login_url='/login')
 def create_booking(request):
     form_filter = FilterForm(request.GET or None)
     menus = Menu.objects.all()
+
+    query = request.GET.get('menu', '')
+    if query:
+        menus = menus.filter(
+            Q(menu__icontains=query) | Q(restaurant_name__icontains=query))
+
 
     # Filter berdasarkan checkbox
     if form_filter.is_valid():
