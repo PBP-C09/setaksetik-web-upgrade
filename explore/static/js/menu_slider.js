@@ -54,8 +54,8 @@ function updateInput(inputId, value) {
     const maxPercent = ((maxValue - 1000) / (1800000 - 1000)) * 100;
     
     const track = document.querySelector('.price-slider-track');
-    track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #C62828 ${minPercent}%, #C62828 ${maxPercent}%, #ddd ${maxPercent}%)`;
-  }
+    track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #502911 ${minPercent}%, #502911 ${maxPercent}%, #ddd ${maxPercent}%)`;
+}
   
   // Fungsi untuk update input rating
   function updateInputRating(inputId, value) {
@@ -109,12 +109,12 @@ function updateInput(inputId, value) {
     const minValue = parseFloat(minSlider.value);
     const maxValue = parseFloat(maxSlider.value);
     
-    const minPercent = ((minValue) / 5) * 100;
-    const maxPercent = ((maxValue) / 5) * 100;
+    const minPercent = (minValue / 5) * 100;
+    const maxPercent = (maxValue / 5) * 100;
     
     const track = document.querySelector('.rating-slider-track');
-    track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #C62828 ${minPercent}%, #C62828 ${maxPercent}%, #ddd ${maxPercent}%)`;
-  }
+    track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #502911 ${minPercent}%, #502911 ${maxPercent}%, #ddd ${maxPercent}%)`;
+}
   
   // Initialize background on page load
   document.addEventListener("DOMContentLoaded", function() {
