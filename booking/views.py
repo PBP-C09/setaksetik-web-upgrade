@@ -18,12 +18,6 @@ def create_booking(request):
     form_filter = FilterForm(request.GET or None)
     menus = Menu.objects.all()
 
-    query = request.GET.get('menu', '')
-    if query:
-        menus = menus.filter(
-            Q(menu__icontains=query) | Q(restaurant_name__icontains=query))
-
-
     # Filter berdasarkan checkbox
     if form_filter.is_valid():
         if form_filter.cleaned_data['takeaway']:
