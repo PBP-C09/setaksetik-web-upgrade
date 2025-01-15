@@ -1,296 +1,114 @@
 {% extends "base.html" %}
+{% include 'navbar.html' %}
 {% load static %}
-{% include "navbar.html" %}
 
 {% block meta %}
-  <title>SetakSetik | Book a Restaurant</title>
+    <title>SetakSetik | Book a Restaurant</title>
+    <script>
+        function toggleFilter() {
+            const filterSection = document.getElementById('filterSection');
+            if (filterSection) {
+                filterSection.classList.toggle('hidden');
+            }
+        }
+    </script>
 {% endblock meta %}
 
 {% block content %}
 <div class="container mx-auto py-12 px-4 lg:px-8">
-    <div class="text-center mb-8">
-        <h1 class="text-5xl font-bold">Book a Restaurant</h1>
-        <p class="mt-3 text-lg">Choose your favorite restaurant and make your reservation now!</p>
-        <div class="mt-4">
+    <!-- Title Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-5xl font-bold text-brown-900">Book a Restaurant</h1>
+        <p class="mt-4 text-lg text-brown-700">Choose your favorite restaurant and make your reservation now!</p>
+        <div class="mt-6">
             <a href="{% url 'booking:lihat_booking' %}"
-               class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md">
+                   class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
                 Atur Booking
             </a>
+            <button onclick="toggleFilter()" 
+            class="inline-block bg-brown-500 text-white px-6 py-3 rounded-lg hover:bg-brown-600 shadow-md transition duration-300">
+                Filter Restaurant
+            </button>
         </div>
     </div>
-
-    <!-- Search + Filter Form -->
-    <div class="bg-brown-800 rounded-lg mb-6 w-full max-w-4xl mx-auto shadow-lg p-4">
-        <form id="filterForm" class="flex items-center space-x-4" method="GET">
-            <!-- Search Bar -->
-            <div class="relative w-full">
-                <input 
-                  type="text" 
-                  name="menu" 
-                  placeholder="Cari menu atau restoran"
-                  value="{{ request.GET.menu|default:'' }}"
-                  class="w-full py-2 pl-10 pr-10 text-gray-900 bg-white rounded-full shadow-md focus:ring-2 focus:ring-yellow-500 transition"
-                >
-                <button type="button"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                        onclick="resetSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                         class="h-5 w-5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <button 
-                type="button" 
-                class="ml-4 bg-white text-[#4E342E] font-medium py-2 px-4 rounded-lg flex items-center shadow-md hover:bg-[#FFC107] hover:text-white transition duration-300 ease-in-out" 
-                onclick="toggleFilter()"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
-                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-                     class="size-6 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0
-                             m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5
-                             m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0
-                             m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5
-                             m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0
-                             m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                </svg>              
-                Filter
-            </button>
-        </form>
-
-        <!-- Toggleable filter options -->
-        <div id="filter-options" class="hidden bg-white p-4 mt-4 rounded-lg shadow-md">
-            <!-- Wi-Fi, Outdoor, Delivery, Takeaway -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <label class="flex items-center space-x-3 text-gray-800">
-                    <input type="checkbox" name="wifi"
-                           class="form-checkbox h-5 w-5 text-yellow-500"
-                           {% if request.GET.wifi %} checked {% endif %}>
-                    <span>Wi-Fi</span>
-                </label>
-                <label class="flex items-center space-x-3 text-gray-800">
-                    <input type="checkbox" name="outdoor"
-                           class="form-checkbox h-5 w-5 text-yellow-500"
-                           {% if request.GET.outdoor %} checked {% endif %}>
-                    <span>Outdoor</span>
-                </label>
-                <label class="flex items-center space-x-3 text-gray-800">
-                    <input type="checkbox" name="delivery"
-                           class="form-checkbox h-5 w-5 text-yellow-500"
-                           {% if request.GET.delivery %} checked {% endif %}>
-                    <span>Delivery</span>
-                </label>
-                <label class="flex items-center space-x-3 text-gray-800">
+    
+    <!-- Filter Section -->
+    <div id="filterSection" class="bg-brown-800 p-6 rounded-lg mb-12 w-full max-w-4xl mx-auto shadow-lg hidden">
+        <h2 class="text-3xl font-bold text-white mb-6">Filter Restaurants</h2>
+        <form id="filterForm" class="space-y-6" method="GET">
+            <!-- Checkboxes -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <label class="flex items-center space-x-3 text-white">
                     <input type="checkbox" name="takeaway"
-                           class="form-checkbox h-5 w-5 text-yellow-500"
-                           {% if request.GET.takeaway %} checked {% endif %}>
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Takeaway</span>
                 </label>
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="delivery"
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                    <span>Delivery</span>
+                </label>
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="outdoor"
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                    <span>Outdoor</span>
+                </label>
+                <label class="flex items-center space-x-3 text-white">
+                    <input type="checkbox" name="wifi"
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                    <span>Wi-Fi</span>
+                </label>
             </div>
 
-            <!-- City filter -->
-            <div class="mt-4">
-                <label for="city" class="block text-lg font-medium text-gray-800">City</label>
+            <!-- City Filter -->
+            <div>
+                <label for="city" class="block text-lg font-semibold text-white">City:</label>
                 <select name="city" id="city"
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        class="form-select mt-2 block w-full bg-white text-gray-900 rounded border-gray-300">
                     <option value="">All Cities</option>
-                    <option value="Central Jakarta" {% if request.GET.city == "Central Jakarta" %}selected{% endif %}>Central Jakarta</option>
-                    <option value="East Jakarta" {% if request.GET.city == "East Jakarta" %}selected{% endif %}>East Jakarta</option>
-                    <option value="North Jakarta" {% if request.GET.city == "North Jakarta" %}selected{% endif %}>North Jakarta</option>
-                    <option value="South Jakarta" {% if request.GET.city == "South Jakarta" %}selected{% endif %}>South Jakarta</option>
-                    <option value="West Jakarta" {% if request.GET.city == "West Jakarta" %}selected{% endif %}>West Jakarta</option>
+                    <option value="central jakarta">Central Jakarta</option>
+                    <option value="east jakarta">East Jakarta</option>
+                    <option value="north jakarta">North Jakarta</option>
+                    <option value="south jakarta">South Jakarta</option>
+                    <option value="west jakarta">West Jakarta</option>
                 </select>
             </div>
 
-            <div class="mt-4 text-right">
-                <!-- Submits GET form -->
+            <!-- Apply Filter Button -->
+            <div class="text-center">
                 <button type="submit"
-                        form="filterForm"
-                        class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300 ease-in-out">
-                    Apply Filters
+                        class="mt-4 bg-yellow-500 text-white px-8 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
+                    Filter
                 </button>
             </div>
-        </div>
+        </form>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 md:px-0">
-        {% if menus %}
-            {% for menu in menus %}
-            <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
-                <!-- Menu Image -->
-                <div class="relative">
-                    <img class="w-full h-64 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
-                </div>
-
-                <!-- Info Section -->
-                <div class="px-4 py-4 flex-grow">
-                    <!-- Menu Title -->
-                    <div class="text-xl text-[#3E2723] font-bold mb-4" style="font-family: 'Playfair Display', serif;">
-                        {{ menu.menu }}
-                    </div>
-
-                    <!-- Restaurant + City -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642
-                                     4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                        </svg>
-                        {{ menu.restaurant_name }}, {{ menu.city }}
-                    </div>
-
-                    <!-- Rating -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563
-                                     0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204
-                                     3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562
-                                     0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982
-                                     20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562
-                                     0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1
-                                     .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-                        </svg>
-                        {{ menu.rating|floatformat:2 }} / 5
-                    </div>
-
-                    <!-- Wi-Fi -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M1.5 8.25a11.994 11.994 0 0 1 21 0M4.125 11.625a8.999
-                                     8.999 0 0 1 15.75 0M9 15.75a3 3 0 0 1 6 0M12 18.75h.008v.008H12v-.008Z" />
-                        </svg>
-                        Wi-Fi: {{ menu.wifi }}
-                    </div>
-
-                    <!-- Outdoor -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M12 2.25c4.97 0 9 4.03 9 9 0
-                                     4.97-4.03 9-9 9-4.97 0-9-4.03-9-9
-                                     0-4.97 4.03-9 9-9Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M14.25 9c-.69-1.7-2.185-3-4.107-3
-                                     -2.347 0-4.243 1.896-4.243 4.243 0
-                                     3.867 3.99 6.107 8.35 9.107" />
-                        </svg>
-                        Outdoor: {{ menu.outdoor }}
-                    </div>
-
-                    <!-- Delivery -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M9 13.5a3 3 0 1 1-6 0 3 3 0 0 1
-                                     6 0Zm12 0a3 3 0 1 1-6 0 3 3 0
-                                     0 1 6 0ZM3 13.5h2.25l3.6-7.2
-                                     a1.5 1.5 0 0 1 1.341-.8H17.25
-                                     a1.5 1.5 0 0 1 1.341.8l2.684
-                                     5.368a.75.75 0 0 1 .075.332V18.75
-                                     a.75.75 0 0 1-.75.75H19.5a.75.75
-                                     0 0 1-.75-.75V18m-15-4.5
-                                     a3 3 0 0 1 6 0m-6 0v4.5a.75.75
-                                     0 0 0 .75.75h1.5c.414 0
-                                     .75-.336.75-.75V16.5" />
-                        </svg>
-                        Delivery: {{ menu.delivery }}
-                    </div>
-
-                    <!-- Takeaway -->
-                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                             class="size-6 mr-3">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M3.75 9.75h16.5M4.5 7.5h15M4.5
-                                     18.75h15m-12.75-3h10.5M7.5
-                                     7.5l.75-3h7.5l.75 3" />
-                        </svg>
-                        Takeaway: {{ menu.takeaway }}
-                    </div>
-                </div>
-
-                <!-- Select Restaurant -->
-                <div class="flex justify-center mt-auto p-4">
+    <!-- Menu Grid Display -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        {% for menu in menus %}
+        <div class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white transform hover:-translate-y-2 hover:shadow-xl transition duration-300">
+            <img class="w-full h-56 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
+            <div class="p-6">
+                <h3 class="text-amber-900 text-2xl font-semibold mb-2">{{ menu.menu }}</h3>
+                <p class="text-gray-600 mb-1"><strong>Category:</strong> {{ menu.category }}</p>
+                <p class="text-gray-600 mb-1"><strong>Price:</strong> Rp.{{ menu.price }}</p>
+                <p class="text-gray-600 mb-1"><strong>Restaurant:</strong> {{ menu.restaurant_name }}</p>
+                <p class="text-gray-600 mb-1"><strong>City:</strong> {{ menu.city }}</p>
+                <p class="text-gray-600 mb-1"><strong>Specialized:</strong> {{ menu.specialized }}</p>
+                <p class="text-gray-600 mb-1"><strong>Rating:</strong> {{ menu.rating }}</p>
+                <div class="text-center mt-4">
                     <a href="{% url 'booking:booking_form' menu.id %}"
-                       class="bg-[#6D4C41] hover:bg-[#B71C1C] text-white font-medium py-2 px-6 w-full text-center rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+                       class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
                         Select Restaurant
                     </a>
                 </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <!-- If no menus are found -->
-            <div class="flex flex-col items-center justify-center min-h-screen text-center col-span-5 text-[#F5F5DC] mt-[-10rem] pb-16">
-                <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-                <h2 class="text-lg font-bold">Menu yang kamu cari tidak ada.</h2>
-            </div>
-        {% endif %}
+        </div>
+        {% endfor %}
     </div>
 </div>
-
-<script>
-    function toggleFilter() {
-        const filterOptions = document.getElementById('filter-options');
-        filterOptions.classList.toggle('hidden');
-    }
-    
-    function resetSearch() {
-        // Reset search input
-        document.querySelector('input[name="menu"]').value = '';
-        // Reset checkbox
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => checkbox.checked = false);
-        // Reset kota
-        document.querySelector('select[name="city"]').value = '';
-        // Submit form
-        document.getElementById('filterForm').submit();
-    }
-    
-    // Form submit handler
-    document.getElementById('filterForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        const params = new URLSearchParams();
-        
-        for (const [key, value] of formData.entries()) {
-            if (value) {
-                params.append(key, value);
-            }
-        }
-        
-        // Checkbox value
-        const checkboxes = ['wifi', 'outdoor', 'delivery', 'takeaway'];
-        checkboxes.forEach(name => {
-            const checkbox = document.querySelector(`input[name="${name}"]`);
-            if (checkbox && checkbox.checked) {
-                params.append(name, 'on');
-            }
-        });
-        
-        // Redirect with query parameters
-        window.location.href = `?${params.toString()}`;
-    });
-</script>
 {% endblock content %}
+
+{% block script %}
+{% endblock script %}
