@@ -4,7 +4,14 @@
 
 {% block meta %}
     <title>SetakSetik | Book a Restaurant</title>
-    <!-- Include your CSS / fonts here if needed -->
+    <script>
+        function toggleFilter() {
+            const filterSection = document.getElementById('filterSection');
+            if (filterSection) {
+                filterSection.classList.toggle('hidden');
+            }
+        }
+    </script>
 {% endblock meta %}
 
 {% block content %}
@@ -15,36 +22,40 @@
         <p class="mt-4 text-lg text-brown-700">Choose your favorite restaurant and make your reservation now!</p>
         <div class="mt-6">
             <a href="{% url 'booking:lihat_booking' %}"
-               class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
+                   class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 shadow-md transition duration-300">
                 Atur Booking
             </a>
+            <button onclick="toggleFilter()" 
+            class="inline-block bg-brown-500 text-white px-6 py-3 rounded-lg hover:bg-brown-600 shadow-md transition duration-300">
+                Filter Restaurant
+            </button>
         </div>
     </div>
     
     <!-- Filter Section -->
-    <div class="bg-brown-800 p-6 rounded-lg mb-12 w-full max-w-4xl mx-auto shadow-lg">
+    <div id="filterSection" class="bg-brown-800 p-6 rounded-lg mb-12 w-full max-w-4xl mx-auto shadow-lg hidden">
         <h2 class="text-3xl font-bold text-white mb-6">Filter Restaurants</h2>
         <form id="filterForm" class="space-y-6" method="GET">
             <!-- Checkboxes -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <label class="flex items-center space-x-3 text-white">
                     <input type="checkbox" name="takeaway"
-                           class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Takeaway</span>
                 </label>
                 <label class="flex items-center space-x-3 text-white">
                     <input type="checkbox" name="delivery"
-                           class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Delivery</span>
                 </label>
                 <label class="flex items-center space-x-3 text-white">
                     <input type="checkbox" name="outdoor"
-                           class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Outdoor</span>
                 </label>
                 <label class="flex items-center space-x-3 text-white">
                     <input type="checkbox" name="wifi"
-                           class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
+                        class="form-checkbox h-5 w-5 text-yellow-500 border-gray-300 rounded">
                     <span>Wi-Fi</span>
                 </label>
             </div>
@@ -100,5 +111,4 @@
 {% endblock content %}
 
 {% block script %}
-<!-- If you want extra JS, you can place it here -->
 {% endblock script %}
