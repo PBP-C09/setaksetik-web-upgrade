@@ -34,9 +34,15 @@ def create_booking(request):
         if city:
             menus = menus.filter(city__iexact=city)
 
+    unique_restaurants = [] # Filter berdasarkan resto
+    for restaurant in menus.values('restaurant_name').distinct():
+        first_menu = menus.filter(restaurant_name=restaurant['restaurant_name']).first()
+        if first_menu:
+            unique_restaurants.append(first_menu)
+
     context = {
         'form_filter': form_filter,
-        'menus': menus,
+        'menus_unique': unique_restaurants,
     }
     return render(request, 'booking/create_booking.html', context)
 
@@ -319,7 +325,6 @@ def edit_booking_flutter(request, booking_id):
 
 @csrf_exempt
 def pantau_booking_owner_flutter(request):
-    """Return JSON data of bookings for the owner's claimed restaurant."""
     user = request.user
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
 
@@ -355,7 +360,6 @@ def pantau_booking_owner_flutter(request):
 @login_required(login_url='/login')
 @csrf_exempt
 def approve_booking_flutter(request, booking_id):
-    """Approve booking from Flutter request."""
     booking = get_object_or_404(Booking, id=booking_id)
     
     if request.user == booking.menu_items.claimed_by:
@@ -365,3 +369,8 @@ def approve_booking_flutter(request, booking_id):
     
     return JsonResponse({'status': 'failed', 'message': 'You do not have permission to approve this booking.'})
 
+@login_required(login_url='/login')
+def booking_detail(request, menu_id):
+    menu = get_object_or_404(Menu, id=menu_id)
+    context = {'menu': menu}
+    return render(request, 'booking/booking_detail.html', context)
