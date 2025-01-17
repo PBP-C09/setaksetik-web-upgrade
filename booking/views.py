@@ -374,3 +374,15 @@ def booking_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
     return render(request, 'booking/booking_detail.html', context)
+
+@login_required(login_url='/login')
+def resto_menu(request, menu_id):
+    current_menu = get_object_or_404(Menu, id=menu_id)
+    
+    all_menus = Menu.objects.filter(restaurant_name=current_menu.restaurant_name)
+    context = {
+        'restaurant_name': current_menu.restaurant_name,
+        'menus': all_menus,
+        'menu_id': menu_id
+    }
+    return render(request, 'booking/resto_menu.html', context)
