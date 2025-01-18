@@ -386,3 +386,47 @@ def resto_menu(request, menu_id):
         'menu_id': menu_id
     }
     return render(request, 'booking/resto_menu.html', context)
+
+from django.http import JsonResponse
+
+@login_required(login_url='/login')
+def booking_detail_flutter(request, menu_id):
+    menu = get_object_or_404(Menu, id=menu_id)
+    data = {
+        'id': menu.id,
+        'restaurant_name': menu.restaurant_name,
+        'menu': menu.menu,
+        'category': menu.category,
+        'price': menu.price,
+        'city': menu.city,
+        'specialized': menu.specialized,
+        'rating': menu.rating,
+        'takeaway': menu.takeaway,
+        'delivery': menu.delivery,
+        'outdoor': menu.outdoor,
+        'smoking_area': menu.smoking_area,
+        'wifi': menu.wifi,
+        'image': menu.image.url if menu.image else None,
+    }
+    return JsonResponse(data)
+
+
+@login_required(login_url='/login')
+def resto_menu_flutter(request, menu_id):
+    current_menu = get_object_or_404(Menu, id=menu_id)
+    all_menus = Menu.objects.filter(restaurant_name=current_menu.restaurant_name)
+    data = {
+        'restaurant_name': current_menu.restaurant_name,
+        'menus': [
+            {
+                'id': menu.id,
+                'menu': menu.menu,
+                'category': menu.category,
+                'price': menu.price,
+                'rating': menu.rating,
+                'image': menu.image.url if menu.image else None,
+            }
+            for menu in all_menus
+        ]
+    }
+    return JsonResponse(data)
