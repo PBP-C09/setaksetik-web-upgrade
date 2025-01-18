@@ -113,7 +113,7 @@
                         name="city" 
                         required 
                         class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]" 
-                        disabled>
+                        >
                     <option value="">Select City</option>
                     <option value="Central Jakarta" {% if restaurant.city == "Central Jakarta" %}selected{% endif %}>Central Jakarta</option>
                     <option value="East Jakarta" {% if restaurant.city == "East Jakarta" %}selected{% endif %}>East Jakarta</option>
@@ -152,7 +152,7 @@
                         name="specialized" 
                         required 
                         class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]" 
-                        disabled>
+                        >
                     <option value="">Select Category</option>
                     <option value="Argentinian" {% if restaurant.specialized == "Argentinian" %}selected{% endif %}>Argentinian</option>
                     <option value="Brazilian" {% if restaurant.specialized == "Brazilian" %}selected{% endif %}>Brazilian</option>
@@ -206,7 +206,8 @@
                     name="image_url" 
                     placeholder="Add image URL"
                     required 
-                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]"
+                    style="color: #3c200c;">
             </div>
 
             <!-- Checkboxes Group -->
