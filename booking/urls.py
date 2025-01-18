@@ -2,7 +2,7 @@ from django.urls import path
 from booking.views import create_booking, lihat_booking, booking_form, delete_booking, edit_booking, pantau_booking_owner, approve_booking
 from booking.views import show_booking_xml, show_booking_json, show_booking_xml_by_id, show_booking_json_by_id
 from booking.views import get_bookings_json, delete_booking_flutter, add_booking_flutter, edit_booking_flutter, pantau_booking_owner_flutter, approve_booking_flutter
-from booking.views import booking_detail, resto_menu
+from booking.views import booking_detail, resto_menu, booking_detail_flutter, resto_menu_flutter
 
 
 app_name = 'booking'
@@ -28,4 +28,6 @@ urlpatterns = [
     path('approve_flutter/<int:booking_id>/', approve_booking_flutter, name='approve_booking_flutter'),
     path('detail/<int:menu_id>/', booking_detail, name='booking_detail'),
     path('resto_menu/<int:menu_id>/', resto_menu, name='resto_menu'),
+    path('booking_detail_flutter/<int:menu_id>/', booking_detail_flutter, name='booking_detail_flutter'),
+    path('resto_menu_flutter/<int:menu_id>/', resto_menu_flutter, name='resto_menu_flutter'),
 ]
