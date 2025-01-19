@@ -25,7 +25,6 @@ class MessageEntryForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filter UserProfile with role 'steak lover' and use their user.full_name for display
         steak_lovers = UserProfile.objects.filter(role="steak lover")
         self.fields['receiver'].queryset = steak_lovers
         self.fields['receiver'].label_from_instance = lambda obj: obj.full_name
