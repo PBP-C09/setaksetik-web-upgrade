@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from review.views import create_review_flutter, delete_review_flutter, show_review, add_review_entry_ajax, create_review_entry, show_xml, show_json, show_json_by_id, show_xml_by_id, get_review, submit_reply_flutter, update_reply_flutter
+from review.views import create_review_flutter, delete_review_flutter, show_review, add_review_entry_ajax, create_review_entry, show_review_menu, show_xml, show_json, show_json_by_id, show_xml_by_id, get_review, submit_reply_flutter, update_reply_flutter
 
 app_name = 'review'
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('edit-review/<uuid:id>', views.edit_review, name='edit_review'),
     path('delete-review/<uuid:id>', views.delete_review, name='delete_review'),
     path('get_review/', get_review, name='get_review'),
+    path('review/<int:menu_id>/', show_review, name='show_review_menu'),
     # path('update-reply/', views.update_reply, name='update_reply'),
     path('create-review-flutter/', create_review_flutter, name='create_review_flutter'),
     path('update-reply/', views.update_reply, name='update_reply'),

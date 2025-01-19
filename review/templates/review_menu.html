@@ -30,23 +30,14 @@
 </div>
 
 <script>
-  console.log("{{menu_id}}");
-  
   async function getReviewEntries() {
-    const id = "{{menu_id}}".toString() == "None" ? "" : "{{menu_id}}"
-
-    console.log(id);
-  
-    return fetch(`/review/json/${id}`).then((res) => res.json())
+    return fetch("{% url 'review:show_json_by_id' %}").then((res) => res.json())
   }
 
   async function refreshReviewEntries() {
     document.getElementById("review_entry_cards").innerHTML = "";
     document.getElementById("review_entry_cards").className = "";
     const reviewEntries = await getReviewEntries();
-
-    console.log(reviewEntries);
-    
     let htmlString = "";
     let classNameString = "";
 

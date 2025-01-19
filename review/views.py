@@ -14,22 +14,53 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @login_required(login_url='/login')
-def show_review(request):
-
+def show_review(request, menu_id=None):
+    # Default context
     context = {
-        'nama' : 'steak',
-        'lokasi' : 'jaksel',
-        'rating' : '5',
+        'nama': 'steak',
+        'lokasi': 'jaksel',
+        'rating': '5',
+    }
+    # Filter reviews based on menu_id if provided
+    if menu_id != None:
+        menu = Menu.objects.get(id=menu_id)
+        reviews = ReviewEntry.objects.filter(menu=menu)
+        context['reviews'] = reviews
+        context['menu'] = menu  # Optional: Detail menu untuk judul
+    else:
+        reviews = ReviewEntry.objects.all()
+        context['reviews'] = reviews
+
+    context['menu_id'] = menu_id
+
+    # Role-based rendering
+    if request.user.userprofile.role == "admin":
+        return render(request, 'review_admin.html', context)
+    elif request.user.userprofile.role == "steakhouse owner":
+        return render(request, 'review_owner.html', context)
+    else:
+        return render(request, 'review.html', context)
+
+@csrf_exempt
+@login_required(login_url='/login')
+def show_review_menu(request, menu_id):
+    menu = Menu.objects.get(id=menu_id)
+    reviews = ReviewEntry.objects.filter(menu = menu_id)
+
+    print("semuanya" + str(menu_id))
+    context = {
+        'menu' : menu,
+        'reviews' : reviews,
     }
 
     if request.user.userprofile.role == "admin":
         return render(request, 'review_admin.html', context)
 
-
-
     if request.user.userprofile.role == "steakhouse owner":
         return render(request, 'review_owner.html', context)
-    return render(request, 'review.html', context)
+    return render(request, 'review_menu.html', context)
+
+
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -58,7 +89,11 @@ def show_xml_by_id(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def show_json_by_id(request, id):
-    data = ReviewEntry.objects.filter(pk=id)
+    if (id != None):
+        menu = Menu.objects.get(id=id)
+        data = ReviewEntry.objects.filter(menu=menu)
+    else:
+        data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @login_required(login_url='/login')
@@ -82,7 +117,7 @@ def add_review_entry_ajax(request):
     themenu.save()
 
     new_review = ReviewEntry(
-        menu=menu, place=place,
+        menu=themenu, place=place,
         rating=rating,
         user=user, description=description
     )
