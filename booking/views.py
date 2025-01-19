@@ -410,23 +410,40 @@ def booking_detail_flutter(request, menu_id):
     }
     return JsonResponse(data)
 
-
-@login_required(login_url='/login')
 def resto_menu_flutter(request, menu_id):
     current_menu = get_object_or_404(Menu, id=menu_id)
+    
     all_menus = Menu.objects.filter(restaurant_name=current_menu.restaurant_name)
-    data = {
-        'restaurant_name': current_menu.restaurant_name,
-        'menus': [
-            {
-                'id': menu.id,
+    
+    menu_list = []
+    for menu in all_menus:
+        menu_data = {
+            'pk': menu.id, 
+            'model': 'explore.menu',
+            'fields': {
                 'menu': menu.menu,
                 'category': menu.category,
+                'restaurant_name': menu.restaurant_name,
                 'price': menu.price,
+                'city': menu.city,
+                'specialized': menu.specialized,
                 'rating': menu.rating,
-                'image': menu.image.url if menu.image else None,
-            }
-            for menu in all_menus
-        ]
-    }
-    return JsonResponse(data)
+                'takeaway': menu.takeaway,
+                'delivery': menu.delivery,
+                'outdoor': menu.outdoor,
+                'smoking_area': menu.smoking_area,
+                'wifi': menu.wifi,
+                'image': menu.image,
+                'claimed_by': menu.claimed_by.username if menu.claimed_by else None,
+            },
+        }
+        menu_list.append(menu_data)
+    
+    return JsonResponse({
+        'status': 'success',
+        'restaurant': {
+            'restaurant_name': current_menu.restaurant_name,
+            'city': current_menu.city,
+        },
+        'menus': menu_list
+    }, status=200)
