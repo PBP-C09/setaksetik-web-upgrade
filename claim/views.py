@@ -164,37 +164,40 @@ def claim_resto_flutter(request, restaurant_id):
 @login_required(login_url='/login')
 @csrf_exempt
 def get_owned_restaurant_flutter(request):
-    """Mengambil restoran yang dimiliki oleh steakhouse owner"""
+    """Mengambil semua menu dari restoran yang dimiliki oleh steakhouse owner"""
     user = request.user
-    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    claimed_menus = Menu.objects.filter(claimed_by=user)
 
-    if not claimed_restaurant:
+    if not claimed_menus.exists():
         return JsonResponse({'status': 'failed', 'message': 'You do not own any restaurant.'}, status=404)
 
-    owned_restaurant = {
-        "model": "explore.menu",
-        "pk": claimed_restaurant.id,
-        "fields": {
-            "menu": claimed_restaurant.menu,
-            "category": claimed_restaurant.category,
-            "restaurant_name": claimed_restaurant.restaurant_name,
-            "image": claimed_restaurant.image,
-            "city": claimed_restaurant.city,
-            "price": claimed_restaurant.price,
-            "rating": claimed_restaurant.rating,
-            "specialized": claimed_restaurant.specialized,
-            "takeaway": claimed_restaurant.takeaway,
-            "delivery": claimed_restaurant.delivery,
-            "outdoor": claimed_restaurant.outdoor,
-            "smoking_area": claimed_restaurant.smoking_area,
-            "wifi": claimed_restaurant.wifi,
-            "claimed_by": claimed_restaurant.claimed_by.id if claimed_restaurant.claimed_by else None,
-            "review_count" : claimed_restaurant.review_count,
-            "total_rating" : claimed_restaurant.total_rating
+    menu_list = []
+    for menu in claimed_menus:
+        menu_data = {
+            "model": "explore.menu",
+            "pk": menu.id,
+            "fields": {
+                "menu": menu.menu,
+                "category": menu.category,
+                "restaurant_name": menu.restaurant_name,
+                "image": menu.image,
+                "city": menu.city,
+                "price": menu.price,
+                "rating": menu.rating,
+                "specialized": menu.specialized,
+                "takeaway": menu.takeaway,
+                "delivery": menu.delivery,
+                "outdoor": menu.outdoor,
+                "smoking_area": menu.smoking_area,
+                "wifi": menu.wifi,
+                "claimed_by": menu.claimed_by.id if menu.claimed_by else None,
+                "review_count": menu.review_count,
+                "total_rating": menu.total_rating
+            }
         }
-    }
+        menu_list.append(menu_data)
 
-    return JsonResponse(owned_restaurant, safe=False)
+    return JsonResponse({"status": "success", "menus": menu_list}, safe=False)
 
 @login_required(login_url='/login')
 @csrf_exempt
@@ -282,6 +285,48 @@ def add_menu_flutter(request):
     
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+    
+@csrf_exempt
+def edit_flutter(request, menu_id):
+    if request.method == 'POST':
+        try:
+            menu = Menu.objects.get(pk=menu_id) 
+            data = json.loads(request.body)
+           
+            # Update fields
+            menu.menu = data.get('menu', menu.menu)
+            menu.category = data.get('category', menu.category)
+            menu.restaurant_name = data.get('restaurant_name', menu.restaurant_name)
+            menu.city = data.get('city', menu.city)
+            menu.price = int(data.get('price', menu.price))
+            menu.rating = float(data.get('rating', menu.rating))
+            menu.specialized = data.get('specialized', menu.specialized)
+            menu.image = data.get('image', menu.image)
+            menu.takeaway = string_to_bool(data.get('takeaway', menu.takeaway))
+            menu.delivery = string_to_bool(data.get('delivery', menu.delivery))
+            menu.outdoor = string_to_bool(data.get('outdoor', menu.outdoor))
+            menu.smoking_area = string_to_bool(data.get('smoking_area', menu.smoking_area))
+            menu.wifi = string_to_bool(data.get('wifi', menu.wifi))
+            
+            menu.save()
+            return JsonResponse({
+                "status": "success",
+                "message": "Menu updated successfully!"
+            }, status=200)
+        except Menu.DoesNotExist:
+            return JsonResponse({
+                "status": "error",
+                "message": "Menu not found!"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=400)
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid method"
+    }, status=405)
     
 def string_to_bool(value): 
     if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
