@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 
@@ -10,8 +11,6 @@ urlpatterns = [
     path('delete/<int:id>/', views.delete_message, name='delete_message'),
     path('accept/<int:id>/', views.accept_message, name='accept_message'),
     path('reject/<int:id>/', views.reject_message, name='reject_message'),
-    path('get-message/<int:message_id>/', views.get_message, name='get_message'),
-    path('refresh-tab/', views.refresh_tab, name='refresh_tab'),
     path('flutter/', views.meatup_home_flutter, name='meatup_home_flutter'),
     path('create-flutter/', views.create_message_flutter, name='create_message_flutter'),
     path('flutter/edit/<int:id>/', views.edit_message_flutter, name='edit_message_flutter'),

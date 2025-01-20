@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -18,7 +19,7 @@ def meatup_home(request):
     
     sent_messages = Message.objects.filter(
         sender=user_profile,
-        status='PENDING'  
+        status='PENDING'  # Only show pending sent messages here
     ).order_by('-timestamp')
     received_messages = Message.objects.filter(
         receiver=user_profile, 
@@ -46,8 +47,6 @@ def meatup_home(request):
 @csrf_exempt
 @login_required(login_url='/login')
 def create_message_entry(request):
-    form = MessageEntryForm()  
-
     if request.method == "POST":
         form = MessageEntryForm(request.POST)
         if form.is_valid():
@@ -56,7 +55,8 @@ def create_message_entry(request):
             new_message.sender = user_profile
             new_message.status = 'PENDING'
             new_message.save()
-            return HttpResponseRedirect(reverse('meatup:meatup_home') + '#sent')  
+            return redirect(reverse('meatup:meatup_home'))
+    else:
         form = MessageEntryForm()
     
     context = {'form': form}
@@ -77,7 +77,7 @@ def edit_message(request, id):
         form = MessageEntryForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('meatup:meatup_home') + '#sent')  
+            return HttpResponseRedirect(reverse('meatup:meatup_home'))
     else:
         form = MessageEntryForm(instance=message)
 
@@ -104,64 +104,7 @@ def reject_message(request, id):
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=403)
 
-@csrf_exempt
-@login_required(login_url='/login')
-def get_message(request, message_id):
-    try:
-        message = Message.objects.get(id=message_id, sender__user=request.user)
-        return JsonResponse({
-            'title': message.title,
-            'content': message.content
-        })
-    except Message.DoesNotExist:
-        return JsonResponse({'error': 'Message not found'}, status=404)
-
-@csrf_exempt
-@login_required(login_url='/login')
-def refresh_tab(request):
-    user = request.user
-    user_profile = UserProfile.objects.get(user=user)
-    
-    sent_messages = Message.objects.filter(
-        sender=user_profile,
-        status='PENDING'
-    ).order_by('-timestamp')
-    
-    received_messages = Message.objects.filter(
-        receiver=user_profile,
-        status='PENDING'
-    ).order_by('-timestamp')
-    
-    accepted_messages = Message.objects.filter(
-        models.Q(sender=user_profile) | models.Q(receiver=user_profile),
-        status='ACCEPTED'
-    ).order_by('-timestamp')
-    
-    rejected_messages = Message.objects.filter(
-        models.Q(sender=user_profile) | models.Q(receiver=user_profile),
-        status='REJECTED'
-    ).order_by('-timestamp')
-    
-    data = {
-        'sent_messages': serialize_messages(sent_messages),
-        'received_messages': serialize_messages(received_messages),
-        'accepted_messages': serialize_messages(accepted_messages),
-        'rejected_messages': serialize_messages(rejected_messages),
-    }
-    
-    return JsonResponse(data)
-
-def serialize_messages(messages):
-    return [{
-        'id': msg.id,
-        'sender': msg.sender.user.username,
-        'receiver': msg.receiver.user.username,
-        'title': msg.title,
-        'content': msg.content,
-        'status': msg.status,
-        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-    } for msg in messages]
-
+# Flutter Views
 @csrf_exempt
 @login_required(login_url='/login')
 def meatup_home_flutter(request):
@@ -301,9 +244,24 @@ def edit_message_flutter(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def get_receivers(request):
-    steak_lovers = UserProfile.objects.filter(role="steak lover")
-    receivers = [{
-        'username': profile.user.username,
-        'full_name': profile.full_name
-    } for profile in steak_lovers]
-    return JsonResponse(receivers, safe=False)
+    try:
+        steak_lovers = UserProfile.objects.filter(role="steak lover")
+        if not steak_lovers.exists():
+            return JsonResponse({
+                "status": "error",
+                "message": "No steak lovers found"
+            }, status=404)
+            
+        receivers = [{
+            'username': profile.user.username,
+            'full_name': profile.full_name
+        } for profile in steak_lovers]
+        return JsonResponse({
+            "status": "success",
+            "data": receivers
+        })
+    except Exception as e:
+        return JsonResponse({
+            "status": "error",
+            "message": str(e)
+        }, status=500)
