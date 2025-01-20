@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -243,9 +244,24 @@ def edit_message_flutter(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def get_receivers(request):
-    steak_lovers = UserProfile.objects.filter(role="steak lover")
-    receivers = [{
-        'username': profile.user.username,
-        'full_name': profile.full_name
-    } for profile in steak_lovers]
-    return JsonResponse(receivers, safe=False)
+    try:
+        steak_lovers = UserProfile.objects.filter(role="steak lover")
+        if not steak_lovers.exists():
+            return JsonResponse({
+                "status": "error",
+                "message": "No steak lovers found"
+            }, status=404)
+            
+        receivers = [{
+            'username': profile.user.username,
+            'full_name': profile.full_name
+        } for profile in steak_lovers]
+        return JsonResponse({
+            "status": "success",
+            "data": receivers
+        })
+    except Exception as e:
+        return JsonResponse({
+            "status": "error",
+            "message": str(e)
+        }, status=500)

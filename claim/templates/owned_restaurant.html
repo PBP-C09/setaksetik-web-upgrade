@@ -69,7 +69,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
             </svg>
-            <p class="-mb-0.5">Add New Menu Item</p>
+            <p class="-mb-0.5">Add Menu</p>
         </button>
     </div>
 
@@ -147,29 +147,27 @@
 
             <!-- Specialized -->
             <div class="mb-4">
-                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized</label>
+                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized*</label>
                 <select id="specialized" 
                         name="specialized" 
                         required 
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]" 
-                        disabled>
-                    <option value="">Select Category</option>
-                    <option value="Argentinian" {% if restaurant.specialized == "Argentinian" %}selected{% endif %}>Argentinian</option>
-                    <option value="Brazilian" {% if restaurant.specialized == "Brazilian" %}selected{% endif %}>Brazilian</option>
-                    <option value="Breakfast Cafe" {% if restaurant.specialized == "Breakfast Cafe" %}selected{% endif %}>Breakfast Cafe</option>
-                    <option value="British" {% if restaurant.specialized == "British" %}selected{% endif %}>British</option>
-                    <option value="French" {% if restaurant.specialized == "French" %}selected{% endif %}>French</option>
-                    <option value="Fushioned" {% if restaurant.specialized == "Fushioned" %}selected{% endif %}>Fushioned</option>
-                    <option value="Italian" {% if restaurant.specialized == "Italian" %}selected{% endif %}>Italian</option>
-                    <option value="Japanese" {% if restaurant.specialized == "Japanese" %}selected{% endif %}>Japanese</option>
-                    <option value="Local" {% if restaurant.specialized == "Local" %}selected{% endif %}>Local</option>
-                    <option value="Local Westerned" {% if restaurant.specialized == "Local Westerned" %}selected{% endif %}>Local Westerned</option>
-                    <option value="Mexican" {% if restaurant.specialized == "Mexican" %}selected{% endif %}>Mexican</option>
-                    <option value="Western" {% if restaurant.specialized == "Western" %}selected{% endif %}>Western</option>
-                    <option value="Singaporean" {% if restaurant.specialized == "Singaporean" %}selected{% endif %}>Singaporean</option>
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    <option value="">Select Specialized</option>
+                    <option value="Argentinian">Argentinian</option>
+                    <option value="Brazilian">Brazilian</option>
+                    <option value="Breakfast Cafe">Breakfast Cafe</option>
+                    <option value="British">British</option>
+                    <option value="French">French</option>
+                    <option value="Fushioned">Fushioned</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Local">Local</option>
+                    <option value="Local Westerned">Local Westerned</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Western">Western</option>
+                    <option value="Singaporean">Singaporean</option>
                 </select>
             </div>
-
 
             <!-- Price -->
             <div class="mb-4">
@@ -206,10 +204,11 @@
                     name="image_url" 
                     placeholder="Add image URL"
                     required 
-                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]"
+                    style="color: #3c200c;">
             </div>
 
-            <!-- Checkboxes Group -->
+            <!-- Checkboxes Group (Disabled) -->
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div>
                     <input type="checkbox" id="takeaway" name="takeaway" class="mr-3" {% if restaurant.takeaway %}checked{% endif %} disabled>
@@ -293,7 +292,7 @@ document.getElementById('addMenuModal').addEventListener('click', function(e) {
         {% for menu in restaurant_menus %}
         <div class="bg-[#F5F5DC] rounded-lg overflow-hidden shadow-lg relative flex flex-col">
             <!-- Edit/Delete Buttons -->
-            <div class="absolute top-4 right-4 flex space-x-2 z-10">                  
+            <div class="absolute top-4 left-4 flex space-x-2 z-10">                  
                 <a href="{% url 'explore:edit_menu' menu.id %}" class="bg-yellow-300 hover:bg-yellow-500 text-white rounded-full p-2 transition duration-300 shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />

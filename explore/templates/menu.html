@@ -30,7 +30,7 @@
         }
     </style>
   
-    <div class="flex justify-center items-center bg-[#5B3E39] py-4" style="margin-bottom: 1cm;">
+    <div class="flex justify-center items-center bg-[#5B3E39] py-4" style="margin-bottom: 1rem;">
         <form id="filterForm" class="flex w-full max-w-4xl" method="GET" onsubmit="submitFilterForm(ajax)">
             <!-- Search Bar -->
             <div class="relative flex-grow max-w-7xl" style="flex-grow: 4;">
@@ -72,7 +72,7 @@
     </script>
     
     <!-- Filter Form -->
-    <div id="filter-options" class="hidden bg-[#F5F5DC] p-8 mt-4 mb-6 rounded-lg shadow-lg max-w-[90%] mx-auto min-h-[400px] overflow-y-auto">
+    <div id="filter-options" class="hidden bg-[#F5F5DC] p-8 mt-4 mb-8 rounded-lg shadow-lg max-w-[90%] mx-auto min-h-[400px] overflow-y-auto">
         <form id="filterForm" class="filter-form space-y-4" method="GET" onsubmit="submitFilterForm()">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
@@ -170,7 +170,7 @@
         </form>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 md:px-0">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 px-4 md:px-0 mt-[1rem]">
         {% if explore %}
         {% for menu in explore %}
             <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
