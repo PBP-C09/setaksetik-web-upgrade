@@ -129,7 +129,7 @@ def add_menu(request):
         city = claimed_restaurant.city
         price = request.POST.get('price')
         rating = request.POST.get('rating')
-        specialized = claimed_restaurant.specialized
+        specialized = request.POST.get('specialized').title()
         takeaway = request.POST.get('takeaway') == 'on'
         delivery = request.POST.get('delivery') == 'on'
         outdoor = request.POST.get('outdoor') == 'on'
