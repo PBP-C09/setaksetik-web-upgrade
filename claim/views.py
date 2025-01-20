@@ -244,3 +244,53 @@ def revoke_ownership_flutter(request):
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
 
+@csrf_exempt
+def add_menu_flutter(request):    
+    if request.method == 'POST':
+        try:         
+            data = json.loads(request.body)
+            user = request.user
+            # Get the claimed restaurant for this user
+            claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+            
+            if not claimed_restaurant:
+                return JsonResponse({"status": "error", "message": "No claimed restaurant found"}, status=400)
+
+            # Create new menu
+            new_menu = Menu.objects.create(
+                menu=data["menu"],
+                category=data["category"].title(),
+                restaurant_name= claimed_restaurant.restaurant_name, 
+                city= claimed_restaurant.city,
+                price=int(data["price"]),  
+                rating=float(data["rating"]),
+                specialized=data["specialized"].title(),
+                image=data.get("image", "default_image_url"),
+                takeaway=string_to_bool(data["takeaway"]),
+                delivery=string_to_bool(data["delivery"]),
+                outdoor=string_to_bool(data["outdoor"]),
+                smoking_area=string_to_bool(data["smoking_area"]),
+                wifi=string_to_bool(data["wifi"]),
+                claimed_by=user 
+            )
+            new_menu.save()
+            
+            return JsonResponse({"status": "success", "message": "Menu added successfully"}, status=200)
+            
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+    
+def string_to_bool(value): 
+    if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
+        return value
+
+    if isinstance(value, str):  # Pastikan nilai adalah string
+        value = value.strip().lower()  # Hapus spasi dan ubah ke huruf kecil
+        
+        if value in ('true'):
+            return True
+        elif value in ('false'):
+            return False
