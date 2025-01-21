@@ -12,6 +12,7 @@ urlpatterns = [
     path('json/', show_json, name='show_json'),
     path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
     path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+    # path('json/<str:namarestoran>/', show_json_by_restoran, name='show_json_by_restoran'),
     path('pantaureview/', show_review_owner, name='show_review_owner'),
     path('submit_reply/', views.submit_reply, name='submit_reply'),
     path('edit-review/<uuid:id>', views.edit_review, name='edit_review'),

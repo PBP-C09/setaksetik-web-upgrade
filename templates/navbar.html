@@ -15,7 +15,7 @@
 
           {% elif request.user.userprofile.role == 'steakhouse owner' %}
             <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Claim Resto</a>
-            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
+            <a href="/review/pantaureview" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
             <a href="{% url 'booking:pantau_booking_owner' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Booking</a>
             
           {% elif request.user.userprofile.role == 'admin' %}

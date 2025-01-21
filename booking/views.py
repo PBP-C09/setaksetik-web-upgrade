@@ -150,7 +150,6 @@ def pantau_booking_owner(request):
     # Cek apakah user memiliki restoran yang sudah di-claim
     user = request.user
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
-
     context = {
         'restaurant': claimed_restaurant
     }

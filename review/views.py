@@ -15,6 +15,8 @@ from django.http import JsonResponse
 @csrf_exempt
 @login_required(login_url='/login')
 def show_review(request, menu_id=None):
+    print("tes masuk ga")
+    
     # Default context
     context = {
         'nama': 'steak',
@@ -60,20 +62,37 @@ def show_review_menu(request, menu_id):
         return render(request, 'review_owner.html', context)
     return render(request, 'review_menu.html', context)
 
-@csrf_exempt
-@login_required(login_url='/login')
 def show_review_owner(request):
     user = request.user
-    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    
+    # Filter menu berdasarkan user
+    restaurant_menus = Menu.objects.filter(claimed_by=user)
 
+    # Debugging untuk memastikan menu yang ditemukan
+    print("Menu yang diklaim oleh user:", [menu.id for menu in restaurant_menus])
+
+    # Context untuk menyimpan menu dan review
     context = {
-        'restaurant' : claimed_restaurant
+        'restaurant_menus': restaurant_menus,
+        'reviews': []
     }
     
-    if claimed_restaurant:
-        reviews = ReviewEntry.objects.filter(menu_items=claimed_restaurant)
-        context['reviews'] = reviews
+    # Ambil review hanya jika ada menu yang diklaim
+    if restaurant_menus.exists():
+        all_reviews = []
+        
+        # Iterasi setiap menu untuk mengambil review
+        for menu in restaurant_menus:
+            reviews_for_menu = ReviewEntry.objects.filter(menu=menu)
+            all_reviews.extend(reviews_for_menu)  # Menambahkan review ke list keseluruhan
+
+        # Masukkan semua review ke dalam konteks
+        context['reviews'] = all_reviews
+
+        print("Total review ditemukan:", len(all_reviews))
+
     return render(request, 'review_owner.html', context)
+
 
 
 @csrf_exempt
