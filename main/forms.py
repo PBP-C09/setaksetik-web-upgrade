@@ -1,7 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from main.models import UserProfile
 
 class UserProfileForm(UserCreationForm):
     role = forms.ChoiceField(choices = (("steak lover", "Steak Lover"), ("steakhouse owner", "Steakhouse Owner")),label="Choose your role!", required=True)
@@ -24,7 +23,7 @@ class UserProfileForm(UserCreationForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Customize the help texts
+
         self.fields['username'].help_text = ""
         self.fields['password1'].help_text = ""
         self.fields['password2'].help_text = ""
@@ -45,11 +44,3 @@ class UserProfileForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({
             'placeholder': 'Make sure its exactly the same'
         })
-
-    # def save(self, commit=True):
-    #     user = super(UserProfileForm, self).save(commit=False)
-    #     if commit:
-    #         user.save()
-    #     UserProfile.objects.create(user = user, full_name = self.cleaned_data["full_name"], role = self.cleaned_data["role"]
-    #     )
-    #     return user
