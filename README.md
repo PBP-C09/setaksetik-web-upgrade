@@ -21,11 +21,11 @@ Sebuah aplikasi yang didekasikan untuk pecinta dan calon pecinta steak!
 
 
 # Deskripsi Aplikasi
-Untuk menjawab kebingungan pengguna dalam memilih menu steak yang tepat, **setaksetik** hadir sebagai solusi lengkap bagi para pecinta steak. Aplikasi ini dirancang dengan beragam fitur yang tidak hanya memudahkan pengguna dalam memilih menu, tetapi juga memberikan pengalaman bersantap yang lebih personal dan menyenangkan. 
+Untuk menjawab kebingungan pengguna dalam memilih menu steak yang tepat, **SetakSetik** hadir sebagai solusi lengkap bagi para pecinta steak. Aplikasi ini dirancang dengan beragam fitur yang tidak hanya memudahkan pengguna dalam memilih menu, tetapi juga memberikan pengalaman bersantap yang lebih personal dan menyenangkan. 
 
-**setaksetik** dikembangkan dengan berbagai modul yang mendukung kemudahan dalam pemilihan menu serta kenyamanan pengguna. Fitur autentikasi memungkinkan pengguna untuk login dengan mudah melalui akun Google, Facebook, atau Apple, serta menyimpan preferensi pribadi seperti tingkat kematangan _steak_ dan jenis daging favorit. Pengguna juga dapat mengakses riwayat pesanan, menyimpan _wishlist_ menu yang ingin dicoba, dan melacak program reward berdasarkan pesanan dan _review_. Selain itu, fitur "Spin the Wheel" menambahkan elemen hiburan dalam menentukan pilihan menu, sementara _filter_ menu yang komprehensif membantu pengguna menyesuaikan pencarian berdasarkan rasa, metode masak, harga, dan kriteria lainnya.
+**setaksetik** dikembangkan dengan berbagai modul yang mendukung kemudahan dalam pemilihan menu serta kenyamanan pengguna. Fitur autentikasi memungkinkan pengguna untuk registrasi serta login dengan mudah. Pengguna juga dapat mengakses riwayat pesanan, menyimpan _wishlist_ menu yang ingin dicoba, dan melacak program reward berdasarkan pesanan dan _review_. Selain itu, fitur "Spin the Wheel" menambahkan elemen hiburan dalam menentukan pilihan menu, sementara _filter_ menu yang komprehensif membantu pengguna menyesuaikan pencarian berdasarkan rasa, metode masak, harga, dan kriteria lainnya.
 
-Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset yang digunakan adalah menu dan _steakhouse_ yang tersebar di segala penjuru Jakarta. Jadi, jika menjejakkan kaki di Jakarta dan mendambakan steak, tak perlu bingung tak perlu ragu, **setaksetik** akan membantu!
+Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset yang digunakan adalah menu dan _steakhouse_ yang tersebar di segala penjuru Jakarta. Jadi, jika menjejakkan kaki di Jakarta dan mendambakan steak, tak perlu bingung tak perlu ragu, **SetakSetik** akan membantu!
 
 
 # Daftar Modul
@@ -91,5 +91,5 @@ Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/st
 
 
 # Tautan Deployment
-Tautan deployment aplikasi [**setaksetik**](http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/).
+Tautan deployment aplikasi [**SetakSetik Upgrade**](https://haliza-nafiah-setaksetik.pbp.cs.ui.ac.id/).
 
