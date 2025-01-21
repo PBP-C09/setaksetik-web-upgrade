@@ -13,5 +13,5 @@ class ReviewEntry(models.Model):
     owner_reply = models.TextField(null=True, blank=True)
 
     @property
-    def is_menu_recommended(self):
-        return self.rating > 4
+    def nama_menu(self):
+        return self.menu.restaurant_name if self.menu else None

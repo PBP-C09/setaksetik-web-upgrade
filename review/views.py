@@ -25,10 +25,13 @@ def show_review(request, menu_id=None):
     }
     # Filter reviews based on menu_id if provided
     if menu_id != None:
+        menus = Menu.objects.all()
         menu = Menu.objects.get(id=menu_id)
         reviews = ReviewEntry.objects.filter(menu=menu)
         context['reviews'] = reviews
         context['menu'] = menu  # Optional: Detail menu untuk judul
+        context['menus'] = menus
+        # menus = Menu.objects.all()
     else:
         reviews = ReviewEntry.objects.all()
         context['reviews'] = reviews
@@ -171,6 +174,8 @@ def create_review_entry(request):
 
     return render(request, 'create_review_entry.html', context)
 
+
+
 @csrf_exempt
 @login_required(login_url='/login')
 def edit_review(request, id):
@@ -185,6 +190,27 @@ def edit_review(request, id):
 
     context = {'form': form}
     return render(request, "edit_review.html", context)
+
+    
+def get_review_entries(self, request, menu_id=None):
+    if menu_id:
+        reviews = ReviewEntry.objects.filter(menu__id=menu_id)
+    else:
+        reviews = ReviewEntry.objects.all()
+    
+    review_data = []
+    for review in reviews:
+        review_data.append({
+            'id': str(review.id),
+            'user': review.user.username,  # Mengambil nama pengguna
+            'menu_name': review.menu.menu if review.menu else None,  # Mengambil nama menu
+            'place': review.place,
+            'rating': review.rating,
+            'description': review.description,
+            'owner_reply': review.owner_reply
+        })
+    
+    return JsonResponse(review_data, safe=False)
 
 @csrf_exempt
 @login_required(login_url='/login')
