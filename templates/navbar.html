@@ -1,40 +1,52 @@
 <nav class="bg-[#f5f5dc] shadow-lg fixed top-0 left-0 z-40 w-screen">
+  <!-- Web Menu -->
   <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="text-[#6d4c41] mr-4 text-2xl font-bold hover:text-[#D1C0B9] transition duration-300" style="font-family: 'Playfair Display'">
           Setak<span class="italic font-normal">Setik</span>
         </a>
-        {% if user.is_authenticated %}
-          {% if request.user.userprofile.role == 'steak lover' %}
-            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Explore</a>
-            <a href="/spinthewheel/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
-            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Review</a>
-            <a href="/meatup/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/meatup/' in request.path %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
-            <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Booking</a>
 
-          {% elif request.user.userprofile.role == 'steakhouse owner' %}
-            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Claim Resto</a>
-            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
-            <a href="{% url 'booking:pantau_booking_owner' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Booking</a>
-            
-          {% elif request.user.userprofile.role == 'admin' %}
-            <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Menu</a>
-            <a href="/spinthewheel/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
-            <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Review</a>
-            <a href="{% url 'claim:manage_ownership' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/claim/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Ownership</a>
+        <!-- Hamburger Menu Button -->
+        <div class="sm:hidden">
+          <button id="menu-toggle" class="text-[#6d4c41] hover:text-[#D1C0B9] focus:outline-none focus:ring-2 focus:ring-[#C62828]">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+        <div id="nav-links" class="hidden sm:flex items-center space-x-4">
+          {% if user.is_authenticated %}
+            {% if request.user.userprofile.role == 'steak lover' %}
+              <a href="/explore/" class="nav-link {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Explore</a>
+              <a href="/spinthewheel/" class="nav-link {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
+              <a href="/review/" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Review</a>
+              <a href="/meatup/" class="nav-link {% if '/meatup/' in request.path %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
+              <a href="/booking/" class="nav-link {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Booking</a>
 
+            {% elif request.user.userprofile.role == 'steakhouse owner' %}
+              <a href="/explore/" class="nav-link {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Claim Resto</a>
+              <a href="/review/" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
+              <a href="{% url 'booking:pantau_booking_owner' %}" class="nav-link {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Booking</a>
+              
+            {% elif request.user.userprofile.role == 'admin' %}
+              <a href="/explore/" class="nav-link {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Menu</a>
+              <a href="/spinthewheel/" class="nav-link {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
+              <a href="/review/" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Review</a>
+              <a href="{% url 'claim:manage_ownership' %}" class="nav-link {% if '/claim/' in request.path %}font-bold{% else %}font-normal{% endif %}">Manage Ownership</a>
+
+            {% endif %}
+          {% else %}
+          <a href="/explore/" class="nav-link {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Explore</a>
+          <a href="/spinthewheel/" class="nav-link {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
+          <a href="/review/" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Review</a>
+          <a href="/meatup/" class="nav-link {% if '/meatup/' in request.path %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
+          <a href="/booking/" class="nav-link {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Booking</a>
           {% endif %}
-        {% else %}
-        <a href="/explore/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Explore</a>
-        <a href="/spinthewheel/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/spinthewheel/' in request.path %}font-bold{% else %}font-normal{% endif %}">Spin</a>
-        <a href="/review/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Review</a>
-        <a href="/meatup/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/meatup/' in request.path %}font-bold{% else %}font-normal{% endif %}">Meat Up</a>
-        <a href="/booking/" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 transition duration-300 {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Booking</a>
-        {% endif %}
+        </div>
       </div>
 
-      <div class="flex items-center">
+      <div class="flex items-center hidden sm:flex">
         {% if user.is_authenticated %}
           <a href="{% url 'main:logout' %}" class="text-[#5b3e39] hover:text-[#D1C0B9] py-2 px-6 rounded transition duration-300 ml-auto" style="font-family: 'Raleway'">
             Logging out, <span class="italic font-bold" style="font-family: 'Playfair Display'">{{ user.userprofile.full_name }}</span>?
@@ -46,4 +58,74 @@
       </div>
     </div>
   </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden sm:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      {% if user.is_authenticated %}
+        {% if request.user.userprofile.role == 'steak lover' %}
+          <a href="/explore/" class="mobile-nav-link {% if '/explore/' in request.path %}font-bold{% endif %}">Explore</a>
+          <a href="/spinthewheel/" class="mobile-nav-link {% if '/spinthewheel/' in request.path %}font-bold{% endif %}">Spin</a>
+          <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Review</a>
+          <a href="/meatup/" class="mobile-nav-link {% if '/meatup/' in request.path %}font-bold{% endif %}">Meat Up</a>
+          <a href="/booking/" class="mobile-nav-link {% if '/booking/' in request.path %}font-bold{% endif %}">Booking</a>
+        {% elif request.user.userprofile.role == 'steakhouse owner' %}
+          <a href="/explore/" class="mobile-nav-link {% if '/explore/' in request.path %}font-bold{% endif %}">Claim Resto</a>
+          <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Monitor Review</a>
+          <a href="{% url 'booking:pantau_booking_owner' %}" class="mobile-nav-link {% if '/booking/' in request.path %}font-bold{% endif %}">Monitor Booking</a>
+        {% elif request.user.userprofile.role == 'admin' %}
+          <a href="/explore/" class="mobile-nav-link {% if '/explore/' in request.path %}font-bold{% endif %}">Manage Menu</a>
+          <a href="/spinthewheel/" class="mobile-nav-link {% if '/spinthewheel/' in request.path %}font-bold{% endif %}">Spin</a>
+          <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Manage Review</a>
+          <a href="{% url 'claim:manage_ownership' %}" class="mobile-nav-link {% if '/claim/' in request.path %}font-bold{% endif %}">Manage Ownership</a>
+        {% endif %}
+      {% else %}
+        <a href="/explore/" class="mobile-nav-link {% if '/explore/' in request.path %}font-bold{% endif %}">Explore</a>
+        <a href="/spinthewheel/" class="mobile-nav-link {% if '/spinthewheel/' in request.path %}font-bold{% endif %}">Spin</a>
+        <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Review</a>
+        <a href="/meatup/" class="mobile-nav-link {% if '/meatup/' in request.path %}font-bold{% endif %}">Meat Up</a>
+        <a href="/booking/" class="mobile-nav-link {% if '/booking/' in request.path %}font-bold{% endif %}">Booking</a>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <a href="{% url 'main:logout' %}" class="mobile-nav-link">Logging out, <span class="italic font-bold" style="font-family: 'Playfair Display'">{{ user.userprofile.full_name }}</span>?</a>
+      {% else %}
+        <a href="{% url 'main:login' %}" class="mobile-nav-link">Login</a>
+        <a href="{% url 'main:register' %}" class="mobile-nav-link">Register</a>
+      {% endif %}
+    </div>
+  </div>
 </nav>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
+
+<style>
+  .nav-link {
+    color: #5b3e39;
+    padding: 0.5rem 1.5rem;
+    transition: color 0.3s;
+  }
+
+  .nav-link:hover {
+    color: #D1C0B9;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    color: #5b3e39;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: color 0.3s;
+  }
+
+  .mobile-nav-link:hover {
+    color: #D1C0B9;
+  }
+</style>
