@@ -32,7 +32,11 @@ class ReviewEntryForm(ModelForm):
 
     # Pastikan untuk menambahkan validasi untuk field image jika diperlukan
 
-        fields = ["menu", "place", "rating", "description"]
+        # fields = ["menu", "place", "rating", "description"]
+        
+    # def clean_name(self):
+    #     name = self.cleaned_data["name"]
+    #     return strip_tags(name)
         
     def clean_menu(self):
         menu = self.cleaned_data["menu"]

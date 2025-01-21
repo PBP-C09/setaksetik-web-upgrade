@@ -112,8 +112,46 @@
   
   
   
-  <div id="review_entry_cards"></div>
-  
+  <!-- <div id="review_entry_cards"></div> -->
+
+  <!-- <div id="review_entry_cards" class="{% if reviews|length == 0 %}flex flex-col items-center justify-center min-h-[24rem] p-6{% else %}columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full{% endif %}"> -->
+  {% if reviews|length == 0 %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <img src="https://wallpapers.com/images/hd/sad-face-emoji-illustration-h5k25uxxbr9h7sjg.jpg" 
+            alt="Sad Face" class="w-52 h-52 mb-0 object-contain"/>
+        <p class="text-center text-[#F5F5DC] mt-4">Belum ada review</p>
+    </div>
+  {% else %}
+    {% for review in reviews %}
+      <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
+        <!-- Product Details -->
+        <div class="p-4">
+          <h3 class="font-bold text-xl text-[#5B3E39] mb-2">{{ review.menu.menu }}</h3>
+          <div class="flex items-center space-x-2 mb-2">
+            <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+            <p class="text-base font-semibold text-[#5B3E39]">
+              {{ review.place|escape }}
+            </p>
+          </div>
+          <div class="flex items-center space-x-2 mb-2">
+            <i class="fas fa-star text-yellow-400"></i>
+            <p class="text-base font-semibold text-[#5B3E39]">
+              {{ review.rating }} / 5
+            </p>
+          </div>
+          <p class="text-gray-600 mb-4">{{ review.description|escape }}</p>
+          {% if review.owner_reply %}
+          <div class="bg-white p-3 rounded-lg">
+            <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+            <p class="text-sm text-gray-600">{{ review.owner_reply|escape }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div> -->
+
 </div>
 
 <script>
@@ -160,6 +198,7 @@
         `;
     }
     else {
+
       classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
       reviewEntries.forEach((item) => {
         // console.log(item)
@@ -167,52 +206,50 @@
         // console.log(nama_menunya)
         const menu = item.fields.menu;
         
-        console.log(menu)
         const place = DOMPurify.sanitize(item.fields.place);
-
         
         
-        htmlString += `
-          <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
-              <!-- Product Details -->
-              <div class="p-4">
-                  <!-- Product Name -->
-                  <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
+        // htmlString += `
+        //   <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
+        //       <!-- Product Details -->
+        //       <div class="p-4">
+        //           <!-- Product Name -->
+        //           <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
 
-                  <!-- Product Place with Pin Icon -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.place}
-                      </p>
-                  </div>
+        //           <!-- Product Place with Pin Icon -->
+        //           <div class="flex items-center space-x-2 mb-2">
+        //               <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+        //               <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+        //                   ${item.fields.place}
+        //               </p>
+        //           </div>
 
-                  <!-- Product Rating -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.rating} / 5
-                      </p>
-                  </div>
+        //           <!-- Product Rating -->
+        //           <div class="flex items-center space-x-2 mb-2">
+        //               <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
+        //               <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+        //                   ${item.fields.rating} / 5
+        //               </p>
+        //           </div>
                   
-                  <!-- Product Description -->
-                  <p class="text-gray-600 mb-4">${item.fields.description}</p>
+        //           <!-- Product Description -->
+        //           <p class="text-gray-600 mb-4">${item.fields.description}</p>
                   
-                  ${item.fields.owner_reply ? `
-                  <div class="bg-white p-3 rounded-lg">
-                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
-                      <p class="text-sm text-gray-600">${DOMPurify.sanitize(item.fields.owner_reply)}</p>
-                  </div>
-                  ` : ''}                  
+        //           ${item.fields.owner_reply ? `
+        //           <div class="bg-white p-3 rounded-lg">
+        //               <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+        //               <p class="text-sm text-gray-600">${DOMPurify.sanitize(item.fields.owner_reply)}</p>
+        //           </div>
+        //           ` : ''}                  
 
-              </div>
-          </div>`;
+        //       </div>
+        //   </div>`;
 
 
       });
     }
     document.getElementById("review_entry_cards").className = classNameString;
-    document.getElementById("review_entry_cards").innerHTML = htmlString;
+    // document.getElementById("review_entry_cards").innerHTML = htmlString;
   }
   refreshReviewEntries();
 

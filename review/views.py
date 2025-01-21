@@ -46,6 +46,8 @@ def show_review(request, menu_id=None):
     else:
         return render(request, 'review.html', context)
 
+
+
 @csrf_exempt
 @login_required(login_url='/login')
 def show_review_menu(request, menu_id):
@@ -136,6 +138,7 @@ def show_json_by_id(request, id):
 @csrf_exempt
 @require_POST
 def add_review_entry_ajax(request):
+    # name = strip_tags(request.POST.get("name"))
     menu = strip_tags(request.POST.get("menu"))
     place = strip_tags(request.POST.get("place"))
     rating = float(strip_tags(request.POST.get("rating")))
