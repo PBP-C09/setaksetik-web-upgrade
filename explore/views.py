@@ -7,8 +7,6 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 import json
