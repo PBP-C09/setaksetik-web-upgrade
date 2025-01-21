@@ -253,13 +253,13 @@ def add_menu_flutter(request):
         try:         
             data = json.loads(request.body)
             user = request.user
-            # Get the claimed restaurant for this user
+            # Ambil restoran yang di-claim oleh user ini
             claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
             
             if not claimed_restaurant:
                 return JsonResponse({"status": "error", "message": "No claimed restaurant found"}, status=400)
 
-            # Create new menu
+            # Buat menu baru
             new_menu = Menu.objects.create(
                 menu=data["menu"],
                 category=data["category"].title(),
@@ -328,12 +328,13 @@ def edit_flutter(request, menu_id):
         "message": "Invalid method"
     }, status=405)
     
-def string_to_bool(value): 
-    if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
+def string_to_bool(value):
+    """Fungsi untuk mengubah string jadi boolean""" 
+    if isinstance(value, bool):  
         return value
 
-    if isinstance(value, str):  # Pastikan nilai adalah string
-        value = value.strip().lower()  # Hapus spasi dan ubah ke huruf kecil
+    if isinstance(value, str): 
+        value = value.strip().lower()  
         
         if value in ('true'):
             return True

@@ -1,3 +1,4 @@
+// Fungsi untuk menampilkan modal tambah menu
 async function showAddMenuModal() {
     document.querySelector("#modal").classList.remove("hidden");
     
@@ -19,7 +20,8 @@ async function showAddMenuModal() {
         }
     });
 }
-  
+
+// Fungsi untuk menutup modal
 function closeModal() {
     const form = document.querySelector("#form");
     form.reset();
@@ -27,7 +29,8 @@ function closeModal() {
     clearErrorMessages();
 }
 
-  function validateForm() {
+// Fungsi untuk validasi form
+function validateForm() {
     let isValid = true;
     clearErrorMessages();
 
@@ -72,6 +75,7 @@ function closeModal() {
     return isValid;
 }
 
+// Fungsi untuk menampilkan pesan error
 function showError(element, message) {
     const errorDiv = element.parentElement.querySelector('.error-message');
     if (errorDiv) {
@@ -85,6 +89,7 @@ function showError(element, message) {
     element.classList.add('border-red-500');
 }
 
+// Fungsi untuk menghapus pesan error
 function clearError(element) {
     const errorDiv = element.parentElement.querySelector('.error-message');
     if (errorDiv) {
@@ -93,13 +98,15 @@ function clearError(element) {
     element.classList.remove('border-red-500');
 }
 
+// Fungsi untuk menghapus semua pesan error
 function clearErrorMessages() {
     document.querySelectorAll('.error-message').forEach(error => error.remove());
     document.querySelectorAll('.border-red-500').forEach(element => {
         element.classList.remove('border-red-500');
     });
 }
-  
+
+// Fungsi untuk menambahkan menu
 async function addMenu() {
     const form = document.querySelector("#form");
     const submitBtn = document.getElementById("confirm-modal");
@@ -134,6 +141,7 @@ async function addMenu() {
     }
 }
 
+// Fungsi untuk memperbarui daftar menu
 async function refreshMenuList() {
     try {
         const response = await fetch('/explore/get_menu/');
@@ -211,18 +219,20 @@ document.getElementById("confirm-modal").addEventListener("click", async functio
     await addMenu();
 });
 
-
-  function submitFilterForm() {
+// Fungsi untuk submit form filter
+function submitFilterForm() {
     var form = document.getElementById('filterForm');
     form.reset();
     form.submit();
-  }
-  
-  function returnToList(){
+}
+ 
+// Fungsi untuk kembali ke halaman explore
+function returnToList(){
     window.location.href="/explore";
-  }
+}
 
-  function toggleFilter() {
+// Fungsi untuk menampilkan atau menyembunyikan filter
+function toggleFilter() {
     const filterOptions = document.getElementById("filter-options");
     if (filterOptions.classList.contains("hidden")) {
         filterOptions.classList.remove("hidden");
@@ -231,6 +241,7 @@ document.getElementById("confirm-modal").addEventListener("click", async functio
     }
 }
 
+// Fungsi untuk menampilkan modal edit menu
 function showEditMenuModal(menuId) {
   $.ajax({
       url: `/get-menu/${menuId}/`,
@@ -248,6 +259,7 @@ function showEditMenuModal(menuId) {
   });
 }
 
+// Fungsi untuk menghapus menu
 function deleteMenu(menuId) {
   if (confirm("Are you sure you want to delete this menu?")) {
       $.ajax({
@@ -267,22 +279,20 @@ function deleteMenu(menuId) {
 
 // Fungsi untuk mengupdate menu
 function updateMenu() {
-  const menuId = document.getElementById('menu_id').value; // Ambil ID menu
-  const menuName = document.getElementById('menu_name').value; // Ambil nama menu
-  const restaurantName = document.getElementById('restaurant_name').value; // Ambil nama restoran
+  const menuId = document.getElementById('menu_id').value; 
+  const menuName = document.getElementById('menu_name').value; 
+  const restaurantName = document.getElementById('restaurant_name').value; 
 
-  // Kirim data ke server untuk diupdate
   $.ajax({
-      url: `edit-menu/<int:menu_id>/`, // Sesuaikan dengan endpoint untuk mengupdate menu
-      method: 'POST', // Atau POST sesuai dengan implementasi backend
+      url: `edit-menu/<int:menu_id>/`, 
+      method: 'POST', 
       data: {
           menu_name: menuName,
           restaurant_name: restaurantName
       },
       success: function(response) {
           alert('Menu updated successfully!');
-          // Refresh atau perbarui tampilan setelah pengupdatean
-          location.reload(); // Menggunakan reload untuk memperbarui tampilan
+          location.reload(); 
       },
       error: function(xhr, status, error) {
           console.error('Error updating menu:', error);

@@ -3,19 +3,21 @@
 {% block meta %}
 <title>SetakSetik | Edit Menu</title>
 {% endblock meta %}
-
 {% block content %}
 {% include 'navbar.html' %}
-<div class="flex flex-col min-h-screen bg-[#F5F5DC]"> <!-- Ganti warna latar belakang menjadi lebih netral -->
-    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
-        <h1 class="text-4xl font-bold text-center mb-8 text-[#6D4C41]">Edit Menu Details</h1> <!-- Warna merah gelap -->
+
+<!-- Edit Menu Form -->
+<div class="flex flex-col min-h-screen bg-[#F5F5DC]">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-3xl"> 
+        <h1 class="text-4xl font-bold text-center mb-8 text-[#6D4C41]">Edit Menu Details</h1>
         
-        <div class="bg-white rounded-lg shadow-lg p-6 form-style border-2 border-[#6D4C41]"> <!-- Tambahkan border -->
+        <!-- Form field -->
+        <div class="bg-white rounded-lg shadow-lg p-6 form-style border-2 border-[#6D4C41]">
             <form method="POST" class="space-y-6">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="flex flex-col">
-                        <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-[#3E2723]"> <!-- Warna gelap -->
+                        <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-[#3E2723]">
                             {{ field.label }}
                         </label>
                         <div class="w-full">
@@ -29,7 +31,9 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-                <div class="flex flex-col mt-6 space-y-4"> <!-- Tambahkan kelas flex-col untuk kolom -->
+
+                <!--  Buttons  -->
+                <div class="flex flex-col mt-6 space-y-4">
                     <button type="submit" class="bg-[#C62828] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#BF3E28] transition duration-300 ease-in-out w-full">
                         Update Menu
                     </button>
@@ -37,7 +41,6 @@
                         Back to Menu List
                     </button>
                 </div>
-                
             </form>
             {% if success %}
                 <p class="mt-4 text-green-600 text-center">{{ success }}</p>
@@ -50,31 +53,66 @@
 </div>
 
 <style>
-    /* Warna input text, select, dan textarea */
-    input[type="text"], input[type="number"], input[type="url"],
-    select, textarea {
-        color: #3E2723; /* Warna teks */
-        border: 1px solid #c5c2c1; /* Border khusus */
-        padding: 8px;
+    /* Standardized input sizing and styling */
+    input[type="text"], 
+    input[type="number"], 
+    input[type="url"],
+    select, 
+    textarea {
+        color: #3E2723;
+        border: 1px solid #c5c2c1;
+        padding: 12px; 
         border-radius: 4px;
-    }
-    
-    /* Placeholder input */
-    input::placeholder, textarea::placeholder {
-        color: #3E2723; /* Warna placeholder */
-        opacity: 1; 
+        width: 100%;
+        height: 45px; 
+        box-sizing: border-box;
     }
 
-    /* Input saat fokus */
-    input:focus, select:focus, textarea:focus {
+    /* Styling for textarea */
+    textarea {
+        height: 120px; 
+        resize: vertical;
+    }
+
+    /* Special styling for checkboxes */
+    input[type="checkbox"] {
+        width: auto;
+        height: auto;
+        margin-right: 8px;
+    }
+
+    /* Image input specific styling */
+    input[type="file"] {
+        height: 45px; 
+        padding: 8px;
+    }
+    
+    /* Placeholder styling */
+    input::placeholder, 
+    textarea::placeholder {
+        color: #3E2723;
+        opacity: 1;
+    }
+
+    /* Focus states */
+    input:focus, 
+    select:focus, 
+    textarea:focus {
         outline: none;
+        border-color: #6D4C41;
+        box-shadow: 0 0 0 1px #6D4C41;
     }
 
-    /* Warna pada option di dropdown */
+    /* Dropdown styling */
     select option {
-        color: #3E2723; 
+        color: #3E2723;
+        padding: 12px;
     }
-    
+
+    /* Form field spacing */
+    .form-style .flex.flex-col {
+        margin-bottom: 20px;
+    }
 </style>
 <script src="/static/js/ajax_menu.js"></script>
 {% endblock %}
