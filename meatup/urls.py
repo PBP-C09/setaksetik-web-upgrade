@@ -18,4 +18,5 @@ urlpatterns = [
     path('flutter/accept/<int:id>/', views.accept_message_flutter, name='accept_message_flutter'),
     path('flutter/reject/<int:id>/', views.reject_message_flutter, name='reject_message_flutter'),
     path('flutter/get-receivers/', views.get_receivers, name='get_receivers'),
+    path('flutter/get-messages-json/', views.get_messages_json, name='get_messages_json')
 ]
