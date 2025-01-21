@@ -120,7 +120,8 @@ def meatup_home_flutter(request):
         'receiver_id': msg.receiver.id,
         'title': msg.title,
         'content': msg.content,
-        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+        'status': message.status,
     } for msg in sent_messages]
 
     received_messages_data = [{
@@ -130,7 +131,8 @@ def meatup_home_flutter(request):
         'receiver': msg.receiver.user.username,
         'title': msg.title,
         'content': msg.content,
-        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        'timestamp': msg.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+        'status': message.status
     } for msg in received_messages]
 
     response_data = {
@@ -157,7 +159,6 @@ def create_message_flutter(request):
                     "message": "Receiver not found"
                 }, status=404)
             
-            # Membuat pesan baru
             new_message = Message.objects.create(
                 sender=sender_user_profile,
                 receiver=receiver_user_profile,
@@ -237,6 +238,7 @@ def get_messages_json(request):
         'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M'),
         'title': message.title,
         'content': message.content,
+        'status': message.status,
     } for message in sent_messages]
 
     received_messages_data = [{
@@ -246,6 +248,7 @@ def get_messages_json(request):
         'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M'),
         'title': message.title,
         'content': message.content,
+        'status': message.status
     } for message in received_messages]
 
     return JsonResponse({
