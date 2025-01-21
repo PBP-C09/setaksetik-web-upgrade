@@ -79,14 +79,6 @@
           <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Manage Review</a>
           <a href="{% url 'claim:manage_ownership' %}" class="mobile-nav-link {% if '/claim/' in request.path %}font-bold{% endif %}">Manage Ownership</a>
         {% endif %}
-      {% else %}
-        <a href="/explore/" class="mobile-nav-link {% if '/explore/' in request.path %}font-bold{% endif %}">Explore</a>
-        <a href="/spinthewheel/" class="mobile-nav-link {% if '/spinthewheel/' in request.path %}font-bold{% endif %}">Spin</a>
-        <a href="/review/" class="mobile-nav-link {% if '/review/' in request.path %}font-bold{% endif %}">Review</a>
-        <a href="/meatup/" class="mobile-nav-link {% if '/meatup/' in request.path %}font-bold{% endif %}">Meat Up</a>
-        <a href="/booking/" class="mobile-nav-link {% if '/booking/' in request.path %}font-bold{% endif %}">Booking</a>
-      {% endif %}
-      {% if user.is_authenticated %}
         <a href="{% url 'main:logout' %}" class="mobile-nav-link">Logging out, <span class="italic font-bold" style="font-family: 'Playfair Display'">{{ user.userprofile.full_name }}</span>?</a>
       {% else %}
         <a href="{% url 'main:login' %}" class="mobile-nav-link">Login</a>
