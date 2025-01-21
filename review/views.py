@@ -60,6 +60,20 @@ def show_review_menu(request, menu_id):
         return render(request, 'review_owner.html', context)
     return render(request, 'review_menu.html', context)
 
+@csrf_exempt
+@login_required(login_url='/login')
+def show_review_owner(request):
+    user = request.user
+    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+
+    context = {
+        'restaurant' : claimed_restaurant
+    }
+    
+    if claimed_restaurant:
+        reviews = ReviewEntry.objects.filter(menu_items=claimed_restaurant)
+        context['reviews'] = reviews
+    return render(request, 'review_owner.html', context)
 
 
 @csrf_exempt

@@ -21,9 +21,15 @@
   <div id="review_entry_cards"></div>
 </div>
 
+
+// TODO: Dharusnya ga json/id
 <script>
   async function getReviewEntries() {
-    return fetch("{% url 'review:show_json' %}").then((res) => res.json())
+    const id = "{{menu_restaurant_name}}".toString() == "None" ? "" : "{{menu_restaurant_name}}"
+
+    console.log(id);
+
+    return fetch(`/review/json/${id}`).then((res) => res.json())
   }
 
   async function submitReply(reviewId, inputElement) {
