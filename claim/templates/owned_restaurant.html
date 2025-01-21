@@ -97,7 +97,7 @@
                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
             </div>
             
-            <!-- Restaurant Name (Hidden & Disabled) -->
+            <!-- Restaurant Name (Disabled) -->
             <div class="mb-4">
                 <label class="block text-[#3E2723] text-sm font-bold mb-2">Restaurant</label>
                 <input type="text" 
@@ -106,7 +106,7 @@
                        disabled>
             </div>
 
-            <!-- City -->
+            <!-- City (disabled)-->
             <div class="mb-4">
                 <label for="city" class="block text-[#3E2723] text-sm font-bold mb-2">City</label>
                 <select id="city" 
@@ -279,7 +279,7 @@ document.getElementById('addMenuForm').addEventListener('submit', async function
     }
 });
 
-// Close modal when clicking outside
+// Close modal ketika diklik
 document.getElementById('addMenuModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeAddMenuModal();
