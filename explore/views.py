@@ -1,4 +1,3 @@
-# Create your views here
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Menu
 from main.models import UserProfile
@@ -8,15 +7,15 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 
+# Fungsi untuk menampilkan semua menu
 @login_required(login_url='/login')
 def show_menu(request):
+     # Filter menu berdasarkan role user
     user_profile = UserProfile.objects.get(user=request.user)
     if user_profile.role.casefold() == "admin" :
         menus = Menu.objects.all()
@@ -31,6 +30,7 @@ def show_menu(request):
         'explore': menus,  
     }
 
+    # Proses filter berdasarkan input user
     if form.is_valid():
         menu_name = form.cleaned_data.get("menu")
         kategori = form.cleaned_data.get("category")
@@ -63,20 +63,24 @@ def show_menu(request):
     if user_profile.role.casefold() == "admin":
         return render(request, 'menu_admin.html', context)
     
+    # Jika pengguna adalah owner
     if (user_profile.role.casefold() == "steakhouse owner"):
         if (Menu.objects.filter(claimed_by=request.user).count() == 0):
             return render(request, 'menu_owner.html', context)
         else:
             return redirect('claim:owned_restaurant')
-    
+        
+    # Jika pengguna adalah steaklover
     return render(request, 'menu.html', context)
 
+# Fungsi untuk menampilkan menu detail
 @login_required(login_url='/login')
 def menu_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     context = {'menu': menu}
     return render(request, 'menu_detail.html', context)
 
+# Fungsi untuk menampilkan menu detail
 @login_required(login_url='/login')
 def admin_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
@@ -89,6 +93,7 @@ def owner_detail(request, menu_id):
     context = {'menu': menu}
     return render(request, 'owner_detail.html', context)
 
+# Fungsi untuk menambah menu 
 @csrf_exempt
 @require_POST
 @login_required(login_url='/login')
@@ -115,16 +120,19 @@ def add_menu(request):
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
 
+# Fungsi untuk mendapatkan semua menu dalam format JSON
 @login_required(login_url='/login')
 def get_menu(request):
     data = Menu.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+# Fungsi untuk mendapatkan menu berdasarkan ID dalam format JSON
 @login_required(login_url='/login')
 def get_menu_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+# Fungsi untuk edit menu 
 @csrf_exempt
 @login_required(login_url='/login')
 def edit_menu(request, menu_id):
@@ -140,12 +148,14 @@ def edit_menu(request, menu_id):
 
     return render(request, 'edit_menu.html', {'form': form, 'menu': menu})
 
+# Fungsi untuk hapus menu 
 @login_required(login_url='/login')
 def delete_menu(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     menu.delete()
     return redirect('explore:show_menu')
 
+# Fungsi untuk filter menu 
 @csrf_exempt
 @login_required(login_url='/login')
 def filter_menu(request):
@@ -183,26 +193,31 @@ def filter_menu(request):
     menu_json = serializers.serialize('json', menus)
     return JsonResponse(menu_json, safe=False)
 
+# Fungsi untuk Menampilkan data dalam format XML
 @login_required(login_url='/login')
 def show_xml(request):
     data = Menu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+# Fungsi untuk Menampilkan data dalam format JSON
 @login_required(login_url='/login')
 def show_json(request):
     data = Menu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+# Fungsi untuk Menampilkan data berdasarkan ID dalam format XML
 @login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+# Fungsi untuk Menampilkan data berdasarkan ID dalam format JSON
 @login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = Menu.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+# Fungsi untuk menambah menu di flutter
 @csrf_exempt
 def create_flutter(request):    
     if request.method == 'POST':
@@ -234,6 +249,7 @@ def create_flutter(request):
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
 
+# Fungsi untuk edit menu di flutter
 @csrf_exempt
 def edit_flutter(request, menu_id):
     if request.method == 'POST':
@@ -276,12 +292,13 @@ def edit_flutter(request, menu_id):
         "message": "Invalid method"
     }, status=405)
 
+# Fungsi untuk mengubah string jadi boolean
 def string_to_bool(value): 
-    if isinstance(value, bool):  # Jika sudah boolean, kembalikan nilai langsung
+    if isinstance(value, bool):  
         return value
 
-    if isinstance(value, str):  # Pastikan nilai adalah string
-        value = value.strip().lower()  # Hapus spasi dan ubah ke huruf kecil
+    if isinstance(value, str): 
+        value = value.strip().lower()  
         
         if value in ('true'):
             return True

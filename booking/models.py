@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from explore.models import Menu # Import from explore.modelspy
+from explore.models import Menu # Import dari explore.modelspy
 import uuid
 
 # Create your models here.

@@ -49,7 +49,6 @@ def option_json(request, selected_category="All Categories"):
 def add_spin_history(request):
     form = SpinHistoryForm(request.POST or None)
 
-    # Create new SpinHistory entry
     if form.is_valid() and request.method == "POST":
         spin_history = form.save(commit=False)
         spin_history.user = request.user
@@ -84,7 +83,6 @@ def secret_json(request):
 def add_secret_history(request):
     form = SecretHistoryForm(request.POST or None)
 
-    # Create new SpinHistory entry
     if form.is_valid() and request.method == "POST":
         secret_history = form.save(commit=False)
         secret_history.user = request.user

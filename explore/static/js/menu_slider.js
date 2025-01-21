@@ -116,7 +116,7 @@ function updateInput(inputId, value) {
     track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #502911 ${minPercent}%, #502911 ${maxPercent}%, #ddd ${maxPercent}%)`;
 }
   
-  // Initialize background on page load
+  // Inisialisasi background slider saat halaman dimuat
   document.addEventListener("DOMContentLoaded", function() {
     updateSliderBackgroundPrice();
     updateSliderBackgroundRate();
