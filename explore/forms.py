@@ -2,6 +2,7 @@ from django import forms
 from .models import Menu
 from django.utils.html import strip_tags
 
+# Pilihan kategori
 CATEGORY_CHOICES = [
     ('beef', 'Beef'),
     ('chicken', 'Chicken'),
@@ -16,6 +17,7 @@ CATEGORY_CHOICES = [
     ('wagyu', 'Wagyu'),
 ]
 
+# Pilihan kota
 CITY_CHOICES = [
     ('Central Jakarta', 'Central Jakarta'),
     ('East Jakarta', 'East Jakarta'),
@@ -24,6 +26,7 @@ CITY_CHOICES = [
     ('West Jakarta', 'West Jakarta'),
 ]
 
+# Pilihan specialized
 SPECIALIZED_CHOICES = [
     ('argentinian', 'Argentinian'),
     ('brazilian', 'Brazilian'),
@@ -40,6 +43,7 @@ SPECIALIZED_CHOICES = [
     ('singaporean', 'Singaporean'),
 ]
 
+# Class form untuk filter menu 
 class MenuFilterForm(forms.Form):
     menu = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'menu'}))
     category = forms.ChoiceField(choices=[('', 'Select category')] + CATEGORY_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
@@ -52,11 +56,11 @@ class MenuFilterForm(forms.Form):
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '1000',      # Nilai minimum
-            'max': '1800000',   # Nilai maksimum
-            'step': '1000',    # Langkah
-            'value': '1000',    # Nilai awal
-            'oninput': "this.nextElementSibling.value = this.value" # Menampilkan nilai
+            'min': '1000',      
+            'max': '1800000',   
+            'step': '1000',    
+            'value': '1000',    
+            'oninput': "this.nextElementSibling.value = this.value" 
         })
     )
 
@@ -64,42 +68,41 @@ class MenuFilterForm(forms.Form):
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '1000',      # Nilai minimum
-            'max': '1800000',   # Nilai maksimum
-            'step': '1000',    # Langkah
-            'value': '1800000', # Nilai awal
-            'oninput': "this.nextElementSibling.value = this.value" # Menampilkan nilai
+            'min': '1000',      
+            'max': '1800000',   
+            'step': '1000',    
+            'value': '1800000', 
+            'oninput': "this.nextElementSibling.value = this.value" 
         })
     )
     min_rating = forms.FloatField(
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '0',     # Atur nilai minimum
-            'max': '5',     # Atur nilai maksimum (ubah sesuai kebutuhan)
-            'step': '0.1',  # Atur langkah perubahan
-            'value': '0',   # Nilai awal slider
-            'oninput': "this.nextElementSibling.value = this.value" # Untuk menampilkan nilai
+            'min': '0',     
+            'max': '5',     
+            'step': '0.1',  
+            'value': '0',   
+            'oninput': "this.nextElementSibling.value = this.value" 
         })
     )
-    # Menampilkan nilai di samping slider
     max_rating = forms.FloatField(
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '0',     # Atur nilai minimum
-            'max': '5',     # Atur nilai maksimum (ubah sesuai kebutuhan)
-            'step': '0.1',  # Atur langkah perubahan
-            'value': '5',   # Nilai awal slider
-            'oninput': "this.nextElementSibling.value = this.value" # Untuk menampilkan nilai
+            'min': '0',     
+            'max': '5',     
+            'step': '0.1',  
+            'value': '5',   
+            'oninput': "this.nextElementSibling.value = this.value" 
         })
     )
-    # Menampilkan nilai di samping slider
 
+# Class form untuk menambahkan menu baru
 class AddMenuForm(forms.ModelForm):
    class Meta:
        model = Menu
-       fields = ['menu', 'restaurant_name', 'price', 'rating', 'city', 'category', 'specialized', 'takeaway', 'delivery', 'outdoor', 'smoking_area', 'wifi', 'image']
+       fields = ['menu', 'restaurant_name', 'price', 'rating', 'city', 'category', 'specialized', 'image','takeaway', 'delivery', 'outdoor', 'smoking_area', 'wifi']
        widgets = {
             'takeaway': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
             'delivery': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),
@@ -111,6 +114,7 @@ class AddMenuForm(forms.ModelForm):
        def clean_menu(self):
             menu = self.cleaned_data["menu"]
             return strip_tags(menu)
+       
        def clean_restaurant(self):
             restaurant = self.cleaned_data["restaurant"]
             return strip_tags(restaurant)
