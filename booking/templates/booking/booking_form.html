@@ -1,77 +1,120 @@
 {% extends "base.html" %}
 {% include 'navbar.html' %}
-
 {% load static %}
 
 {% block meta %}
     <title>SetakSetik | Booking Form</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<div class="container mx-auto py-12 px-4 lg:px-8">
-    <!-- Section Header -->
-    <div class="text-center mb-12">
-        <h1 class="text-5xl font-bold text-brown-900">Book a Restaurant</h1>
-        <p class="mt-4 text-lg text-brown-900">Fill in the details below to confirm your reservation.</p>
-    </div>
+<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;">
+    <!-- Header -->
+    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
+        Make a <span class="italic">Booking</span>
+    </h1>
 
-    <!-- Booking Form -->
-    <div class="max-w-xl mx-auto bg-brown-800 p-8 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-semibold text-white mb-6">Booking Form</h2>
+    <!-- Form Section -->
+    <div class="bg-[#F5F5DC] p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <form id="bookingForm" method="POST">
             {% csrf_token %}
-            <div class="space-y-4">
-                <div class="flex flex-col">
-                    <label for="booking_date" class="text-lg font-medium text-white mb-2">Booking Date:</label>
-                    <input id="booking_date" name="booking_date" type="date" class="form-input block w-full bg-white text-gray-900 rounded-lg py-3 px-4 focus:ring-yellow-500 focus:border-yellow-500" required>
+            <div class="space-y-6">
+                <div>
+                    <label for="booking_date" class="block text-[#3E2723] text-lg font-medium mb-2">Booking Date</label>
+                    <input id="booking_date" 
+                           name="booking_date" 
+                           type="date" 
+                           class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
+                           required>
                 </div>
-                <div class="flex flex-col">
-                    <label for="number_of_people" class="text-lg font-medium text-white mb-2">Number of People:</label>
-                    <input id="number_of_people" name="number_of_people" type="number" min="1" class="form-input block w-full bg-white text-gray-900 rounded-lg py-3 px-4 focus:ring-yellow-500 focus:border-yellow-500" required>
+
+                <div>
+                    <label for="number_of_people" class="block text-[#3E2723] text-lg font-medium mb-2">Number of People</label>
+                    <input id="number_of_people" 
+                           name="number_of_people" 
+                           type="number" 
+                           min="1"
+                           class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
+                           required>
+                </div>
+
+                <div class="flex justify-between pt-6">
+                    <a href="{% url 'booking:create_booking' %}" 
+                       class="bg-[#5B3E39] hover:bg-[#3E2723] text-white font-bold py-2 px-6 rounded-full">
+                        Back
+                    </a>
+                    <button type="submit" 
+                            class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
+                        Submit Booking
+                    </button>
                 </div>
             </div>
-            <button type="submit" class="mt-6 w-full bg-yellow-500 text-white py-3 rounded-lg shadow-lg font-semibold hover:bg-yellow-600 transition duration-300">Submit Booking</button>
         </form>
 
         <div id="successMessage" class="hidden mt-4 p-4 bg-green-500 text-white rounded-lg">
             Booking successfully submitted!
         </div>
-
-        <!-- Back to Booking List Button -->
-        <div class="mt-6 text-center">
-            <a href="{% url 'booking:create_booking' %}" class="inline-block bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 shadow-md transition duration-300">Back to Booking Page</a>
-        </div>
     </div>
 
-    <!-- Booking List -->
+    <!-- Booking List Section -->
     <div class="mt-12">
-        <h2 class="text-3xl font-semibold text-brown-900 mb-8">Your Bookings</h2>
+        <h2 class="text-[42px] text-3xl font-reguler text-[#F5F5DC] text-center mb-8">
+            Your <span class="italic">Bookings</span>
+        </h2>
+
         {% if bookings %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for booking in bookings %}
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
-                        <img class="w-full h-48 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold text-brown-900 mb-2">{{ booking.menu.restaurant_name }}</h3>
-                            <p class="text-gray-700 mb-2"><strong>Date:</strong> {{ booking.booking_date | date:"F d, Y" }}</p>
-                            <p class="text-gray-700 mb-2"><strong>People:</strong> {{ booking.number_of_people }}</p>
-                            <p class="text-gray-700 mb-2"><strong>Menu:</strong> {{ booking.menu_items.menu }}</p>
-                            <p class="text-gray-700 mb-2"><strong>Location:</strong> {{ booking.menu_items.city }}</p>
-                            <p class="text-gray-700 mb-2"><strong>Rating:</strong> {{ booking.menu_items.rating }}</p>
-                            <p class="text-gray-700"><strong>Status:</strong> {{ booking.get_status_display }}</p>
-                        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for booking in bookings %}
+            <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
+                <div class="relative">
+                    <img class="w-full h-64 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
+                </div>
+
+                <div class="px-4 py-4 flex-grow">
+                    <div class="text-xl text-[#3E2723] font-bold mb-4" style="font-family: 'Playfair Display', serif;">
+                        {{ booking.menu_items.restaurant_name }}
                     </div>
-                {% endfor %}
+
+                    <!-- Date -->
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        {{ booking.booking_date|date:"F d, Y" }}
+                    </div>
+
+                    <!-- People -->
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                        </svg>
+                        {{ booking.number_of_people }} people
+                    </div>
+
+                    <!-- Status -->
+                    <div class="flex flex-wrap gap-2 mb-2 mt-4">
+                        <span class="bg-[#F7B32B] text-white text-sm font-medium py-1 px-3 rounded-full">
+                            Status: {{ booking.get_status_display }}
+                        </span>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
+        </div>
         {% else %}
-            <p class="text-gray-700 text-lg">You don't have any bookings yet.</p>
+        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+            <!-- Gambar dari URL -->
+            <img src="https://wallpapers.com/images/hd/sad-face-emoji-illustration-h5k25uxxbr9h7sjg.jpg" 
+                alt="Sad Face" class="w-52 h-52 mb-0 object-contain"/>
+
+            <p class="text-center text-[#F5F5DC] mt-4">You don't have any booking yet :3</p>
+        </div>
         {% endif %}
     </div>
 </div>
 
-<!-- AJAX Script for handling form submission -->
 <script>
     const form = document.getElementById('bookingForm');
     const successMessage = document.getElementById('successMessage');
@@ -79,7 +122,7 @@
     const bookingContainer = document.querySelector('.grid');
 
     form.addEventListener('submit', function(event) {
-        event.preventDefault();  // Prevent form submission
+        event.preventDefault(); 
 
         const formData = new FormData(form);
         const csrfToken = formData.get('csrfmiddlewaretoken');
@@ -96,9 +139,8 @@
             if (data.message) {
                 successMessage.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
-                form.reset();  // Reset form after submission
+                form.reset(); 
 
-                // Add new booking card to the booking list
                 const booking = data.booking;
                 const bookingCard = `
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
