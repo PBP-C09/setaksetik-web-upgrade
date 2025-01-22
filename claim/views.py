@@ -129,12 +129,12 @@ def add_menu(request):
         city = claimed_restaurant.city
         price = request.POST.get('price')
         rating = request.POST.get('rating')
-        specialized = request.POST.get('specialized').title()
-        takeaway = request.POST.get('takeaway') == 'on'
-        delivery = request.POST.get('delivery') == 'on'
-        outdoor = request.POST.get('outdoor') == 'on'
-        smoking_area = request.POST.get('smoking_area') == 'on'
-        wifi = request.POST.get('wifi') == 'on'
+        specialized = claimed_restaurant.specialized
+        takeaway = claimed_restaurant.takeaway
+        delivery = claimed_restaurant.delivery
+        outdoor = claimed_restaurant.outdoor
+        smoking_area = claimed_restaurant.smoking_area
+        wifi = claimed_restaurant.wifi
         image = request.POST.get('image_url')
 
         new_menu = Menu(menu=menu, category=category, restaurant_name=restaurant_name, city=city, 
@@ -267,13 +267,13 @@ def add_menu_flutter(request):
                 city= claimed_restaurant.city,
                 price=int(data["price"]),  
                 rating=float(data["rating"]),
-                specialized=data["specialized"].title(),
+                specialized=claimed_restaurant.specialized,
                 image=data.get("image", "default_image_url"),
-                takeaway=string_to_bool(data["takeaway"]),
-                delivery=string_to_bool(data["delivery"]),
-                outdoor=string_to_bool(data["outdoor"]),
-                smoking_area=string_to_bool(data["smoking_area"]),
-                wifi=string_to_bool(data["wifi"]),
+                takeaway = claimed_restaurant.takeaway,
+                delivery = claimed_restaurant.delivery,
+                outdoor = claimed_restaurant.outdoor,
+                smoking_area = claimed_restaurant.smoking_area,
+                wifi = claimed_restaurant.wifi,
                 claimed_by=user 
             )
             new_menu.save()
