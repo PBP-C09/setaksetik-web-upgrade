@@ -4,41 +4,75 @@
 {% block content %}
 <title>SetakSetik | Resto Ownership</title>
 
-<!-- Ownership Card Section -->
-<div class="flex items-center justify-center mt-32">
-    <div class="px-7 py-5 bg-[#f5f5dc] rounded-[20px] flex-col justify-start items-start gap-5 inline-flex transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out">
-        <div class="h-[181px] flex-col justify-start items-start gap-2 flex">
-            <div class="self-stretch justify-between items-center inline-flex">
-                <div class="w-full text-[#5b3e39] text-[40px] font-bold" style="font-family: 'Playfair Display'; font-style: italic">Card of Ownership</div>
-            </div>
-            <div class="self-stretch h-[120px] flex-col justify-start items-start gap-1 flex mt-6 mb-6">
-                <div class="self-stretch flex items-center gap-1">
-                    <div class="text-[#5b3e39] text-base font-normal font-['Raleway']">This is to verify that</div>
-                    <div class="flex-grow h-[1px] bg-[#5b3e39]"></div>
-                </div>
-                <div class="self-stretch justify-start items-end gap-1 inline-flex">
-                    <div class="text-[#5b3e39] text-2xl font-normal" style="font-family: 'Playfair Display'; font-style: italic">{{ request.user.userprofile.full_name }}</div>
-                </div>
-                <div class="self-stretch justify-end items-end gap-1 inline-flex"></div>
-                <div class="self-stretch flex items-center gap-1 mt-3">
-                    <div class="flex-grow h-[1px] bg-[#5b3e39]"></div>
-                    <div class="text-[#5b3e39] text-base font-normal font-['Raleway']">is the One True Owner of</div>
-                </div>
-                <div class="self-stretch flex justify-end items-end gap-1">
-                    <div class="text-[#5b3e39] text-2xl font-normal" style="font-family: 'Playfair Display'; font-style: italic">{{ restaurant.restaurant_name }}</div>
-                </div>
-            </div>
+<!-- Ownership Card -->
+<div class="flex items-center justify-center min-h-screen p-4">
+    <!-- Card Container -->
+    <div class="w-full max-w-xl">
+        <!-- Header Card -->
+        <div class="bg-[#3E2723] text-[#F5F5DC] p-8 rounded-t-3xl shadow-xl">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-center" 
+                style="font-family: 'Playfair Display'; font-style: italic">
+                Card of Ownership
+            </h1>
         </div>
-        <div class="h-[19px] flex-col justify-start items-start gap-1 flex">
-            <div class="self-stretch"></div>
-        </div>
-        <div class="flex justify-between gap-4 mt-4 w-full">
-            <a href="{% url 'claim:delete_ownership' restaurant.id %}" class="bg-[#842323] text-[#F5F5DC] font-medium italic py-2 px-4 rounded hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display';">
-                Disown Restaurant
-            </a>
-            <a href="{% url 'booking:pantau_booking_owner' %}" class="bg-[#C08C25] text-[#F5F5DC] font-medium italic py-2 px-4 rounded hover:bg-[#F5F5DC] hover:text-[#3E2723] transition-all duration-300" style="font-family:'Playfair Display';">
-                See Bookings
-            </a>
+
+        <!-- Main Card -->
+        <div class="bg-[#F5F5DC] rounded-b-3xl shadow-2xl">
+            <!-- Content Container -->
+            <div class="p-8 md:p-10">
+                <!-- Owner Info Section -->
+                <div class="space-y-8 mb-12">
+                    <!-- Verification Section -->
+                    <div class="relative">
+                        <span class="block text-[#6D4C41] text-sm uppercase tracking-wider font-['Raleway'] mb-2">
+                            Verified Owner
+                        </span>
+                        <div class="relative group">
+                            <div class="flex items-end w-full">
+                                <h2 class="text-[#3E2723] text-2xl md:text-3xl font-medium whitespace-nowrap" 
+                                    style="font-family: 'Playfair Display'; font-style: italic">
+                                    {{ request.user.userprofile.full_name }}
+                                </h2>
+                                <div class="flex-grow border-b-2 border-[#3E2723] ml-4 mb-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Section -->
+                    <div class="relative">
+                        <span class="block text-[#6D4C41] text-sm uppercase tracking-wider font-['Raleway'] mb-2">
+                            Restaurant
+                        </span>
+                        <div class="relative group">
+                            <div class="flex items-end w-full">
+                                <h2 class="text-[#3E2723] text-2xl md:text-3xl font-medium whitespace-nowrap" 
+                                    style="font-family: 'Playfair Display'; font-style: italic">
+                                    {{ restaurant.restaurant_name }}
+                                </h2>
+                                <div class="flex-grow border-b-2 border-[#3E2723] ml-4 mb-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="{% url 'booking:pantau_booking_owner' %}" 
+                       class="flex items-center justify-center gap-2 bg-[#FFD54F] border-2 border-[#FFD54F] text-[#3E2723] py-4 px-6 rounded-xl hover:bg-transparent hover:text-[#FFD54F] transition-all duration-300 group">
+                        <span class="font-medium" style="font-family: 'Playfair Display'; font-style: italic">View Bookings</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="{% url 'claim:delete_ownership' restaurant.id %}" 
+                       class="flex items-center justify-center gap-2 bg-transparent border-2 border-[#842323] text-[#842323] py-4 px-6 rounded-xl hover:bg-[#842323] hover:text-[#F5F5DC] transition-all duration-300 group">
+                        <span class="font-medium" style="font-family: 'Playfair Display'; font-style: italic">Disown Restaurant</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
