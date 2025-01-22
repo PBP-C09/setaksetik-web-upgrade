@@ -99,7 +99,7 @@
 
     <!-- Add Menu Button -->
     <div class="flex justify-center mb-8">
-        <button onclick="showAddMenuModal()" class="bg-[#C62828] flex items-center gap-2 text-white font-raleway font-medium pr-4 pl-3 py-2 rounded hover:bg-[#FF5252] transition duration-300">
+        <button onclick="showAddMenuModal()" class="bg-[#842323] flex items-center gap-2 text-white font-raleway font-medium pr-4 pl-3 py-2 rounded hover:bg-[#B23A3A] transition duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
             </svg>
@@ -157,6 +157,31 @@
                 </select>
             </div>
 
+            <!-- Specialized (disabled)-->
+            <div class="mb-4">
+                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized</label>
+                <select id="specialized" 
+                        name="specialized" 
+                        required 
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]"
+                        disabled>
+                    <option value="">Select Specialized</option>
+                    <option value="Argentinian" {% if restaurant.specialized == "Argentinian" %}selected{% endif %}>Argentinian</option>
+                    <option value="Brazilian" {% if restaurant.specialized == "Brazilian" %}selected{% endif %}>Brazilian</option>
+                    <option value="Breakfast Cafe" {% if restaurant.specialized == "Breakfast Cafe" %}selected{% endif %}>Breakfast Cafe</option>
+                    <option value="British" {% if restaurant.specialized == "British" %}selected{% endif %}>British</option>
+                    <option value="French" {% if restaurant.specialized == "French" %}selected{% endif %}>French</option>
+                    <option value="Fushioned" {% if restaurant.specialized == "Fushioned" %}selected{% endif %}>Fushioned</option>
+                    <option value="Italian" {% if restaurant.specialized == "Italian" %}selected{% endif %}>Italian</option>
+                    <option value="Japanese" {% if restaurant.specialized == "Japanese" %}selected{% endif %}>Japanese</option>
+                    <option value="Local" {% if restaurant.specialized == "Local" %}selected{% endif %}>Local</option>
+                    <option value="Local Westerned" {% if restaurant.specialized == "Local Westerned" %}selected{% endif %}>Local Westerned</option>
+                    <option value="Mexican" {% if restaurant.specialized == "Mexican" %}selected{% endif %}>Mexican</option>
+                    <option value="Western" {% if restaurant.specialized == "Western" %}selected{% endif %}>Western</option>
+                    <option value="Singaporean" {% if restaurant.specialized == "Singaporean" %}selected{% endif %}>Singaporean</option>
+                </select>
+            </div>
+
             <!-- Category -->
             <div class="mb-4">
                 <label for="category" class="block text-[#3E2723] text-sm font-bold mb-2">Category*</label>
@@ -179,30 +204,6 @@
                 </select>
             </div>
 
-            <!-- Specialized -->
-            <div class="mb-4">
-                <label for="specialized" class="block text-[#3E2723] text-sm font-bold mb-2">Specialized*</label>
-                <select id="specialized" 
-                        name="specialized" 
-                        required 
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#C62828]">
-                    <option value="">Select Specialized</option>
-                    <option value="Argentinian">Argentinian</option>
-                    <option value="Brazilian">Brazilian</option>
-                    <option value="Breakfast Cafe">Breakfast Cafe</option>
-                    <option value="British">British</option>
-                    <option value="French">French</option>
-                    <option value="Fushioned">Fushioned</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Local">Local</option>
-                    <option value="Local Westerned">Local Westerned</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Western">Western</option>
-                    <option value="Singaporean">Singaporean</option>
-                </select>
-            </div>
-
             <!-- Price -->
             <div class="mb-4">
                 <label for="price" class="block text-[#3E2723] text-sm font-bold mb-2">Price (Rp)*</label>
@@ -222,7 +223,7 @@
                 <input type="number" 
                        id="rating" 
                        name="rating" 
-                       placeholder="Add rating (0 - 5)"
+                       placeholder="Add rating (0.0 - 5.0)"
                        required 
                        min="0" 
                        max="5" 
