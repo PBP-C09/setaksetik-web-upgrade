@@ -1,7 +1,7 @@
 from django.urls import path
 from explore.views import get_menu, show_menu, menu_detail, add_menu, get_menu_by_id, filter_menu, admin_detail, owner_detail, edit_menu, delete_menu, show_xml, show_json, show_xml_by_id, show_json_by_id, create_flutter, edit_flutter
 from booking.views import booking_form, lihat_booking
-from review.views import show_review
+from review.views import show_review, show_review_menu
 from claim.views import claim_restaurant
 
 app_name = "explore"
@@ -18,6 +18,7 @@ urlpatterns = [
     path('get_menu/<int:id>/', get_menu_by_id, name="get_menu_by_id"),
     path('add_menu/', add_menu, name='add_menu'),
     path('form/<int:menu_id>/', booking_form, name='booking_form'),
+    path('review/<int:menu_id>/', show_review_menu, name='show_review_menu'),
     path('filter_menu/', filter_menu, name='filter_menu'),
     path('', show_review, name='show_review'),
     path('lihat/', lihat_booking, name='lihat_booking'),

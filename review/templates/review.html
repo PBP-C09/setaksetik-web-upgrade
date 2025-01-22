@@ -19,25 +19,168 @@
     <p class="text-center">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
   </div>
 
-  <div class="flex justify-center mt-0 mb-0"> <!--mt-4 itu margin top-->
-    <a href="{% url 'review:create_review_entry' %}">
-      <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 mb-8">Tambah Review</button>
-    </a>
+  <div class="flex justify-center mt-0 mb-0">
+    {% if menu_id %}
+      {% for men in menus %}
+        {% if men.id == menu_id %}
+
+          
+          <button 
+              data-modal-target="crudModal" 
+              data-modal-toggle="crudModal"
+              class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              onclick="showModal(this)"
+              data-image="{{ menu.image }}"
+              data-menu="{{ menu.menu }}"
+              data-restaurant="{{ menu.restaurant_name }}"
+              data-description="{{ menu.description }}">
+              Tambah Review untuk {{men.menu}}
+          </button>
+        {% endif %}
+      {% endfor %}
+
+    {% else %}
+      <a href="{% url 'review:create_review_entry' %}">
+        <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 mb-8">
+          Tambah Review
+        </button>
+      </a>
+    {% endif %}
   </div>
+
+  <div id="crudModal" tabindex="-1" aria-hidden="true"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div id="crudModalContent"
+      class="relative bg-[#F5F5DC] rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">Tambah Review</h3>
+        <button type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+          id="closeModalBtn">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="px-6 py-4 space-y-6">
+        <form id="ReviewEntryForm">
+          <!-- Menu Information -->
+          <div class="flex items-center space-x-4 mb-4">
+            <img id="modalImage" class="w-24 h-24 rounded-lg object-cover" src="" alt="Menu Image">
+            <div>
+              <h3 id="modalMenuName" class="text-2xl font-semibold text-[#5B3E39]"></h3>
+              <p id="modalRestaurant" class="text-sm text-gray-600"></p>
+            </div>
+          </div>
+          <!-- Hidden Fields -->
+          <input type="hidden" id="hiddenMenu" name="menu">
+          <input type="hidden" id="hiddenPlace" name="place">
+          <!-- Rating Input -->
+          <div>
+            <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
+            <input type="number" id="rating" name="rating" min="1" max="5"
+              class="mt-1 block w-full border rounded-md p-2 text-black"
+              placeholder="Rating (1-5)" required>
+          </div>
+          <!-- Review Description -->
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+            <textarea id="description" name="description" rows="4"
+              class="mt-1 block w-full border rounded-md p-2 text-black"
+              placeholder="Deskripsi ulasan Anda" required></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="flex justify-end space-x-2 p-4 border-t">
+        <button type="button" id="cancelButton"
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Batal</button>
+        <button type="submit" form="ReviewEntryForm" id="submitReviewEntry"
+          class="px-4 py-2 bg-[#6D4C41] text-white rounded-lg hover:bg-[#A36F5E]">Simpan</button>
+      </div>
+    </div>
+  </div>
+
   
-  <div id="review_entry_cards"></div>
   
+  
+  <!-- <div id="review_entry_cards"></div> -->
+
+  <!-- <div id="review_entry_cards" class="{% if reviews|length == 0 %}flex flex-col items-center justify-center min-h-[24rem] p-6{% else %}columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full{% endif %}"> -->
+  {% if reviews|length == 0 %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <img src="https://wallpapers.com/images/hd/sad-face-emoji-illustration-h5k25uxxbr9h7sjg.jpg" 
+            alt="Sad Face" class="w-52 h-52 mb-0 object-contain"/>
+        <p class="text-center text-[#F5F5DC] mt-4">Belum ada review</p>
+    </div>
+  {% else %}
+    {% for review in reviews %}
+      <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
+        <!-- Product Details -->
+        <div class="p-4">
+          <h3 class="font-bold text-xl text-[#5B3E39] mb-2">{{ review.menu.menu }}</h3>
+          <div class="flex items-center space-x-2 mb-2">
+            <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+            <p class="text-base font-semibold text-[#5B3E39]">
+              {{ review.place|escape }}
+            </p>
+          </div>
+          <div class="flex items-center space-x-2 mb-2">
+            <i class="fas fa-star text-yellow-400"></i>
+            <p class="text-base font-semibold text-[#5B3E39]">
+              {{ review.rating }} / 5
+            </p>
+          </div>
+          <p class="text-gray-600 mb-4">{{ review.description|escape }}</p>
+          {% if review.owner_reply %}
+          <div class="bg-white p-3 rounded-lg">
+            <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+            <p class="text-sm text-gray-600">{{ review.owner_reply|escape }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div> -->
+
 </div>
 
 <script>
+  // console.log("{{menu_id}}");
+  
   async function getReviewEntries() {
-    return fetch("{% url 'review:show_json' %}").then((res) => res.json())
+    const id = "{{menu_id}}".toString() == "None" ? "" : "{{menu_id}}"
+
+    console.log(id);
+  
+    return fetch(`/review/json/${id}`).then((res) => res.json())
   }
+
+  async function getMenu(menuId) {
+    const response = await fetch(`/menu/${menuId}`);
+    const menu = await response.json();
+    console.log(menu.restaurant_name);  // Contoh: Menampilkan nama restoran
+  }
+
+
+
 
   async function refreshReviewEntries() {
     document.getElementById("review_entry_cards").innerHTML = "";
     document.getElementById("review_entry_cards").className = "";
     const reviewEntries = await getReviewEntries();
+
+    // console.log(reviewEntries);
+    
     let htmlString = "";
     let classNameString = "";
 
@@ -55,73 +198,90 @@
         `;
     }
     else {
-      // if request.user.userprofile.role == "steakhouse owner":
+
       classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
       reviewEntries.forEach((item) => {
-        const menu = DOMPurify.sanitize(item.fields.menu);
+        // console.log(item)
+        // const nama_menu = item.nama_menu;
+        // console.log(nama_menunya)
+        const menu = item.fields.menu;
+        
         const place = DOMPurify.sanitize(item.fields.place);
-
         
         
-        htmlString += `
-          <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
-              <!-- Product Details -->
-              <div class="p-4">
-                  <!-- Product Name -->
-                  <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
+        // htmlString += `
+        //   <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
+        //       <!-- Product Details -->
+        //       <div class="p-4">
+        //           <!-- Product Name -->
+        //           <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
 
-                  <!-- Product Place with Pin Icon -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.place}
-                      </p>
-                  </div>
+        //           <!-- Product Place with Pin Icon -->
+        //           <div class="flex items-center space-x-2 mb-2">
+        //               <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+        //               <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+        //                   ${item.fields.place}
+        //               </p>
+        //           </div>
 
-                  <!-- Product Rating -->
-                  <div class="flex items-center space-x-2 mb-2">
-                      <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
-                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
-                          ${item.fields.rating} / 5
-                      </p>
-                  </div>
+        //           <!-- Product Rating -->
+        //           <div class="flex items-center space-x-2 mb-2">
+        //               <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
+        //               <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+        //                   ${item.fields.rating} / 5
+        //               </p>
+        //           </div>
                   
-                  <!-- Product Description -->
-                  <p class="text-gray-600 mb-4">${item.fields.description}</p>
+        //           <!-- Product Description -->
+        //           <p class="text-gray-600 mb-4">${item.fields.description}</p>
                   
-                  ${item.fields.owner_reply ? `
-                  <div class="bg-white p-3 rounded-lg">
-                      <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
-                      <p class="text-sm text-gray-600">${DOMPurify.sanitize(item.fields.owner_reply)}</p>
-                  </div>
-                  ` : ''}                  
+        //           ${item.fields.owner_reply ? `
+        //           <div class="bg-white p-3 rounded-lg">
+        //               <p class="text-sm font-semibold text-[#5B3E39]">Balasan pemilik:</p>
+        //               <p class="text-sm text-gray-600">${DOMPurify.sanitize(item.fields.owner_reply)}</p>
+        //           </div>
+        //           ` : ''}                  
 
-              </div>
-          </div>`;
+        //       </div>
+        //   </div>`;
 
 
       });
     }
     document.getElementById("review_entry_cards").className = classNameString;
-    document.getElementById("review_entry_cards").innerHTML = htmlString;
+    // document.getElementById("review_entry_cards").innerHTML = htmlString;
   }
   refreshReviewEntries();
 
-  const modal = document.getElementById('crudModal');
-  const modalContent = document.getElementById('crudModalContent');
 
-  function showModal() {
-    console.log("HELLO");
-
+  function showModal(button) {
     const modal = document.getElementById('crudModal');
     const modalContent = document.getElementById('crudModalContent');
 
+    // Ambil data dari tombol yang diklik
+    const image = button.getAttribute('data-image');
+    const menu = button.getAttribute('data-menu');
+    const restaurant = button.getAttribute('data-restaurant');
+
+    // Perbarui konten modal dengan data yang sesuai
+    document.getElementById('modalImage').src = image;
+    document.getElementById('modalMenuName').textContent = menu;  // Isi nama menu di elemen <h3>
+    document.getElementById('modalRestaurant').textContent = restaurant;  // Isi nama restoran di elemen <p>
+
+    // Isi hidden inputs untuk form submission
+    document.getElementById('hiddenMenu').value = menu;
+    document.getElementById('hiddenPlace').value = restaurant;
+
+    // Tampilkan modal
     modal.classList.remove('hidden');
     setTimeout(() => {
-      modalContent.classList.remove('opacity-0', 'scale-95');
-      modalContent.classList.add('opacity-100', 'scale-100');
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
     }, 50);
   }
+
+
+
 
   function hideModal() {
     const modal = document.getElementById('crudModal');
@@ -135,8 +295,8 @@
     }, 150);
   }
 
-  // document.getElementById("cancelButton").addEventListener("click", hideModal);
-  // document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+  document.getElementById("cancelButton").addEventListener("click", hideModal);
+  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
 
   function addReviewEntry() {
     fetch("{% url 'review:create-review-entry-ajax' %}", {
@@ -145,22 +305,68 @@
     })
       .then(response => {
 
-        console.log("masuk add");
-        refreshReviewEntries()
+        console.log(response);
+        hideModal();
+        showSuccessModal();
+        refreshReviewEntries();
         console.log("AKOWKOWKOWOK");
       }).catch(e => {
         console.log(e);
       })
 
-    // document.getElementById("ReviewEntryForm").reset();
+    document.getElementById("ReviewEntryForm").reset();
     document.querySelector("[data-modal-toggle='crudModal']").click();
 
     return false;
   }
-  // document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   addReviewEntry();
-  // })
+  document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addReviewEntry();
+  })
+
+  function showSuccessModal() {
+    // Buat elemen modal baru
+    const successModal = document.createElement('div');
+    successModal.id = 'successModal';
+    successModal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50';
+    successModal.innerHTML = `
+        <div class="bg-[#FAF3E3] rounded-lg shadow-lg p-6 w-3/4 md:w-1/3 text-center">
+            <!-- Icon Success -->
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-[#617A55] rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h2 class="text-2xl font-semibold text-[#5B3E39] mb-2">Review Berhasil Ditambahkan</h2>
+
+            <!-- Description -->
+            <p class="text-[#5B3E39] mb-6">Terima kasih atas review Anda! Apa yang ingin Anda lakukan setelah ini?</p>
+
+            <!-- Buttons -->
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button id="backToPrevious"
+                    class="bg-[#5B3E39] hover:bg-[#3E2A28] text-white font-bold py-2 px-6 rounded-lg">
+                    Lihat Review Menu Lain
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(successModal);
+
+    // Tambahkan event listener untuk tombol di modal notifikasi
+    document.getElementById('backToPrevious').addEventListener('click', () => {
+        window.location.href = "{% url 'review:show_review' %}"; // Redirect ke halaman utama review
+    });
+
+    document.getElementById('addAnotherReview').addEventListener('click', () => {
+        document.body.removeChild(successModal); // Tutup modal notifikasi
+    });
+  }
+
 </script>
 
 {% endblock content %}

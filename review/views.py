@@ -14,22 +14,91 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @login_required(login_url='/login')
-def show_review(request):
-
+def show_review(request, menu_id=None):
+    print("tes masuk ga")
+    
+    # Default context
     context = {
-        'nama' : 'steak',
-        'lokasi' : 'jaksel',
-        'rating' : '5',
+        'nama': 'steak',
+        'lokasi': 'jaksel',
+        'rating': '5',
+    }
+    # Filter reviews based on menu_id if provided
+    if menu_id != None:
+        menus = Menu.objects.all()
+        menu = Menu.objects.get(id=menu_id)
+        reviews = ReviewEntry.objects.filter(menu=menu)
+        context['reviews'] = reviews
+        context['menu'] = menu  # Optional: Detail menu untuk judul
+        context['menus'] = menus
+        # menus = Menu.objects.all()
+    else:
+        reviews = ReviewEntry.objects.all()
+        context['reviews'] = reviews
+
+    context['menu_id'] = menu_id
+
+    # Role-based rendering
+    if request.user.userprofile.role == "admin":
+        return render(request, 'review_admin.html', context)
+    elif request.user.userprofile.role == "steakhouse owner":
+        return render(request, 'review_owner.html', context)
+    else:
+        return render(request, 'review.html', context)
+
+
+
+@csrf_exempt
+@login_required(login_url='/login')
+def show_review_menu(request, menu_id):
+    menu = Menu.objects.get(id=menu_id)
+    reviews = ReviewEntry.objects.filter(menu = menu_id)
+
+    print("semuanya" + str(menu_id))
+    context = {
+        'menu' : menu,
+        'reviews' : reviews,
     }
 
     if request.user.userprofile.role == "admin":
         return render(request, 'review_admin.html', context)
 
-
-
     if request.user.userprofile.role == "steakhouse owner":
         return render(request, 'review_owner.html', context)
-    return render(request, 'review.html', context)
+    return render(request, 'review_menu.html', context)
+
+def show_review_owner(request):
+    user = request.user
+    
+    # Filter menu berdasarkan user
+    restaurant_menus = Menu.objects.filter(claimed_by=user)
+
+    # Debugging untuk memastikan menu yang ditemukan
+    print("Menu yang diklaim oleh user:", [menu.id for menu in restaurant_menus])
+
+    # Context untuk menyimpan menu dan review
+    context = {
+        'restaurant_menus': restaurant_menus,
+        'reviews': []
+    }
+    
+    # Ambil review hanya jika ada menu yang diklaim
+    if restaurant_menus.exists():
+        all_reviews = []
+        
+        # Iterasi setiap menu untuk mengambil review
+        for menu in restaurant_menus:
+            reviews_for_menu = ReviewEntry.objects.filter(menu=menu)
+            all_reviews.extend(reviews_for_menu)  # Menambahkan review ke list keseluruhan
+
+        # Masukkan semua review ke dalam konteks
+        context['reviews'] = all_reviews
+
+        print("Total review ditemukan:", len(all_reviews))
+
+    return render(request, 'review_owner.html', context)
+
+
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -58,13 +127,18 @@ def show_xml_by_id(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def show_json_by_id(request, id):
-    data = ReviewEntry.objects.filter(pk=id)
+    if (id != None):
+        menu = Menu.objects.get(id=id)
+        data = ReviewEntry.objects.filter(menu=menu)
+    else:
+        data = ReviewEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @login_required(login_url='/login')
 @csrf_exempt
 @require_POST
 def add_review_entry_ajax(request):
+    # name = strip_tags(request.POST.get("name"))
     menu = strip_tags(request.POST.get("menu"))
     place = strip_tags(request.POST.get("place"))
     rating = float(strip_tags(request.POST.get("rating")))
@@ -82,7 +156,7 @@ def add_review_entry_ajax(request):
     themenu.save()
 
     new_review = ReviewEntry(
-        menu=menu, place=place,
+        menu=themenu, place=place,
         rating=rating,
         user=user, description=description
     )
@@ -103,6 +177,8 @@ def create_review_entry(request):
 
     return render(request, 'create_review_entry.html', context)
 
+
+
 @csrf_exempt
 @login_required(login_url='/login')
 def edit_review(request, id):
@@ -117,6 +193,27 @@ def edit_review(request, id):
 
     context = {'form': form}
     return render(request, "edit_review.html", context)
+
+    
+def get_review_entries(self, request, menu_id=None):
+    if menu_id:
+        reviews = ReviewEntry.objects.filter(menu__id=menu_id)
+    else:
+        reviews = ReviewEntry.objects.all()
+    
+    review_data = []
+    for review in reviews:
+        review_data.append({
+            'id': str(review.id),
+            'user': review.user.username,  # Mengambil nama pengguna
+            'menu_name': review.menu.menu if review.menu else None,  # Mengambil nama menu
+            'place': review.place,
+            'rating': review.rating,
+            'description': review.description,
+            'owner_reply': review.owner_reply
+        })
+    
+    return JsonResponse(review_data, safe=False)
 
 @csrf_exempt
 @login_required(login_url='/login')

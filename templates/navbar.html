@@ -26,7 +26,7 @@
 
             {% elif request.user.userprofile.role == 'steakhouse owner' %}
               <a href="/explore/" class="nav-link {% if '/explore/' in request.path %}font-bold{% else %}font-normal{% endif %}">Claim Resto</a>
-              <a href="/review/" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
+              <a href="/review/pantaureview" class="nav-link {% if '/review/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Review</a>
               <a href="{% url 'booking:pantau_booking_owner' %}" class="nav-link {% if '/booking/' in request.path %}font-bold{% else %}font-normal{% endif %}">Monitor Booking</a>
               
             {% elif request.user.userprofile.role == 'admin' %}
