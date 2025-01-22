@@ -98,7 +98,79 @@ def show_review_owner(request):
 
     return render(request, 'review_owner.html', context)
 
+@login_required(login_url='/login')
+def get_review_from_owner(request): 
+    user = request.user
+    restaurant_menus = Menu.objects.filter(claimed_by=user)
 
+    all_reviews = []
+    for menu in restaurant_menus:
+        reviews_for_menu = ReviewEntry.objects.filter(menu=menu)
+        all_reviews.extend(reviews_for_menu)
+
+    # Mengubah data sesuai kebutuhan
+    final_reviews = []
+    for review in all_reviews:
+        review_data = {
+            "id": str(review.id),
+            "menu_name": review.menu.menu if review.menu else None,
+            "place": review.place,
+            "rating": review.rating,
+            "description": review.description,
+            "owner_reply": review.owner_reply or 'No reply yet',
+            "user_id": review.user.id,
+            "username": review.user.username,
+        }
+        final_reviews.append(review_data)
+
+    return JsonResponse({
+        'reviews': final_reviews,
+    })
+
+def show_review_owner_flutter(request):
+    user = request.user
+    restaurant_menus = Menu.objects.filter(claimed_by=user)
+    if not restaurant_menus:
+        return JsonResponse({
+            'status' : 'failed',
+            'message' : 'Tidak ada menu yang sesuai'
+        })
+    
+    # Debugging untuk memastikan menu yang ditemukan
+    print("Menu yang diklaim oleh user:", [menu.id for menu in restaurant_menus])
+
+    all_reviews = []
+    
+    # Iterasi setiap menu untuk mengambil review
+    for menu in restaurant_menus:
+        reviews_for_menu = ReviewEntry.objects.filter(menu=menu)
+        all_reviews.extend(reviews_for_menu)  # Menambahkan review ke list keseluruhan
+
+    final_reviews = []
+    for review in all_reviews:
+        review_data = {
+            "model": "review",  # Misalnya properti ini ada pada objek review
+            "pk": review.pk,  # Misalnya properti ini ada
+            "fields": {
+                "user": review.user.id,
+                "menu": review.menu.id,
+                "place": review.place,
+                "rating": review.rating,
+                "description": review.description,
+                "owner_reply": review.owner_reply or 'No reply yet',  # Atur nilai default jika null
+            }
+        }
+        final_reviews.append(review_data)
+
+    # Masukkan semua review ke dalam konteks
+    # context['reviews'] = all_reviews
+
+    print("Total review ditemukan:", len(all_reviews))
+
+    return JsonResponse({
+        # 'status' : 'success',
+        'reviews': final_reviews,
+    })
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -311,16 +383,19 @@ def update_reply(request):
 def create_review_flutter(request):
     if request.method == 'POST':
         try:
+            print("Tes")
             data = json.loads(request.body)
+            print(data)
             new_review = ReviewEntry.objects.create(
                 user = request.user,
-                menu=data["menu"],
+                # id = data["id"],
+                menu=data["menu.menu"],
                 place=data["place"],
                 rating=float(data["rating"]),
                 description=data["description"],
                 owner_reply=data["owner_reply"],
             )
-
+            print("new review" + new_review)
             # Manage perubahan rating menu
             themenu = Menu.objects.get(menu=data["menu"])
             if (themenu.total_rating == 0):
