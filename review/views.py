@@ -383,34 +383,67 @@ def update_reply(request):
 def create_review_flutter(request):
     if request.method == 'POST':
         try:
-            print("Tes")
+            # Parse JSON body
             data = json.loads(request.body)
             print(data)
-            new_review = ReviewEntry.objects.create(
-                user = request.user,
-                # id = data["id"],
-                menu=data["menu.menu"],
-                place=data["place"],
-                rating=float(data["rating"]),
-                description=data["description"],
-                owner_reply=data["owner_reply"],
+            
+            # Extract fields from the request body
+            user_id = request.user
+            menu_id = data.get('menu')
+            place = data.get('place')
+            rating = data.get('rating')
+            description = data.get('description')
+            owner_reply = data.get('owner_reply')
+            print("masuk1")
+            # Validate required fields
+            if not all([user_id, menu_id, place, rating, description]):
+                print(user_id)
+                print(menu_id)
+                print(place)
+                print(rating)
+                print(description)
+                return JsonResponse({'error': 'Missing required fields'}, status=400)
+            print("masuk2")
+            # Get related User and Menu objects
+            try:
+                print("masuk3")
+                user = request.user
+                print("masuk4")
+                menu = Menu.objects.get(id=menu_id)
+                print("masuk5")
+            except user.DoesNotExist:
+                return JsonResponse({'error': 'User not found'}, status=404)
+            except Menu.DoesNotExist:
+                return JsonResponse({'error': 'Menu not found'}, status=404)
+
+            # Create a new ReviewEntry object
+            review = ReviewEntry.objects.create(
+                user=user,
+                menu=menu,
+                place=place,
+                rating=rating,
+                description=description,
+                owner_reply=owner_reply
             )
-            print("new review" + new_review)
-            # Manage perubahan rating menu
-            themenu = Menu.objects.get(menu=data["menu"])
-            if (themenu.total_rating == 0):
-                themenu.total_rating += themenu.rating
 
-            themenu.total_rating += float(data["rating"])
-            themenu.review_count += 1
-            themenu.rating = themenu.total_rating / (themenu.review_count + 1)
-            themenu.save()
-            new_review.save()
-            return JsonResponse({"status": "success"}, status=200)
+            # Return success response
+            return JsonResponse({
+                'message': 'Review created successfully',
+                'review': {
+                    'id': str(review.id),
+                    'user': review.user.id,
+                    'menu': review.menu.id,
+                    'place': review.place,
+                    'rating': review.rating,
+                    'description': review.description,
+                    'owner_reply': review.owner_reply,
+                }
+            }, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
         except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=500)
-
-    return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+            return JsonResponse({'error': str(e)}, status=500)
 
 @csrf_exempt
 @require_POST
