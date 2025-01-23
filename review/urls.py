@@ -24,7 +24,7 @@ urlpatterns = [
     path('<int:menu_id>/', show_review, name='show_review_menu'),
     # path('update-reply/', views.update_reply, name='update_reply'),
     path('create-review-flutter/', create_review_flutter, name='create_review_flutter'),
-    
+    path('show-review-flutter/', views.show_review_flutter, name='show_review_flutter'),
     path('update-reply/', views.update_reply, name='update_reply'),
     path('submit-reply-flutter/', submit_reply_flutter, name='submit_reply_flutter'),
     path('delete-review-flutter/', delete_review_flutter, name='delete_review_flutter'),
