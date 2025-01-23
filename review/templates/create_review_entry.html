@@ -12,9 +12,9 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
-    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-      Ingin<span class="italic"> review</span> menu apa?
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+    <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-4">
+      What do you want to<span class="italic"> review?</span>
     </h1>    
     
     <div class="grid grid-cols-2 md:grid-cols-5 gap-4 px-4 md:px-0">
@@ -39,7 +39,7 @@
                     data-menu="{{ menu.menu }}"
                     data-restaurant="{{ menu.restaurant_name }}"
                     data-description="{{ menu.description }}">
-                    Tambah Review
+                    Add Review
                 </button>
             </div>
         </div>
@@ -225,7 +225,7 @@
                 </button>
                 <button id="addAnotherReview"
                     class="bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-bold py-2 px-6 rounded-lg">
-                    Tambah Review
+                    Add Review
                 </button>
             </div>
         </div>

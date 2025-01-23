@@ -8,8 +8,10 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col bg-[#5B3E39] text-[#F5F5DC] py-8 min-h-screen">
-    <h1 class="text-5xl font-bold mb-8">Monitor Booking</h1>
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+    <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-5">
+        Monitor bookings <span class="italic">made</span> in your restaurant
+    </h1>
     
     {% if restaurant %}
         <div class="bg-[#4E342E] p-8 rounded-xl shadow-lg mb-8 w-full max-w-lg">
@@ -40,7 +42,7 @@
         </div>
     {% else %}
         <div class="bg-[#4E342E] p-8 rounded-xl shadow-lg mb-8 w-full max-w-lg text-center">
-            <p class="text-lg">Anda belum memiliki restoran. Silakan <a href="{% url 'explore:show_menu' %}" class="text-[#F5C542] hover:text-[#E0B93F] underline">claim restoran</a> terlebih dahulu.</p>
+            <p class="text-lg">You don't own a restaurant! <a href="{% url 'explore:show_menu' %}" class="text-[#F5C542] hover:text-[#E0B93F] underline">Claim yours here.</a></p>
         </div>
     {% endif %}
 </div>

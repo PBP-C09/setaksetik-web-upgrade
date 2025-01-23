@@ -9,8 +9,8 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;">
-    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+    <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-4">
         Your <span class="italic">Bookings</span>
     </h1>
 
@@ -75,9 +75,9 @@
         {% endfor %}
     </div>
     {% else %}
-        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-            <p class="text-center text-[#F5F5DC] mt-4">Kamu belum pernah melakukan booking!</p>
-        </div>
+    <div class="text-center py-16">
+        <p class="text-[#F5F5DC] text-lg italic">No bookings made yet!</p>
+    </div>
     {% endif %}
 
     <div class="text-center mt-8 mb-8">

@@ -9,19 +9,17 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen 5B3E39 flex flex-col">
-  <div class="p-2 mb-2 relative">
-    <!-- Menambahkan kelas Tailwind untuk memperindah teks -->
-    <h1 class= "text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center">
-        Apa kata <span class="italic">mereka</span>?
-    </h1>
-    <hr class="border-t-2 border-[#F5F5DC] my-6 w-full mx-auto" style="width: 460px;" /><!-- Garis di bawah H1 -->
-    <p class="text-center">Dengar cerita dan rekomendasi dari steak<br>enthusiasts di seluruh penjuru</p>
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+  <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-3">
+      What do <span class="italic">they</span> say?
+  </h1>
+    <hr class="border-t-2 border-[#F5F5DC] w-full mx-auto" style="width: 460px;" />
+    <p class="text-center text-[1.2rem] mt-3">See reviews, ratings and recommendations!</p>
   </div>
 
   <div class="flex justify-center mt-0 mb-0"> <!--mt-4 itu margin top-->
     <a href="{% url 'review:create_review_entry' %}">
-      <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 mb-8">Tambah Review</button>
+      <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 mb-8">Add Review</button>
     </a>
   </div>
   
@@ -45,11 +43,9 @@
       classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
       htmlString = `
         <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-            <!-- Gambar dari URL -->
-            <img src="https://wallpapers.com/images/hd/sad-face-emoji-illustration-h5k25uxxbr9h7sjg.jpg" 
-                alt="Sad Face" class="w-52 h-52 mb-0 object-contain"/>
-
-            <p class="text-center text-[#F5F5DC] mt-4">Belum ada review</p>
+            <div class="text-center py-16">
+              <p class="text-[#F5F5DC] text-lg italic">No reviews yet!</p>
+            </div>
         </div>
 
         `;

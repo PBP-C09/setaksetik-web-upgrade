@@ -11,9 +11,9 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
-    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-        Book a <span class="italic">Restaurant</span>
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+    <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-4">
+        <span class="italic">Book</span> a restaurant!
     </h1>
 
     <div class="flex justify-center items-center bg-[#5B3E39] py-4" style="margin-bottom: 1rem;">
@@ -96,9 +96,9 @@
     </div>
 
     <div class="text-center mb-8">
-        <a href="{% url 'booking:lihat_booking' %}" class="inline-block bg-[#C62828] text-white px-6 py-3 rounded-lg hover:bg-[#B71C1C] shadow-md transition duration-300">
-            Atur Booking
-        </a>
+        <a href="{% url 'booking:lihat_booking' %}" class="inline-block bg-[#FFD54F] text-[#3E2723] px-6 py-3 rounded-lg hover:bg-[#FFCA28] shadow-md transition duration-300">
+            Your Bookings
+        </a>        
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-3 gap-2 px-4 md:px-0 mt-[1rem]">
