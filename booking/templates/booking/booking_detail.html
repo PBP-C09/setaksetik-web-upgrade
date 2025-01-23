@@ -34,6 +34,15 @@
             <p class="text-lg text-[#5B3E39] mb-4">
                 <strong>Rating:</strong> {{ menu.rating|floatformat:2 }}
             </p>
+
+            <p class="text-lg text-[#5B3E39] mb-4">
+                <strong>Owned by </strong> 
+                {% if menu.claimed_by %}
+                    {{ menu.claimed_by.username }}
+                {% else %}
+                    SetakSetik
+                {% endif %}
+            </p>
             
             <div class="mb-4">
                 <h2 class="text-xl font-bold text-[#3E2723]">Additional Information</h2>
