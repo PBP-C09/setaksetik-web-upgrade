@@ -3,9 +3,13 @@
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
+from django.core.management import call_command
 
 
 class Migration(migrations.Migration):
+
+    def load_my_initial_data(apps, schema_editor):
+        call_command("loaddata", "<your_json_file_in_fixtures_folder>")
 
     initial = True
 
@@ -36,4 +40,5 @@ class Migration(migrations.Migration):
                 ('claimed_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='claimed_menus', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.RunPython(load_my_initial_data),
     ]
