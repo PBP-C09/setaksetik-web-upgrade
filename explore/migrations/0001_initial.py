@@ -9,7 +9,7 @@ from django.core.management import call_command
 class Migration(migrations.Migration):
 
     def load_my_initial_data(apps, schema_editor):
-        call_command("loaddata", "<your_json_file_in_fixtures_folder>")
+        call_command("loaddata", "data.json")
 
     initial = True
 
