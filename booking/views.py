@@ -154,17 +154,20 @@ def pantau_booking_owner(request):
     # Cek apakah user memiliki restoran yang sudah di-claim
     user = request.user
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
-    context = {
-        'restaurant': claimed_restaurant
-    }
-
-    # Jika user memiliki restoran yang sudah di-claim, ambil daftar booking
     if claimed_restaurant:
         bookings = Booking.objects.filter(menu_items=claimed_restaurant)
-        context['bookings'] = bookings
+        context = {
+            'restaurant': claimed_restaurant, 
+            'bookings': bookings,
+            'resto_image': claimed_restaurant.image  # Pass immage
+        }
+    else:
+        context = {
+            'restaurant': None,
+            'bookings': None
+        }
 
     return render(request, 'booking/pantau_booking_owner.html', context)
-
 @login_required(login_url='/login')
 def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
