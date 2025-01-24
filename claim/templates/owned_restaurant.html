@@ -7,9 +7,9 @@
 <!-- Ownership Card -->
 <div class="flex items-center justify-center min-h-screen p-4">
     <!-- Card Container -->
-    <div class="w-full max-w-xl">
+    <div class="max-w-xl" style="height: 500px;">
         <!-- Header Card -->
-        <div class="bg-[#3E2723] text-[#F5F5DC] p-8 rounded-t-3xl shadow-xl">
+        <div class="bg-[#3E2723] text-[#F5F5DC] p-4 rounded-t-3xl shadow-xl">
             <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-center" 
                 style="font-family: 'Playfair Display'; font-style: italic">
                 Card of Ownership
@@ -78,9 +78,9 @@
 </div>
 
 <!-- Menu Management Section -->
-<div class="container mx-auto mt-16 mb-16">
+<div class="container mx-auto mb-16">
     <h2 class="text-4xl text-[#F5F5DC] text-center mb-8" style="font-family: 'Playfair Display'; font-style: italic">
-        Restaurant Menu
+        Menus at your restaurant
     </h2>
 
     <style>
@@ -364,9 +364,15 @@ document.getElementById('addMenuModal').addEventListener('click', function(e) {
                 </div>
 
                 <!-- Categories -->
-                <div class="flex flex-wrap gap-2 mt-4">
-                    <span class="bg-[#F7B32B] text-white text-xs px-2 py-1 rounded-full">{{ menu.category }}</span>
-                    <span class="bg-[#F7B32B] text-white text-xs px-2 py-1 rounded-full">{{ menu.specialized }}</span>
+                <div class="flex flex-wrap gap-2 mb-2 mt-4">
+                    <span class="bg-[#842323] text-[#F5F5DC] text-sm font-medium py-1 px-3 rounded-full">
+                        {{ menu.category }}
+                    </span>
+
+                    <!-- Specialized -->
+                    <span class="bg-[#F7B32B] text-[#F5F5DC] text-sm font-medium py-1 px-3 rounded-full">
+                        {{ menu.specialized }}
+                    </span>
                 </div>
             </div>
 

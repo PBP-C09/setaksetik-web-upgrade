@@ -222,7 +222,7 @@ async function refreshSecretHistory() {
     const secretHistory = await getSecretHistory();
     let htmlString = `
     <h1 class="text-4xl text-center">
-        Yang <span class="italic">pernah</span> kamu spin
+        Your spin <span class="italic">history</span>
     </h1>    
     <div class="border-t-2 border-[beige] mt-3 mx-auto w-2/3"></div>`;
     let classNameString = "";

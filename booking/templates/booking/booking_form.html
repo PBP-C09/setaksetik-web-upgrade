@@ -12,7 +12,7 @@
 {% block content %}
 <div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
     <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-4">
-        Make a <span class="italic">Booking</span>
+        Make a <span class="italic">booking</span>
     </h1>
 
     <!-- Form Section -->
@@ -60,31 +60,34 @@
     <!-- Booking List Section -->
     <div class="mt-12">
         <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-            Your <span class="italic">Bookings</span>
+            Your <span class="italic">bookings</span>
         </h1>
 
         {% if bookings %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for booking in bookings %}
-            <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
+            <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col booking-card">
                 <div class="relative">
                     <img class="w-full h-64 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
                 </div>
-
+                
                 <div class="px-4 py-4 flex-grow">
-                    <div class="text-xl text-[#3E2723] font-bold mb-4" style="font-family: 'Playfair Display', serif;">
-                        {{ booking.menu_items.restaurant_name }}
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-xl text-[#3E2723] font-bold" style="font-family: 'Playfair Display', serif;">
+                            {{ booking.menu_items.restaurant_name }}
+                        </div>
+                        <span class="rounded-full px-5 py-1 text-sm font-medium {% if booking.status == 'waiting' %}bg-[#842323] text-[#F5F5DC]{% else %}bg-[#F7B32B] text-[#3E2723]{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
                     </div>
 
-                    <!-- Date -->
                     <div class="flex items-center text-sm text-[#3E2723] mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                         </svg>
-                        {{ booking.booking_date|date:"F d, Y" }}
+                        {{ booking.booking_date | date:"F d, Y"}}
                     </div>
 
-                    <!-- People -->
                     <div class="flex items-center text-sm text-[#3E2723] mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
@@ -92,13 +95,32 @@
                         {{ booking.number_of_people }} people
                     </div>
 
-                    <!-- Status -->
-                    <div class="flex flex-wrap gap-2 mb-2 mt-4">
-                        <span class="bg-[#F7B32B] text-white text-sm font-medium py-1 px-3 rounded-full">
-                            Status: {{ booking.get_status_display }}
-                        </span>
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                        {{ booking.menu_items.menu }}
+                    </div>
+
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        {{ booking.menu_items.city }}
                     </div>
                 </div>
+                {% if booking.status == 'waiting' %}
+                <div class="flex gap-2 justify-center mt-auto p-4">
+                    <a href="{% url 'booking:edit_booking' booking.id %}" class="bg-[#F7B32B] hover:bg-yellow-600 text-white font-medium py-2 px-6 flex-1 text-center rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+                        Edit
+                    </a>
+                    <button class="bg-[#B71C1C] hover:bg-[#C62828] text-white font-medium py-2 px-6 flex-1 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out delete-booking" data-id="{{ booking.id }}">
+                        Delete
+                    </button>
+                </div>
+                {% endif %}
+
             </div>
             {% endfor %}
         </div>

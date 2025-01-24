@@ -114,14 +114,15 @@ function clearAll() {
     });
 
     var texts = [
-        "Spin aja!", 
-        "Spin sekarang B)", 
-        "Gachain aja gaksih :3", 
-        "Putar rodanya banh~", 
-        "Gausah bingung bingung laah", 
-        "Sepinsetik to the rescue :D", 
-        "Makan semuanya :V"
+        "Spin em!", 
+        "Spin now B)", 
+        "Trust the gacha :3", 
+        "Just spin the wheel~", 
+        "No need to overthink!", 
+        "SetakSetik Spin to the rescue :D", 
+        "Just eat everything probably :V"
     ];
+    
 
     var randomText = texts[Math.floor(Math.random() * texts.length)];
     document.getElementById("winner").innerHTML = randomText;
@@ -313,7 +314,7 @@ async function refreshSpinHistory() {
     const spinHistory = await getSpinHistory();
     let htmlString = `
     <h1 class="text-4xl text-center">
-        Yang <span class="italic">pernah</span> kamu spin
+        Your spin <span class="italic">history</span>
     </h1>    
     <div class="border-t-2 border-[beige] mt-3 mx-auto w-2/3"></div>`;
     let classNameString = "";

@@ -11,110 +11,109 @@
 
 {% block content %}
 <div class="container mx-auto py-12 px-4 lg:px-8">
-    <div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;">
-        <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
-            Edit Your <span class="italic">Booking</span>
-        </h1>
-    
-        {% if success %}
-            <div class="bg-green-500 text-white p-4 rounded-lg mb-6 shadow-lg w-full max-w-2xl">
-                Booking berhasil diperbarui!
-            </div>
-        {% elif error %}
-            <div class="bg-red-500 text-white p-4 rounded-lg mb-6 shadow-lg w-full max-w-2xl">
-                Terjadi kesalahan saat menyimpan booking.
-            </div>
-        {% endif %}
-    
-        <div class="bg-[#F5F5DC] p-8 rounded-lg shadow-lg w-full max-w-2xl">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="space-y-6">
-                    <div>
-                        <label for="booking_date" class="block text-[#3E2723] text-lg font-medium mb-2">Tanggal Booking</label>
-                        <input id="booking_date" 
-                               name="booking_date" 
-                               type="date" 
-                               value="{{ booking.booking_date }}"
-                               class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
-                               required>
+    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-20">
+        Edit Your <span class="italic">Booking</span>
+    </h1>
+    <div class="flex container mx-auto flex-col lg:flex-row gap-6 justify-center">
+        <!-- Summary Card (Left Side) -->
+        <div class="flex-1 max-w-md">
+            <!-- Booking Summary Card -->
+            <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
+                <div class="relative">
+                    <img class="w-full h-64 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
+                </div>
+                
+                <div class="px-4 py-4 flex-grow">
+                    <!-- Restaurant Name and Status -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-xl text-[#3E2723] font-bold" style="font-family: 'Playfair Display', serif;">
+                            {{ booking.menu_items.restaurant_name }}
+                        </div>
+                        <span class="rounded-full px-5 py-1 text-sm font-medium {% if booking.status == 'waiting' %}bg-[#842323] text-[#F5F5DC]{% else %}bg-[#F7B32B] text-[#3E2723]{% endif %}">
+                            Status: {{ booking.get_status_display }}
+                        </span>
                     </div>
-    
-                    <div>
-                        <label for="number_of_people" class="block text-[#3E2723] text-lg font-medium mb-2">Jumlah Orang</label>
-                        <input id="number_of_people" 
-                               name="number_of_people" 
-                               type="number" 
-                               value="{{ booking.number_of_people }}"
-                               min="1"
-                               class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
-                               required>
+
+                    <!-- Date -->
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        {{ booking.booking_date|date:"F d, Y" }}
                     </div>
-    
-                    <div class="flex justify-between pt-6">
-                        <a href="{% url 'booking:lihat_booking' %}" 
-                           class="bg-[#5B3E39] hover:bg-[#3E2723] text-white font-bold py-2 px-6 rounded-full">
-                            Back
-                        </a>
-                        <button type="submit" 
-                                class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
-                            Save Changes
-                        </button>
+
+                    <!-- Number of People -->
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                        </svg>
+                        {{ booking.number_of_people }} people
+                    </div>
+
+                    <!-- Location -->
+                    <div class="flex items-center text-sm text-[#3E2723] mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        {{ booking.menu_items.city }}
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Booking Summary Card -->
-    <div class="mt-12 flex container items-center align-center mx-auto flex-col">
-        <h2 class="text-[42px] text-3xl font-reguler text-[#F5F5DC] text-center mb-8">
-            Booking yang sedang <span class="italic">diedit</span>
-        </h2>
+            </div>
+        </div>  
         
-        <div class="max-w-md rounded-lg overflow-hidden shadow-lg bg-[#F5F5DC] relative border flex flex-col">
-            <div class="relative">
-                <img class="w-full h-64 object-cover" src="{{ booking.menu_items.image }}" alt="{{ booking.menu_items.menu }}">
-            </div>
-            
-            <div class="px-4 py-4 flex-grow">
-                <div class="text-xl text-[#3E2723] font-bold mb-4" style="font-family: 'Playfair Display', serif;">
-                    {{ booking.menu_items.restaurant_name }}
+        <!-- Editing Form -->
+        <div class="flex-1 max-w-md">
+            {% if success %}
+                <div class="bg-[#F7B32B] text-white p-4 rounded-lg mb-6 shadow-lg w-full max-w-2xl">
+                    Booking updated!
                 </div>
-
-                <!-- Date -->
-                <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                    </svg>
-                    {{ booking.booking_date|date:"F d, Y" }}
+            {% elif error %}
+                <div class="bg-[#842323] text-white p-4 rounded-lg mb-6 shadow-lg w-full max-w-2xl">
+                    An error occured
                 </div>
-
-                <!-- Number of People -->
-                <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                    </svg>
-                    {{ booking.number_of_people }} people
-                </div>
-
-                <!-- Location -->
-                <div class="flex items-center text-sm text-[#3E2723] mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                    </svg>
-                    {{ booking.menu_items.city }}
-                </div>
-
-                <!-- Status -->
-                <div class="flex flex-wrap gap-2 mb-2 mt-4">
-                    <span class="bg-[#F7B32B] text-white text-sm font-medium py-1 px-3 rounded-full">
-                        Status: {{ booking.get_status_display }}
-                    </span>
-                </div>
+            {% endif %}
+        
+            <div class="bg-[#F5F5DC] p-8 rounded-lg shadow-lg w-full max-w-2xl">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="space-y-6">
+                        <div>
+                            <label for="booking_date" class="block text-[#3E2723] text-lg font-medium mb-2">Date of Booking</label>
+                            <input id="booking_date" 
+                                   name="booking_date" 
+                                   type="date" 
+                                   value="{{ booking.booking_date }}"
+                                   class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
+                                   required>
+                        </div>
+        
+                        <div>
+                            <label for="number_of_people" class="block text-[#3E2723] text-lg font-medium mb-2">Number of People</label>
+                            <input id="number_of_people" 
+                                   name="number_of_people" 
+                                   type="number" 
+                                   value="{{ booking.number_of_people }}"
+                                   min="1"
+                                   class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#FFC107] text-[#3E2723]"
+                                   required>
+                        </div>
+        
+                        <div class="flex justify-between pt-6">
+                            <a href="{% url 'booking:lihat_booking' %}" 
+                               class="bg-[#5B3E39] hover:bg-[#3E2723] text-white font-bold py-2 px-6 rounded-full">
+                                Back
+                            </a>
+                            <button type="submit" 
+                                    class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock content %}

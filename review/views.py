@@ -14,9 +14,7 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @login_required(login_url='/login')
-def show_review(request, menu_id=None):
-    print("tes masuk ga")
-    
+def show_review(request, menu_id=None):    
     # Default context
     context = {
         'nama': 'steak',
@@ -93,8 +91,6 @@ def show_review_owner(request):
 
         # Masukkan semua review ke dalam konteks
         context['reviews'] = all_reviews
-
-        print("Total review ditemukan:", len(all_reviews))
 
     return render(request, 'review_owner.html', context)
 

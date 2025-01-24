@@ -136,8 +136,8 @@
 
     // Perbarui konten modal dengan data yang sesuai
     document.getElementById('modalImage').src = image;
-    document.getElementById('modalMenuName').textContent = menu;  // Isi nama menu di elemen <h3>
-    document.getElementById('modalRestaurant').textContent = restaurant;  // Isi nama restoran di elemen <p>
+    document.getElementById('modalMenuName').textContent = menu;
+    document.getElementById('modalRestaurant').textContent = restaurant; 
 
     // Isi hidden inputs untuk form submission
     document.getElementById('hiddenMenu').value = menu;
@@ -215,17 +215,17 @@
             <h2 class="text-2xl font-semibold text-[#5B3E39] mb-2">Review Berhasil Ditambahkan</h2>
 
             <!-- Description -->
-            <p class="text-[#5B3E39] mb-6">Terima kasih atas review Anda! Apa yang ingin Anda lakukan setelah ini?</p>
+            <p class="text-[#5B3E39] mb-6">Thank you for your review! What do you want to do now?</p>
 
             <!-- Buttons -->
             <div class="flex flex-col md:flex-row justify-center gap-4">
                 <button id="backToMain"
                     class="bg-[#5B3E39] hover:bg-[#3E2A28] text-white font-bold py-2 px-6 rounded-lg">
-                    Kembali
+                    Back
                 </button>
                 <button id="addAnotherReview"
                     class="bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-bold py-2 px-6 rounded-lg">
-                    Add Review
+                    Add Another
                 </button>
             </div>
         </div>

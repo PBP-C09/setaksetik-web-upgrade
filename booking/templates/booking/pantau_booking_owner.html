@@ -7,70 +7,66 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
+<div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+    <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-4">
+        Monitor bookings <span class="italic">made</span>
+    </h1>
+    <hr class="border-t-2 border-[#F5F5DC] w-full mx-auto" style="width: 460px;" />
+    
     {% if restaurant %}
-        <div class="bg-[#F5F5DC] rounded-xl overflow-hidden shadow-lg mb-8">
-            <img src="{{ resto_image }}" 
-                alt="{{ restaurant.restaurant_name }}" 
-                class="w-full h-96 object-cover">
-            <div class="p-8 space-y-4">
-                <h2 class="text-2xl font-bold text-[#3E2723] mb-4">Owned Restaurant:</h2>
-                <p class="text-xl text-[#3E2723]">{{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
-            </div>
-        </div>
-
+        <p class="text-center text-[1.2rem] mt-3 mb-10">Approve bookings in {{ restaurant.restaurant_name }} - {{ restaurant.city }}</p>
             {% if bookings %}
-                <div class="space-y-4">
-                    {% for booking in bookings %}
-                        <div class="bg-[#F5F5DC] rounded-xl p-6 shadow-lg">
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-[#3E2723] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                    <span class="font-bold text-[#3E2723]">User: {{ booking.user }}</span>
-                                </div>
-
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-[#842323] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    <span class="text-[#3E2723]">Date: {{ booking.booking_date|date:"d M Y" }}</span>
-                                </div>
-
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-[#6D4C41] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                    </svg>
-                                    <span class="text-[#3E2723]">People: {{ booking.number_of_people }}</span>
-                                </div>
-
-                                <div class="flex justify-end mt-4">
-                                    {% if booking.status == 'waiting' %}
-                                        <form method="POST" action="{% url 'booking:approve_booking' booking.id %}" class="inline">
-                                            {% csrf_token %}
-                                            <button type="submit" 
-                                                    class="bg-[#FFD54F] text-[#3E2723] px-6 py-2 rounded-lg font-semibold hover:bg-[#FFC107] transition-colors duration-300">
-                                                Approve
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <span class="text-[#6D4C41] font-bold italic">Approved</span>
-                                    {% endif %}
-                                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for booking in bookings %}
+                    <div class="bg-[#F5F5DC] rounded-xl p-6 shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl w-[350px] max-w-[350px] mx-auto">
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-[#3E2723] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                <span class="font-bold text-[#3E2723]">User: {{ booking.user }}</span>
+                            </div>
+            
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-[#842323] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="text-[#3E2723]">Date: {{ booking.booking_date|date:"d M Y" }}</span>
+                            </div>
+            
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-[#6D4C41] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                <span class="text-[#3E2723]">People: {{ booking.number_of_people }}</span>
+                            </div>
+            
+                            <div class="flex justify-end mt-4">
+                                {% if booking.status == 'waiting' %}
+                                    <form method="POST" action="{% url 'booking:approve_booking' booking.id %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="bg-[#FFD54F] text-[#3E2723] px-6 py-2 rounded-lg font-semibold hover:bg-[#FFC107] transition-colors duration-300">
+                                            Approve
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="text-[#6D4C41] font-bold italic">Approved</span>
+                                {% endif %}
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            
             {% else %}
                 <div class="text-center">
-                    <p class="text-[#F5F5DC] text-xl font-playfair italic">No bookings available yet!</p>
+                    <p class="text-[#F5F5DC] text-xl font-playfair italic mt-20">No bookings made yet!</p>
                 </div>
             {% endif %}
         {% else %}
-            <div class="text-center">
-                <p class="text-[#F5F5DC] text-xl font-playfair italic">You don't own a restaurant!</p>
-            </div>
+            <p class="text-center text-[1.2rem] mt-3 mb-10">You don't own any restaurant!</p>
         {% endif %}
     </div>
 </div>

@@ -22,7 +22,7 @@
                 <input 
                     type="text" 
                     name="restaurant" 
-                    placeholder="Cari restoran" 
+                    placeholder="Search restaurant" 
                     class="w-full py-2 pl-12 pr-12 text-gray-900 bg-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFC107] transition"
                     value="{{ request.GET.restaurant|default:'' }}"
                 >
@@ -96,7 +96,8 @@
     </div>
 
     <div class="text-center mb-8">
-        <a href="{% url 'booking:lihat_booking' %}" class="inline-block bg-[#FFD54F] text-[#3E2723] px-6 py-3 rounded-lg hover:bg-[#FFCA28] shadow-md transition duration-300">
+
+        <a href="{% url 'booking:lihat_booking' %}" class="inline-block bg-[#FFD54F] text-[#3E2723] px-6 py-2 rounded-lg hover:bg-[#F7A52B] shadow-md transition duration-300">
             Your Bookings
         </a>        
     </div>
@@ -148,9 +149,6 @@
             {% endfor %}
         {% else %}
             <div class="col-span-full flex flex-col items-center justify-center min-h-[24rem] p-6">
-                <img src="{% static 'image/sedih-banget.png' %}" 
-                    alt="No Results" 
-                    class="w-52 h-52 mb-0 object-contain"/>
                 <p class="text-center text-[#F5F5DC] mt-4">No restaurant with your criteria :(</p>
             </div>
         {% endif %}

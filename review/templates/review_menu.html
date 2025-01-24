@@ -51,8 +51,7 @@
         `;
     }
     else {
-      // if request.user.userprofile.role == "steakhouse owner":
-      classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+      classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full";
       reviewEntries.forEach((item) => {
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
@@ -131,9 +130,6 @@
     }, 150);
   }
 
-  // document.getElementById("cancelButton").addEventListener("click", hideModal);
-  // document.getElementById("closeModalBtn").addEventListener("click", hideModal);
-
   function addReviewEntry() {
     fetch("{% url 'review:create-review-entry-ajax' %}", {
       method: "POST",
@@ -148,15 +144,10 @@
         console.log(e);
       })
 
-    // document.getElementById("ReviewEntryForm").reset();
     document.querySelector("[data-modal-toggle='crudModal']").click();
 
     return false;
   }
-  // document.getElementById("ReviewEntryForm").addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   addReviewEntry();
-  // })
 </script>
 
 {% endblock content %}
