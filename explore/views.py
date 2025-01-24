@@ -38,7 +38,7 @@ def show_menu(request):
         max_harga = form.cleaned_data.get("max_price")
         restaurant = form.cleaned_data.get("restaurant")
         kota = form.cleaned_data.get("city")
-        specialization = form.cleaned_data.get("specialize")
+        specialization = form.cleaned_data.get("specialized")
         min_rate = form.cleaned_data.get("min_rating")
         max_rate = form.cleaned_data.get("max_rating")
 
@@ -165,7 +165,7 @@ def filter_menu(request):
     max_harga = request.GET.get('max_price', None)
     restaurant = request.GET.get('restaurant', '')
     kota = request.GET.get('city', '')
-    specialization = request.GET.get('specialize', '')
+    specialization = request.GET.get('specialized', '')
     min_rate = request.GET.get('min_rating', None)
     max_rate = request.GET.get('max_rating', None)
 
@@ -186,7 +186,7 @@ def filter_menu(request):
         menus = menus.filter(city__icontains=kota)
 
     if specialization:
-        menus = menus.filter(specialized__icontains=specialization)
+        menus = menus.filter(specialized__=specialization)
 
     if min_rate is not None and max_rate is not None:
             menus = menus.filter(rating__gte=min_rate, rating__lte=max_rate)
