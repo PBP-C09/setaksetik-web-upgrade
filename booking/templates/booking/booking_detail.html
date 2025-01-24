@@ -34,15 +34,6 @@
             <p class="text-lg text-[#5B3E39] mb-4">
                 <strong>Rating:</strong> {{ menu.rating|floatformat:2 }}
             </p>
-
-            <p class="text-lg text-[#5B3E39] mb-4">
-                <strong>Owned by </strong> 
-                {% if menu.claimed_by %}
-                    {{ menu.claimed_by.username }}
-                {% else %}
-                    SetakSetik
-                {% endif %}
-            </p>
             
             <div class="mb-4">
                 <h2 class="text-xl font-bold text-[#3E2723]">Additional Information</h2>
@@ -57,10 +48,10 @@
             <!-- Tombol back dan booking -->
             <div class="flex justify-between items-center mt-6">
                 <a href="{% url 'booking:create_booking' %}" class="bg-[#5B3E39] hover:bg-[#3E2723] text-white font-bold py-2 px-4 rounded-full">
-                    Back to Resto List
+                    Back to Restaurant List
                 </a>
                 <a href="{% url 'booking:resto_menu' menu.id %}" class="bg-[#F7B32B] hover:bg-[#FFD54F] text-white font-bold py-2 px-6 rounded-full">
-                    View Menus
+                    View Menu
                 </a>
                 <div class="flex space-x-4">
                     <a href="{% url 'booking:booking_form' menu.id %}" class="bg-[#C62828] hover:bg-[#B71C1C] text-white font-bold py-2 px-6 rounded-full">
