@@ -4,14 +4,14 @@ function updateInput(inputId, value) {
     const maxSlider = document.getElementById('max_price');
     
     if (inputId === 'min_price') {
-        if (parseInt(value) > parseInt(maxSlider.value) - 1000) {
-            value = parseInt(maxSlider.value) - 1000; // Mengatur batas minimum
+        if (parseInt(value) > parseInt(maxSlider.value) - 10000) {
+            value = parseInt(maxSlider.value) - 10000; // Mengatur batas minimum
         }
         document.getElementById(`${inputId}_input`).value = value;
         minSlider.value = value;
     } else if (inputId === 'max_price') {
-        if (parseInt(value) < parseInt(minSlider.value) + 1000) {
-            value = parseInt(minSlider.value) + 1000; // Mengatur batas minimum
+        if (parseInt(value) < parseInt(minSlider.value) + 10000) {
+            value = parseInt(minSlider.value) + 10000; // Mengatur batas minimum
         }
         document.getElementById(`${inputId}_input`).value = value;
         maxSlider.value = value;
@@ -26,14 +26,14 @@ function updateInput(inputId, value) {
     const maxSlider = document.getElementById('max_price');
   
     if (sliderId === 'min_price') {
-        if (parseInt(value) > parseInt(maxSlider.value) - 1000) {
-            value = parseInt(maxSlider.value) - 1000; // Mengatur batas minimum
+        if (parseInt(value) > parseInt(maxSlider.value) - 10000) {
+            value = parseInt(maxSlider.value) - 10000; // Mengatur batas minimum
         }
         minSlider.value = value;
         document.getElementById('min_price_input').value = value;
     } else if (sliderId === 'max_price') {
-        if (parseInt(value) < parseInt(minSlider.value) + 1000) {
-            value = parseInt(minSlider.value) + 1000; // Mengatur batas minimum
+        if (parseInt(value) < parseInt(minSlider.value) + 10000) {
+            value = parseInt(minSlider.value) + 10000; // Mengatur batas minimum
         }
         maxSlider.value = value;
         document.getElementById('max_price_input').value = value;
@@ -50,8 +50,8 @@ function updateInput(inputId, value) {
     const minValue = parseInt(minSlider.value);
     const maxValue = parseInt(maxSlider.value);
     
-    const minPercent = ((minValue - 1000) / (1800000 - 1000)) * 100;
-    const maxPercent = ((maxValue - 1000) / (1800000 - 1000)) * 100;
+    const minPercent = ((minValue - 10000) / (1800000 - 10000)) * 100;
+    const maxPercent = ((maxValue - 10000) / (1800000 - 10000)) * 100;
     
     const track = document.querySelector('.price-slider-track');
     track.style.background = `linear-gradient(to right, #ddd ${minPercent}%, #502911 ${minPercent}%, #502911 ${maxPercent}%, #ddd ${maxPercent}%)`;
@@ -121,4 +121,3 @@ function updateInput(inputId, value) {
     updateSliderBackgroundPrice();
     updateSliderBackgroundRate();
   });
-  

@@ -36,7 +36,7 @@
             <input 
                 type="text" 
                 name="menu" 
-                placeholder="Cari menu" 
+                placeholder="Search menu" 
                 class="w-full py-2 pl-12 pr-12 text-gray-900 bg-white rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFC107] transition"
                 value="{{ request.GET.menu|default:'' }}"
             >
@@ -102,7 +102,7 @@
             <div>
                 <label for="specialized" class="block text-lg font-medium text-[#5B3E39]">Specialized</label>
                 <select name="specialized" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#FFC107] focus:border-[#FFC107] sm:text-sm">
-                {% for key, value in form.specialize.field.choices %}
+                {% for key, value in form.specialized.field.choices %}
                     <option value="{{ key }}" style="color: #5B3E39;">{{ value }}</option>
                 {% endfor %}
                 </select>
@@ -113,22 +113,22 @@
                 <div class="space-x-4 flex items-center justify-between">
                     <div class="space-x-2 flex items-center">
                         <label for="min_price" class="text-[#5B3E39] text-sm">Min</label>
-                        <input type="number" id="min_price_input" name="min_price" value="1000" 
-                            oninput="updateSlider('min_price', this.value)" min="1000" max="1800000" step="1000" 
+                        <input type="number" id="min_price_input" name="min_price" value="10000" 
+                            oninput="updateSlider('min_price', this.value)" min="10000" max="1800000" step="10000" 
                             class="w-32 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#FFC107] focus:border-[#FFC107] sm:text-sm" />
                     </div>
                     <div class="space-x-2 flex items-center">
                         <label for="max_price" class="text-[#5B3E39] text-sm">Max</label>
                         <input type="number" id="max_price_input" name="max_price" value="1800000" 
-                            oninput="updateSlider('max_price', this.value)" min="1000" max="1800000" step="1000" 
+                            oninput="updateSlider('max_price', this.value)" min="10000" max="1800000" step="10000" 
                             class="w-32 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#FFC107] focus:border-[#FFC107] sm:text-sm" />
                     </div>
                 </div>
                 <div class="range-slider mb-6">
                     <div class="slider-track price-slider-track"></div>
-                    <input type="range" id="min_price" min="1000" max="1800000" step="1000" value="1000" 
+                    <input type="range" id="min_price" min="10000" max="1800000" step="10000" value="10000" 
                         oninput="updateInput('min_price', this.value); updateSliderBackground()" />
-                    <input type="range" id="max_price" min="1000" max="1800000" step="1000" value="1800000" 
+                    <input type="range" id="max_price" min="10000" max="1800000" step="10000" value="1800000" 
                         oninput="updateInput('max_price', this.value); updateSliderBackground()" />
                 </div>
             </div>
@@ -234,9 +234,9 @@
             </div>
         {% endfor %}
     {% else %}
-    <div class="flex flex-col items-center justify-center min-h-screen text-center col-span-5 text-[#F5F5DC] mt-[-10rem] pb-16">        
+    <div class="flex flex-col items-center justify-center h-auto text-center col-span-5 text-[#F5F5DC] pointer-events-none my-10">
         <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-        <h2 class="text-lg font-bold">Menu yang kamu cari tidak ada.</h2>
+        <h2 class="text-lg font-bold pointer-events-auto">No menu with your criteria :(</h2>
     </div>
     {% endif %}
     

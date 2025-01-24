@@ -4,8 +4,8 @@ async function showAddMenuModal() {
     
     document.getElementById('price').addEventListener('input', function() {
         const value = this.value;
-        if (value < 1000 || value > 1800000) {
-            showError(this, 'Price must be between Rp 1,000 and Rp 1,800,000');
+        if (value < 10000 || value > 1800000) {
+            showError(this, 'Price must be between Rp 10,000 and Rp 1,800,000');
         } else {
             clearError(this);
         }
@@ -37,7 +37,7 @@ function validateForm() {
     const fields = [
         { id: 'menu_name', label: 'Menu Name' },
         { id: 'restaurant_name', label: 'Restaurant Name' },
-        { id: 'price', label: 'Price', min: 1000, max: 1800000 },
+        { id: 'price', label: 'Price', min: 10000, max: 1800000 },
         { id: 'rating', label: 'Rating', min: 0, max: 5 },
         { id: 'image_url', label: 'Image URL' },
         { id: 'city', label: 'City' },

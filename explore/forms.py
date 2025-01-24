@@ -49,17 +49,17 @@ class MenuFilterForm(forms.Form):
     category = forms.ChoiceField(choices=[('', 'Select category')] + CATEGORY_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
     restaurant= forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'restaurant name'}))
     city = forms.ChoiceField(choices=[('', 'Select city')] + CITY_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
-    specialize = forms.ChoiceField(choices=[('', 'Select specialized')] + SPECIALIZED_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
+    specialized = forms.ChoiceField(choices=[('', 'Select specialized')] + SPECIALIZED_CHOICES, required=False, widget=forms.Select(attrs={'style': 'color: #5B3E39; background-color: white;'}))
     price = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'placeholder': 'price'}))
     rating = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'placeholder': 'rating'}))
     min_price = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '1000',      
+            'min': '10000',      
             'max': '1800000',   
-            'step': '1000',    
-            'value': '1000',    
+            'step': '10000',    
+            'value': '10000',    
             'oninput': "this.nextElementSibling.value = this.value" 
         })
     )
@@ -68,9 +68,9 @@ class MenuFilterForm(forms.Form):
         required=False,
         widget=forms.NumberInput(attrs={
             'type': 'range',
-            'min': '1000',      
+            'min': '10000',      
             'max': '1800000',   
-            'step': '1000',    
+            'step': '10000',    
             'value': '1800000', 
             'oninput': "this.nextElementSibling.value = this.value" 
         })
