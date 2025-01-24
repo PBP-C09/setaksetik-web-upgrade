@@ -168,6 +168,8 @@ def pantau_booking_owner(request):
         }
 
     return render(request, 'booking/pantau_booking_owner.html', context)
+
+@csrf_exempt
 @login_required(login_url='/login')
 def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
