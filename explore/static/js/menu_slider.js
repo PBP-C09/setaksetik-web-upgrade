@@ -70,7 +70,7 @@ function updateInput(inputId, value) {
         minSlider.value = value;
     } else if (inputId === 'max_rating') {
         if (parseFloat(value) < parseFloat(minSlider.value) + 0.1) {
-            value = parseFloat(minSlider.value) + 0.1; // Mengatur batas minimum
+            value = parseFloat(minSlider.value) + 0.1; // Mengatur batas max
         }
         document.getElementById(`${inputId}_input`).value = value;
         maxSlider.value = value;
