@@ -52,7 +52,6 @@ def show_review_menu(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
     reviews = ReviewEntry.objects.filter(menu = menu_id)
 
-    print("semuanya" + str(menu_id))
     context = {
         'menu' : menu,
         'reviews' : reviews,
@@ -70,9 +69,6 @@ def show_review_owner(request):
     
     # Filter menu berdasarkan user
     restaurant_menus = Menu.objects.filter(claimed_by=user)
-
-    # Debugging untuk memastikan menu yang ditemukan
-    print("Menu yang diklaim oleh user:", [menu.id for menu in restaurant_menus])
 
     # Context untuk menyimpan menu dan review
     context = {
@@ -154,7 +150,6 @@ def show_review_owner_flutter(request):
         })
     
     # Debugging untuk memastikan menu yang ditemukan
-    print("Menu yang diklaim oleh user:", [menu.id for menu in restaurant_menus])
 
     all_reviews = []
     
@@ -183,7 +178,6 @@ def show_review_owner_flutter(request):
     # Masukkan semua review ke dalam konteks
     # context['reviews'] = all_reviews
 
-    print("Total review ditemukan:", len(all_reviews))
 
     return JsonResponse({
         # 'status' : 'success',
@@ -310,8 +304,6 @@ def get_review_entries(self, request, menu_id=None):
 def delete_review(request, id):
     # Get review berdasarkan id
     review = ReviewEntry.objects.get(pk=id)
-    print(review)
-    # print("reviewmenunya: " + review.menu.menu)
     # Manage perubahan rating menu
     themenu = Menu.objects.get(menu=review.menu.menu)
     themenu.total_rating -= review.rating
@@ -334,14 +326,11 @@ def submit_reply(request):
     
     try:
         data = json.loads(request.body)
-        print(data)
         review_id = data.get('review_id')
         reply_text = data.get('reply_text')
         
         # Verifikasi bahwa review ini milik steakhouse owner yang bersangkutan
         review = ReviewEntry.objects.get(pk=review_id)
-        print(review)
-        print(review.owner_reply)
         # Uncomment jika sudah ada relasi ke steakhouse
         # if review.steakhouse != request.user.steakhouse:
         #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
@@ -407,7 +396,6 @@ def create_review_flutter(request):
         try:
             # Parse JSON body
             data = json.loads(request.body)
-            print(data)
             
             # Extract fields from the request body
             user_id = request.user
@@ -416,23 +404,13 @@ def create_review_flutter(request):
             rating = data.get('rating')
             description = data.get('description')
             owner_reply = data.get('owner_reply')
-            print("masuk1")
             # Validate required fields
             if not all([user_id, menu_id, place, rating, description]):
-                print(user_id)
-                print(menu_id)
-                print(place)
-                print(rating)
-                print(description)
                 return JsonResponse({'error': 'Missing required fields'}, status=400)
-            print("masuk2")
             # Get related User and Menu objects
             try:
-                print("masuk3")
                 user = request.user
-                print("masuk4")
                 menu = Menu.objects.get(id=menu_id)
-                print("masuk5")
             except user.DoesNotExist:
                 return JsonResponse({'error': 'User not found'}, status=404)
             except Menu.DoesNotExist:
@@ -471,17 +449,13 @@ def create_review_flutter(request):
 @require_POST
 @login_required(login_url='/login')
 def submit_reply_flutter(request):
-    print("1masuk")
     # Pastikan hanya steakhouse owner yang bisa mengakses
     if request.user.userprofile.role != "steakhouse owner":
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
 
-    print("masuk2")
     try:
-        print("masuk3")
         # Parse data dari request body
         data = json.loads(request.body)
-        print(data)
         review_id = data.get('review_id')
         reply_text = data.get('reply_text')
 
@@ -515,8 +489,6 @@ def submit_reply_flutter(request):
 # def delete_review(request, id):
 #     # Get review berdasarkan id
 #     review = ReviewEntry.objects.get(pk=id)
-#     print(review)
-#     # print("reviewmenunya: " + review.menu.menu)
 #     # Manage perubahan rating menu
 #     themenu = Menu.objects.get(menu=review.menu.menu)
 #     themenu.total_rating -= review.rating

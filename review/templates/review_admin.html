@@ -113,10 +113,7 @@
       body: new FormData(document.querySelector('#ReviewEntryForm')),
     })
       .then(response => {
-
-        console.log("masuk add");
         refreshReviewEntries()
-        console.log("AKOWKOWKOWOK");
       }).catch(e => {
         console.log(e);
       })

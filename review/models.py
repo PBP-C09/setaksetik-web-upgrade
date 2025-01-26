@@ -15,5 +15,4 @@ class ReviewEntry(models.Model):
 
     @property
     def nama_menu(self):
-        print("ini loh" + self.menu)
         return self.menu.menu if self.menu else None
