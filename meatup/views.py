@@ -215,7 +215,7 @@ def edit_message_flutter(request, id):
 @csrf_exempt
 @login_required(login_url='/login')
 def get_receivers(request):
-    steak_lovers = UserProfile.objects.filter(role="steak lover")
+    steak_lovers = UserProfile.objects.filter(role="steak lover").exclude(user=request.user)
     receivers = [{
         'username': profile.user.username,
         'full_name': profile.full_name
