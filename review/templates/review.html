@@ -10,11 +10,19 @@
 {% block content %}
 {% include 'navbar.html' %}
 <div class="flex container items-center align-center mx-auto flex-col px-4 py-8">
+  {% if menu_id %}
   <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-3">
-      What do <span class="italic">they</span> say?
+      <span class="italic">Reviews about</span> {{ menu.menu }}
   </h1>
-    <hr class="border-t-2 border-[#F5F5DC] w-full mx-auto" style="width: 460px;" />
-    <p class="text-center text-[1.2rem] mt-3">See reviews, ratings and recommendations!</p>
+  <hr class="border-t-2 border-[#F5F5DC] w-full mx-auto" style="width: 460px;" />
+  <p class="text-center text-[1.2rem] mt-3">What do they say about this dish?</p>
+  {% else %}
+  <h1 class="text-[48px] font-reguler text-[#F5F5DC] text-center mt-2 mb-3">
+    What do <span class="italic">they</span> say?
+  </h1>
+  <hr class="border-t-2 border-[#F5F5DC] w-full mx-auto" style="width: 460px;" />
+  <p class="text-center text-[1.2rem] mt-3">See reviews, ratings and recommendations!</p>
+  {% endif %}
   </div>
 
   <div class="flex justify-center mt-0 mb-0">
@@ -25,7 +33,7 @@
           <button 
               data-modal-target="crudModal" 
               data-modal-toggle="crudModal"
-              class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              class="btn bg-[#FFD54F] hover:bg-[#F7A52B] text-[#3E2723] font-reguler py-2 px-6 rounded-lg transition duration-300 mb-8"
               onclick="showModal(this)"
               data-image="{{ menu.image }}"
               data-menu="{{ menu.menu }}"
@@ -88,10 +96,10 @@
           </div>
           <!-- Review Description -->
           <div>
-            <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+            <label for="description" class="block text-sm font-medium text-gray-700 mt-6">Description</label>
             <textarea id="description" name="description" rows="4"
               class="mt-1 block w-full border rounded-md p-2 text-black"
-              placeholder="Deskripsi ulasan Anda" required></textarea>
+              placeholder="Describe your review!" required></textarea>
           </div>
         </form>
       </div>

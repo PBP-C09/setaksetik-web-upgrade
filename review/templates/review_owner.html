@@ -17,6 +17,11 @@
   <p class="text-center text-[1.2rem] mt-3">See reviews of your restaurant and answer them!</p>
 </div>
 
+{% if count == 0 %}
+  <div class="text-center py-16">
+    <p class="text-[#F5F5DC] text-lg italic">No reviews available!</p>
+  </div>
+{% else %}
   <div id="review_entry_cards">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
       {% for review in reviews %}
@@ -102,6 +107,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 
 
@@ -125,7 +131,7 @@
       if (response.ok) {
         // Clear input and refresh reviews
         inputElement.value = '';
-        refreshReviewEntries();
+        window.location.href = "/review/pantaureview/";;
       } else {
         const data = await response.json();
         alert(data.message || 'Error submitting reply');
@@ -168,12 +174,11 @@
     })
       .then(response => {
 
-        refreshReviewEntries()
+        window.location.href = "/review/pantaureview/";
       }).catch(e => {
         console.log(e);
       })
 
-    // document.getElementById("ReviewEntryForm").reset();
     document.querySelector("[data-modal-toggle='crudModal']").click();
 
     return false;
@@ -184,7 +189,7 @@
     const replyText = textArea.value.trim();
 
     try {
-        const response = await fetch("{% url 'review:show_review_owner_flutter' %}", {
+        const response = await fetch("{% url 'review:update_reply' %}", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -197,9 +202,8 @@
         });
 
         if (response.ok) {
-            // Perbarui UI secara langsung
             document.getElementById(`reply-text-${reviewId}`).textContent = replyText;
-            toggleEdit(reviewId); // Kembali ke view mode
+            toggleEdit(reviewId);
         } else {
             const data = await response.json();
             alert(data.message || 'Error updating reply');
@@ -218,6 +222,8 @@
       viewMode.classList.remove('hidden');
       editMode.classList.add('hidden');
     } else {
+      const currentText = document.getElementById(`reply-text-${reviewId}`).textContent.trim();
+      document.getElementById(`edit-textarea-${reviewId}`).value = currentText;
       viewMode.classList.add('hidden');
       editMode.classList.remove('hidden');
     }

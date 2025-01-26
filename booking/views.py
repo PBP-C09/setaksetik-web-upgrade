@@ -158,7 +158,7 @@ def pantau_booking_owner(request):
         bookings = []
         for menu in claimed_restaurant:
             bookings.extend(Booking.objects.filter(menu_items=menu))
-        
+
         context = {
             'restaurant': claimed_restaurant[0], 
             'bookings': bookings,
@@ -346,10 +346,9 @@ def pantau_booking_owner_flutter(request):
             'message': 'You do not own any restaurant.'
         })
 
-    all_bookings = []
+    booking_list = []
     for menu in claimed_restaurant:
         bookings = Booking.objects.filter(menu_items=menu)
-        booking_list = []
 
         for booking in bookings:
             booking_data = {
@@ -362,18 +361,14 @@ def pantau_booking_owner_flutter(request):
             }
             booking_list.append(booking_data)
 
-        menu_data = {
-            "id": menu.id,
-            "restaurant_name": menu.restaurant_name,
-            "city": menu.city,
-            "bookings": booking_list
-        }
-
-        all_bookings.append(menu_data)
-
     return JsonResponse({
         'status': 'success',
-        'restaurants': all_bookings
+        'restaurant': {
+            "id": claimed_restaurant[0].id,
+            "restaurant_name": claimed_restaurant[0].restaurant_name,
+            "city": claimed_restaurant[0].city
+        },
+        'bookings': booking_list
     })
 
 @login_required(login_url='/login')

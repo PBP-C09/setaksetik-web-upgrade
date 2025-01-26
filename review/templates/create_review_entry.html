@@ -33,7 +33,7 @@
                 <button 
                     data-modal-target="crudModal" 
                     data-modal-toggle="crudModal"
-                    class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                    class="btn bg-[#FFD54F] hover:bg-[#F7A52B] text-[#3E2723] font-reguler py-2 px-6 rounded-lg transition duration-300 mt-5"
                     onclick="showModal(this)"
                     data-image="{{ menu.image }}"
                     data-menu="{{ menu.menu }}"
@@ -98,10 +98,10 @@
 
         <!-- Review Description -->
         <div class="mb-4">
-          <label for="description" class="block text-sm font-medium text-gray-700">Review Description</label>
+          <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
           <textarea id="description" name="description" rows="3"
               class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700 text-black"
-              placeholder="Jelaskan rating yang Anda berikan" required></textarea>
+              placeholder="Describe your review!" required></textarea>
         </div>
 
       </form>
@@ -180,7 +180,6 @@
         hideModal();
         showSuccessModal();
         refreshReviewEntries();
-        console.log("AKOWKOWKOWOK");
       }).catch(e => {
         console.log(e);
       })

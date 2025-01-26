@@ -15,36 +15,28 @@ from django.http import JsonResponse
 @csrf_exempt
 @login_required(login_url='/login')
 def show_review(request, menu_id=None):    
-    # Default context
-    context = {
-        'nama': 'steak',
-        'lokasi': 'jaksel',
-        'rating': '5',
-    }
+    context = {}
     # Filter reviews based on menu_id if provided
     if menu_id != None:
         menus = Menu.objects.all()
         menu = Menu.objects.get(id=menu_id)
         reviews = ReviewEntry.objects.filter(menu=menu)
         context['reviews'] = reviews
-        context['menu'] = menu  # Optional: Detail menu untuk judul
+        context['menu'] = menu
         context['menus'] = menus
-        # menus = Menu.objects.all()
     else:
         reviews = ReviewEntry.objects.all()
         context['reviews'] = reviews
 
+    context['count'] = len(reviews)
     context['menu_id'] = menu_id
 
-    # Role-based rendering
     if request.user.userprofile.role == "admin":
         return render(request, 'review_admin.html', context)
     elif request.user.userprofile.role == "steakhouse owner":
         return render(request, 'review_owner.html', context)
     else:
         return render(request, 'review.html', context)
-
-
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -87,6 +79,7 @@ def show_review_owner(request):
 
         # Masukkan semua review ke dalam konteks
         context['reviews'] = all_reviews
+        context['count'] = len(all_reviews)
 
     return render(request, 'review_owner.html', context)
 
@@ -125,16 +118,16 @@ def show_review_flutter(request):
     
     for review in data:
         serialized_data.append({
-            "model": "review",  # Menambahkan properti ini ke objek review
-            "pk": str(review.pk),  # Primary key
+            "model": "review",
+            "pk": str(review.pk),
             "fields": {
-                "name": review.menu.menu,  # Menggunakan properti terkait menu
-                "user": review.user.id,  # ID pengguna yang mengisi review
-                "menu": review.menu.id,  # ID menu yang direview
+                "name": review.menu.menu,
+                "user": review.user.id,
+                "menu": review.menu.id,
                 "place": review.place,
                 "rating": review.rating,
                 "description": review.description,
-                "owner_reply": review.owner_reply or 'No reply yet',  # Mengatur nilai default jika null
+                "owner_reply": review.owner_reply or 'No reply yet',
             }
         })
 
@@ -161,8 +154,8 @@ def show_review_owner_flutter(request):
     final_reviews = []
     for review in all_reviews:
         review_data = {
-            "model": "review",  # Misalnya properti ini ada pada objek review
-            "pk": review.pk,  # Misalnya properti ini ada
+            "model": "review",
+            "pk": review.pk,
             "fields": {
                 "name" : review.menu.menu,
                 "user": review.user.id,
@@ -170,7 +163,7 @@ def show_review_owner_flutter(request):
                 "place": review.place,
                 "rating": review.rating,
                 "description": review.description,
-                "owner_reply": review.owner_reply or 'No reply yet',  # Atur nilai default jika null
+                "owner_reply": review.owner_reply or 'No reply yet',
             }
         }
         final_reviews.append(review_data)
@@ -193,9 +186,16 @@ def show_xml(request):
 @csrf_exempt
 @login_required(login_url='/login')
 def show_json(request):
-    data = ReviewEntry.objects.filter(user=request.user)
-    data = ReviewEntry.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    data = ReviewEntry.objects.select_related('menu').all()
+    json_data = serializers.serialize("json", data)
+    
+    parsed_data = json.loads(json_data)
+    
+    for item in parsed_data:
+        review_entry = ReviewEntry.objects.get(pk=item['pk'])
+        item['fields']['menu'] = review_entry.nama_menu
+    
+    return HttpResponse( json.dumps(parsed_data), content_type="application/json")
 
 @login_required(login_url='/login')
 def get_review(request):
@@ -222,7 +222,6 @@ def show_json_by_id(request, id):
 @csrf_exempt
 @require_POST
 def add_review_entry_ajax(request):
-    # name = strip_tags(request.POST.get("name"))
     menu = strip_tags(request.POST.get("menu"))
     place = strip_tags(request.POST.get("place"))
     rating = float(strip_tags(request.POST.get("rating")))
@@ -261,14 +260,10 @@ def create_review_entry(request):
 
     return render(request, 'create_review_entry.html', context)
 
-
-
 @csrf_exempt
 @login_required(login_url='/login')
 def edit_review(request, id):
-    # Get the review entry based on id
     review = ReviewEntry.objects.get(pk=id)
-    # Set review entry as an instance of the form
     form = ReviewEntryForm(request.POST or None, instance=review)
 
     if form.is_valid() and request.method == "POST":
@@ -304,6 +299,7 @@ def get_review_entries(self, request, menu_id=None):
 def delete_review(request, id):
     # Get review berdasarkan id
     review = ReviewEntry.objects.get(pk=id)
+    
     # Manage perubahan rating menu
     themenu = Menu.objects.get(menu=review.menu.menu)
     themenu.total_rating -= review.rating
@@ -314,8 +310,6 @@ def delete_review(request, id):
     review.delete()
 
     return HttpResponseRedirect(reverse('review:show_review'))
-
-
 
 @csrf_exempt
 @require_POST
@@ -329,12 +323,7 @@ def submit_reply(request):
         review_id = data.get('review_id')
         reply_text = data.get('reply_text')
         
-        # Verifikasi bahwa review ini milik steakhouse owner yang bersangkutan
         review = ReviewEntry.objects.get(pk=review_id)
-        # Uncomment jika sudah ada relasi ke steakhouse
-        # if review.steakhouse != request.user.steakhouse:
-        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
-        
         review.owner_reply = reply_text
         review.save()
         
@@ -366,10 +355,6 @@ def update_reply(request):
         reply_text = data.get('reply_text')
         
         review = ReviewEntry.objects.get(pk=review_id)
-        # Verifikasi ownership
-        # if review.steakhouse != request.user.steakhouse:
-        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
-        
         review.owner_reply = reply_text
         review.save()
         
@@ -410,7 +395,11 @@ def create_review_flutter(request):
             # Get related User and Menu objects
             try:
                 user = request.user
-                menu = Menu.objects.get(id=menu_id)
+                themenu = Menu.objects.get(id=menu_id)
+                themenu.total_rating += rating
+                themenu.review_count += 1
+                themenu.rating = themenu.total_rating / (themenu.review_count + 1)
+                themenu.save()
             except user.DoesNotExist:
                 return JsonResponse({'error': 'User not found'}, status=404)
             except Menu.DoesNotExist:
@@ -419,7 +408,7 @@ def create_review_flutter(request):
             # Create a new ReviewEntry object
             review = ReviewEntry.objects.create(
                 user=user,
-                menu=menu,
+                menu=themenu,
                 place=place,
                 rating=rating,
                 description=description,
@@ -466,11 +455,6 @@ def submit_reply_flutter(request):
         # Cari review berdasarkan ID
         review = ReviewEntry.objects.get(pk=review_id)
 
-        # Optional: Verifikasi bahwa review ini terkait dengan steakhouse owner (jika ada relasi)
-        # if review.steakhouse != request.user.steakhouse:
-        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
-
-        # Perbarui kolom owner_reply
         review.owner_reply = reply_text
         review.save()
 
@@ -485,25 +469,8 @@ def submit_reply_flutter(request):
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
-# @login_required(login_url='/login')
-# def delete_review(request, id):
-#     # Get review berdasarkan id
-#     review = ReviewEntry.objects.get(pk=id)
-#     # Manage perubahan rating menu
-#     themenu = Menu.objects.get(menu=review.menu.menu)
-#     themenu.total_rating -= review.rating
-#     themenu.review_count -= 1
-#     themenu.rating = themenu.total_rating / (themenu.review_count + 1)
-#     themenu.save()
-
-#     review.delete()
-
-#     return HttpResponseRedirect(reverse('review:show_review'))
-
 @csrf_exempt
 @require_POST
-@login_required(login_url='/login')
-@csrf_exempt
 @login_required(login_url='/login')
 def delete_review_flutter(request):
     if request.method == 'POST':
@@ -523,13 +490,7 @@ def delete_review_flutter(request):
             themenu = Menu.objects.get(menu=review.menu.menu)
             themenu.total_rating -= review.rating
             themenu.review_count -= 1
-
-            # Pastikan tidak ada pembagian dengan nol
-            if themenu.review_count > 0:
-                themenu.rating = themenu.total_rating / themenu.review_count
-            else:
-                themenu.rating = 0  # Atur rating ke 0 jika tidak ada review yang tersisa
-
+            themenu.rating = themenu.total_rating / (themenu.review_count + 1)
             themenu.save()
 
             # Optional: Validasi role atau kepemilikan
@@ -568,11 +529,6 @@ def update_reply_flutter(request):
         # Cari review berdasarkan ID
         review = ReviewEntry.objects.get(pk=review_id)
 
-        # Optional: Verifikasi bahwa review ini terkait dengan steakhouse owner (jika ada relasi)
-        # if review.steakhouse != request.user.steakhouse:
-        #     return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
-
-        # Perbarui kolom owner_reply
         review.owner_reply = reply_text
         review.save()
 

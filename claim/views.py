@@ -42,7 +42,7 @@ def claim_restaurant(request, restaurant_id):
     # Cek apakah user adalah 'steakhouse owner' dan belum claim restoran lain
     if user.userprofile.role == "steakhouse owner" and Menu.objects.filter(claimed_by=user).count() == 0:
         menus_in_restaurant.update(claimed_by=user)
-        return redirect('claim:owned_restaurant')  # Redirect ke halaman restoran yang dimiliki
+        return redirect('claim:owned_restaurant')
     else:
         return render(request, 'claim/error.html', {'message': 'You cannot claim more than one restaurant or you are not a steakhouse owner.'})
 
@@ -140,12 +140,12 @@ def add_menu(request):
 def claim_resto_flutter(request, restaurant_id):
     user = request.user
     menu = Menu.objects.get(id=restaurant_id)
+    menus_in_restaurant = Menu.objects.filter(restaurant_name=menu.restaurant_name)
     
     # Cek apakah user adalah 'steakhouse owner' dan belum claim restoran lain
     if user.userprofile.role == "steakhouse owner" and Menu.objects.filter(claimed_by=user).count() == 0:
         if menu.claimed_by is None:  # Pastikan restoran belum di-claim
-            menu.claimed_by = user
-            menu.save()
+            menus_in_restaurant.update(claimed_by=user)
             return JsonResponse({'status': 'success', 'message': f'You have successfully claimed {menu.restaurant_name}.'})
         else:
             return JsonResponse({'status': 'failed', 'message': f'{menu.restaurant_name} has already been claimed.'})
@@ -237,7 +237,6 @@ def revoke_ownership_flutter(request):
     """API untuk menghapus ownership restoran untuk semua menu dengan restaurant_name yang sama."""
     if request.method == 'POST':
         menu_id = request.POST.get('menu_id')
-        print(menu_id)
         menu = get_object_or_404(Menu, id=menu_id)
 
         Menu.objects.filter(restaurant_name=menu.restaurant_name).update(claimed_by=None)
