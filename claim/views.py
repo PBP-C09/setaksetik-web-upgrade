@@ -9,27 +9,13 @@ from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
 
 @login_required
-def available_restaurants(request):
-    # Jika resto owner sudah meng-claim restoran, langsung ke halaman restoran yang dimiliki
-    user = request.user
-    if user.userprofile.role == 'steakhouse owner':
-        claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
-        if claimed_restaurant:
-            return redirect('claim:owned_restaurant')
-    
-    # Jika belum claim restoran, tampilkan daftar restoran yang tersedia
-    available_menus = Menu.objects.filter(claimed_by__isnull=True)
-    context = {'available_menus': available_menus}
-    return render(request, 'available_restaurants.html', context)
-
-@login_required
 def owned_restaurant(request):
     user = request.user
     claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
     restaurant_menus = Menu.objects.filter(claimed_by=user)
 
     if not restaurant_menus:
-        return redirect('claim:available_restaurants')
+        return redirect('/explore')
     
     context = {
         'restaurant': claimed_restaurant,
@@ -66,19 +52,24 @@ def is_admin(user):
 @csrf_exempt
 @login_required
 def manage_ownership(request):
-    claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)  # Menampilkan semua restoran yang sudah di-claim
+    claimed_menus = Menu.objects.filter(claimed_by__isnull=False)  
+    claimed_restaurants = {}
+    
+    for menu in claimed_menus:
+        if menu.restaurant_name not in claimed_restaurants:
+            claimed_restaurants[menu.restaurant_name] = menu
 
     if request.method == 'POST':
         menu_id = request.POST.get('menu_id')
         menu = get_object_or_404(Menu, id=menu_id)
-        menu.claimed_by = None  # Menghapus ownership
-        menu.save()
+        Menu.objects.filter(restaurant_name=menu.restaurant_name).update(claimed_by=None)
         return redirect('claim:manage_ownership')
-
+    
     context = {
-        'claimed_restaurants': claimed_restaurants,
+        'claimed_restaurants': list(claimed_restaurants.values())
     }
     return render(request, 'manage_ownership.html', context)
+
 
 @login_required(login_url='/login')
 @csrf_exempt
@@ -208,10 +199,9 @@ def delete_ownership_flutter(request, restaurant_id):
     try:
         menu = Menu.objects.get(id=restaurant_id)
 
-        # Pastikan user memiliki restoran tersebut
         if menu.claimed_by == request.user:
-            menu.claimed_by = None  # Set claimed_by menjadi null
-            menu.save()
+            Menu.objects.filter(restaurant_name=menu.restaurant_name).update(claimed_by=None)
+
             return JsonResponse({'status': 'success', 'message': 'Ownership deleted successfully.'})
         else:
             return JsonResponse({'status': 'failed', 'message': 'You do not own this restaurant.'}, status=403)
@@ -219,32 +209,41 @@ def delete_ownership_flutter(request, restaurant_id):
         return JsonResponse({'status': 'failed', 'message': 'Restaurant not found.'}, status=404)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    
+  
 @csrf_exempt
 @login_required
 def manage_ownership_flutter(request):
     """API untuk mendapatkan semua restoran yang telah di-claim."""
-    claimed_restaurants = Menu.objects.filter(claimed_by__isnull=False)
+    claimed_menus = Menu.objects.filter(claimed_by__isnull=False)
+    claimed_restaurants = {}
+
+    for menu in claimed_menus:
+        if menu.restaurant_name not in claimed_restaurants:
+            claimed_restaurants[menu.restaurant_name] = menu
+
     claimed_list = [
         {
             "id": menu.id,
             "restaurant_name": menu.restaurant_name,
             "claimed_by": menu.claimed_by.username,
         }
-        for menu in claimed_restaurants
+        for menu in claimed_restaurants.values()
     ]
     return JsonResponse({"status": "success", "claimed_restaurants": claimed_list})
 
 @csrf_exempt
 @login_required
 def revoke_ownership_flutter(request):
-    """API untuk menghapus ownership restoran."""
+    """API untuk menghapus ownership restoran untuk semua menu dengan restaurant_name yang sama."""
     if request.method == 'POST':
         menu_id = request.POST.get('menu_id')
+        print(menu_id)
         menu = get_object_or_404(Menu, id=menu_id)
-        menu.claimed_by = None  # Menghapus ownership
-        menu.save()
+
+        Menu.objects.filter(restaurant_name=menu.restaurant_name).update(claimed_by=None)
+
         return JsonResponse({'status': 'success'})
+    
     return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
 
 @csrf_exempt

@@ -151,15 +151,18 @@ def edit_booking(request, booking_id):
 # Steak House Owner (Resto Owner)
 @login_required(login_url='/login')
 def pantau_booking_owner(request):
-    # Cek apakah user memiliki restoran yang sudah di-claim
     user = request.user
-    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    claimed_restaurant = Menu.objects.filter(claimed_by=user)
+    
     if claimed_restaurant:
-        bookings = Booking.objects.filter(menu_items=claimed_restaurant)
+        bookings = []
+        for menu in claimed_restaurant:
+            bookings.extend(Booking.objects.filter(menu_items=menu))
+        
         context = {
-            'restaurant': claimed_restaurant, 
+            'restaurant': claimed_restaurant[0], 
             'bookings': bookings,
-            'resto_image': claimed_restaurant.image  # Pass immage
+            'resto_image': claimed_restaurant[0].image if claimed_restaurant else None
         }
     else:
         context = {
@@ -168,6 +171,7 @@ def pantau_booking_owner(request):
         }
 
     return render(request, 'booking/pantau_booking_owner.html', context)
+
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -334,7 +338,7 @@ def edit_booking_flutter(request, booking_id):
 @csrf_exempt
 def pantau_booking_owner_flutter(request):
     user = request.user
-    claimed_restaurant = Menu.objects.filter(claimed_by=user).first()
+    claimed_restaurant = Menu.objects.filter(claimed_by=user)
 
     if not claimed_restaurant:
         return JsonResponse({
@@ -342,27 +346,34 @@ def pantau_booking_owner_flutter(request):
             'message': 'You do not own any restaurant.'
         })
 
-    bookings = Booking.objects.filter(menu_items=claimed_restaurant)
-    booking_list = []
-    for booking in bookings:
-        booking_data = {
-            "id": booking.id,
-            "user": booking.user.username,
-            "menu": booking.menu_items.restaurant_name,
-            "booking_date": booking.booking_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "number_of_people": booking.number_of_people,
-            "status": booking.status,
+    all_bookings = []
+    for menu in claimed_restaurant:
+        bookings = Booking.objects.filter(menu_items=menu)
+        booking_list = []
+
+        for booking in bookings:
+            booking_data = {
+                "id": booking.id,
+                "user": booking.user.username,
+                "menu": booking.menu_items.restaurant_name,
+                "booking_date": booking.booking_date.strftime("%Y-%m-%d %H:%M:%S"),
+                "number_of_people": booking.number_of_people,
+                "status": booking.status,
+            }
+            booking_list.append(booking_data)
+
+        menu_data = {
+            "id": menu.id,
+            "restaurant_name": menu.restaurant_name,
+            "city": menu.city,
+            "bookings": booking_list
         }
-        booking_list.append(booking_data)
-    
+
+        all_bookings.append(menu_data)
+
     return JsonResponse({
         'status': 'success',
-        'restaurant': {
-            "id": claimed_restaurant.id,
-            "restaurant_name": claimed_restaurant.restaurant_name,
-            "city": claimed_restaurant.city
-        },
-        'bookings': booking_list
+        'restaurants': all_bookings
     })
 
 @login_required(login_url='/login')

@@ -1,11 +1,11 @@
 from django.urls import path
-from claim.views import available_restaurants, claim_restaurant, owned_restaurant, delete_ownership, manage_ownership
+from claim.views import claim_restaurant, owned_restaurant, delete_ownership, manage_ownership
 from claim.views import get_claimable_json, add_menu, claim_resto_flutter, get_owned_restaurant_flutter, delete_ownership_flutter, manage_ownership_flutter, revoke_ownership_flutter, add_menu_flutter, edit_flutter
 
 app_name = 'claim'
 
 urlpatterns = [
-    path('', available_restaurants, name='available_restaurants'),  
+    path('', owned_restaurant, name='owned_restaurant'),  
     path('claim/<int:restaurant_id>/', claim_restaurant, name='claim_restaurant'),
     path('owned/', owned_restaurant, name='owned_restaurant'),
     path('delete/<int:restaurant_id>/', delete_ownership, name='delete_ownership'),
