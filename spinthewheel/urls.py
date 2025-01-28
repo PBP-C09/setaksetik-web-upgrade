@@ -1,7 +1,7 @@
 from django.urls import path
 from spinthewheel.views import spin_view, history_json, add_spin_history, delete_spin_history, option_json
 from spinthewheel.views import secret_view, add_secret_history, delete_secret_history, secret_json
-from spinthewheel.views import add_spin_history_mobile
+from spinthewheel.views import add_spin_history_mobile, add_secret_history_mobile
 
 app_name = 'spinthewheel'
 
@@ -16,5 +16,6 @@ urlpatterns = [
     path('add-secret-history/', add_secret_history, name='add_secret_history'),
     path('delete-secret/<uuid:id>', delete_secret_history, name='delete_secret_history'),
     path('add-spin-history-mobile/', add_spin_history_mobile, name='add_spin_history_mobile'),
+    path('add-secret-history-mobile/', add_secret_history_mobile, name='add_secret_history_mobile'),
 ]
 

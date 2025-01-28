@@ -117,3 +117,22 @@ def add_spin_history_mobile(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+@require_POST
+@login_required(login_url='/login')
+def add_secret_history_mobile(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_history = SecretHistory.objects.create(
+            user=request.user,
+            winner=data["winner"],
+            note=data["note"]
+        )
+
+        new_history.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
