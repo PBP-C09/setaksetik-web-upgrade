@@ -74,24 +74,28 @@ Saat ini, aplikasi ini dirancang untuk pecinta _steak_ berbasis Jakarta. Dataset
    - Akses:
      - Mengakses seluruh konten publik seperti daftar menu, informasi restoran, harga, dan ulasan.
      - Membuat akun dan login/logout menggunakan akun yang sudah dibuat
+   - Fitur:
+     - **Explore**: Melihat daftar menu dan restoran yang tersedia dengan fitur filter serta search bar.
      - **Spin the Wheel**: Menggunakan fitur "spin the wheel" untuk memilih menu secara acak.
      - **MeatUp**: Menyimpan menu-menu favorit yang ingin dicoba di masa depan dan berinteraksi dengan pengguna lain.
-     - **Rating dan Review**: Memberi rating dan review pada menu yang sudah dicoba, serta mengunggah foto makanan.
-     - **Booking Restoran**: Melakukan pemesanan tempat di restoran dan melihat riwayat booking.
+     - **Review**: Memberi rating dan review pada menu yang sudah dicoba
+     - **Booking**: Melakukan pemesanan tempat di restoran dan melihat riwayat booking.
        
 2. **Admin**
    - Akses:
-     - Mengelola konten website.
+     - Mengelola konten yang ada pada website.
    - Fitur:
-     - **Pengelolaan Menu & Restoran**: Menambah, mengedit, atau menghapus informasi tentang menu.
-     - **Manajemen Ulasan**: Mengedit atau menghapus ulasan yang tidak sesuai.
-     - **Manajemen Pengguna**: Mengelola akun pengguna..
+     - **Manage Menu**: Menambah, mengedit, atau menghapus informasi tentang menu.
+     - **Manage Review**: Menghapus ulasan yang tidak sesuai.
+     - **Manage Ownership**: Memastikan klaim kepemilikan sesuai.
        
 3. **Pemilik Steakhouse**
    - Akses:
-     - Mengelola proses booking restoran yang dimiliki.
+     - Mengatur menu serta booking pada _steakhouse_ yang telah diklaim.
    - Fitur:
-     - **Manajemen Booking**: Memantau dan mengelola booking dari seluruh _steakhouse_.
+     - **Claim**: Melakukan klaim kepemiikan terhadap _steakhouse_ yang dimiliki.
+     - **Monitor Booking**: Memantau dan mengelola booking dari _steakhouse_ yang dimiliki.
+     - **Monitor Review**: Memantau dan menjawab review dari _steakhouse_ yang dimiliki.
 
 
 # Tautan Deployment
