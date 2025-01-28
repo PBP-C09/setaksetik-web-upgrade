@@ -1,5 +1,7 @@
-# setaksetik
-Sebuah aplikasi yang didekasikan untuk pecinta dan calon pecinta steak!
+# SetakSetik
+Sebuah aplikasi yang didekasikan untuk pecinta dan calon pecinta _steak_!
+
+_Web upgraded version_ dari tugas mata kuliah PBP.
 
 ---
 
@@ -7,7 +9,7 @@ Sebuah aplikasi yang didekasikan untuk pecinta dan calon pecinta steak!
 1. [Anggota Kelompok](#anggota-kelompok)
 2. [Deskripsi Aplikasi](#deskripsi-aplikasi)
 3. [Daftar Modul](#daftar-modul)
-4. [Sumber Initial Dataset](#sumber-initial-dataset)
+4. [Initial Dataset](#initial-dataset)
 5. [Role atau Peran Pengguna](#role-atau-peran-pengguna)
 6. [Tautan Deployment](#tautan-deployment)
 
@@ -21,11 +23,11 @@ Sebuah aplikasi yang didekasikan untuk pecinta dan calon pecinta steak!
 
 
 # Deskripsi Aplikasi
-Untuk menjawab kebingungan pengguna dalam memilih menu steak yang tepat, **SetakSetik** hadir sebagai solusi lengkap bagi para pecinta steak. Aplikasi ini dirancang dengan beragam fitur yang tidak hanya memudahkan pengguna dalam memilih menu, tetapi juga memberikan pengalaman bersantap yang lebih personal dan menyenangkan. 
+Untuk menjawab kebingungan pengguna dalam memilih menu _steak_ yang tepat, **SetakSetik** hadir sebagai solusi lengkap bagi para pecinta _steak_. Aplikasi ini dirancang dengan beragam fitur yang tidak hanya memudahkan pengguna dalam memilih menu, tetapi juga memberikan pengalaman bersantap yang lebih personal dan menyenangkan. 
 
-**setaksetik** dikembangkan dengan berbagai modul yang mendukung kemudahan dalam pemilihan menu serta kenyamanan pengguna. Fitur autentikasi memungkinkan pengguna untuk registrasi serta login dengan mudah. Pengguna juga dapat mengakses riwayat pesanan, menyimpan _wishlist_ menu yang ingin dicoba, dan melacak program reward berdasarkan pesanan dan _review_. Selain itu, fitur "Spin the Wheel" menambahkan elemen hiburan dalam menentukan pilihan menu, sementara _filter_ menu yang komprehensif membantu pengguna menyesuaikan pencarian berdasarkan rasa, metode masak, harga, dan kriteria lainnya.
+**SetakSetik** dikembangkan dengan berbagai modul yang mendukung kemudahan dalam pemilihan menu serta kenyamanan pengguna. Fitur autentikasi memungkinkan pengguna untuk login dengan mudah. Pengguna dapat melakukan _explore_ dari banyaknya menu yang tersedia beserta filter, lalu selanjutnya melakukan _booking_ restoran dan memberikan _review_. Selain itu, terdapat juga fitur _spin the wheel_ yang merupakan elemen hiburan dalam menentukan pilihan menu, serta fitur _meat up_ untuk melihat pengguna lain dengan _public wishlist_ dan preferensi yang serupa.
 
-Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset yang digunakan adalah menu dan _steakhouse_ yang tersebar di segala penjuru Jakarta. Jadi, jika menjejakkan kaki di Jakarta dan mendambakan steak, tak perlu bingung tak perlu ragu, **SetakSetik** akan membantu!
+Saat ini, aplikasi ini dirancang untuk pecinta _steak_ berbasis Jakarta. Dataset yang digunakan adalah menu dan _steakhouse_ yang tersebar di segala penjuru Jakarta. Jadi, jika menjejakkan kaki di Jakarta dan mendambakan _steak_, tak perlu bingung tak perlu ragu, **SetakSetik** akan membantu!
 
 
 # Daftar Modul
@@ -59,10 +61,12 @@ Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset y
    - Riwayat pemesanan yang sudah dilakukan.
 
 
-# Sumber Initial Dataset
-Kategori utama produk berupa menu _steak_ unggulan dari berbagai _steakhouse_ di Jakarta.
+# Initial Dataset
 
-Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/steakhouse-jakarta?resource=download) kami.
+**Kategori:** Menu _steak_ dari berbagai _steakhouse_ di Jakarta.
+
+- **Sumber:** [Kaggle](https://www.kaggle.com/datasets/miradelimanr/steakhouse-jakarta?resource=download).
+- **Dataset Terproses:** [Google Sheets](https://docs.google.com/spreadsheets/d/1NDPuzQpybnalNUVGGFEaG_dutWjPqhmTbliIAJ24xuU/edit?usp=sharing).
 
 
 # Role atau Peran Pengguna
